@@ -15,7 +15,7 @@ function Nav() {
   const closeSearch = () => setFocused(false);
 
   return (
-    <div>
+    <div className="sticky z-30 top-0 bg-white">
       <div className=" m-auto max-w-4xl py-3 flex justify-between items-center min-w-fit relative">
         <BranduIcon />
         <p>스토어</p>
@@ -41,7 +41,7 @@ function Nav() {
             </div>
           </div>
           <div
-            className={`dropdown border-[1px] border-main border-t-white rounded-b-xl py-3 absolute  w-[350px] ${
+            className={`dropdown  bg-white border-[1px] border-main border-t-white rounded-b-xl py-3 absolute  w-[350px] ${
               focused ? "block" : "hidden"
             }`}
           >
