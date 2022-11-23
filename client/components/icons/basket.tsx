@@ -2,7 +2,7 @@ interface BasketProps {
   color: string;
 }
 
-function Basket({ color }: BasketProps) {
+function BasketIcon({ color }: BasketProps) {
   return (
     <svg
       width="21"
@@ -22,4 +22,4 @@ function Basket({ color }: BasketProps) {
   );
 }
 
-export default Basket;
+export default BasketIcon;

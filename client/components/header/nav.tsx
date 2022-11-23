@@ -1,52 +1,94 @@
-import Image from "next/image";
 import Input from "../common/input";
+import SearchIcon from "../icons/search";
+import HeartIcon from "../icons/heart";
+import BasketIcon from "../icons/basket";
+import ScrapIcon from "../icons/scrap";
+import HamburgerIcon from "../icons/hamburger";
+import ProfileIcon from "../icons/profile";
+import BranduIcon from "../icons/brandu";
+import CloseIcon from "../icons/close";
+import { useState } from "react";
 
 function Nav() {
+  const [focused, setFocused] = useState<boolean>(false);
+  const showSearch = () => setFocused(true);
+  const closeSearch = () => setFocused(false);
+
   return (
-    <div className="flex justify-center">
-      <div className="w-auto max-w-4xl min-w-fit flex items-center justify-between space-x-8 py-3  ">
-        <Image src="/logo/main_logo.svg" alt="logo" width={100} height={22} />
-        <div className="flex space-x-9">
-          <p className="text-main">스토어</p>
-          <p className="text-main">커뮤니티</p>
+    <div>
+      <div className=" m-auto max-w-4xl py-3 flex justify-between items-center min-w-fit relative">
+        <BranduIcon />
+        <p>스토어</p>
+        <p>브랜드</p>
+        <div>
+          <div
+            onBlur={closeSearch}
+            onClick={showSearch}
+            className={`flex items-center justify-between border-[1px] border-main rounded-t-xl w-[350px] h-[40px] ${
+              focused ? "border-b-0" : "rounded-b-xl"
+            }`}
+          >
+            <Input
+              type="text"
+              color="main"
+              height={350}
+              width={40}
+              value="검색어를 입력해주세요"
+            />
+
+            <div className="mx-3">
+              <SearchIcon />
+            </div>
+          </div>
+          <div
+            className={`dropdown border-[1px] border-main border-t-white rounded-b-xl py-3 absolute  w-[350px] ${
+              focused ? "block" : "hidden"
+            }`}
+          >
+            <div className="flex justify-between px-3 py-2">
+              <h3 className="text-sm">최근 검색어</h3>
+              <p className="text-xs">전체삭제</p>
+            </div>
+            <div className="recently px-5 flex items-center justify-between text-sm text-notice border-b-[1px] border-gray w-[95%] m-auto">
+              <p className="py-3">크라프트 백</p>
+              <CloseIcon />
+            </div>
+            <div className="topic">
+              <h3 className="p-3 text-sm">급상승 검색어</h3>
+              <div className="columns-2  m-auto">
+                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item, index) => {
+                  return (
+                    <div className=" px-5 text-sm py-1 ">
+                      <p>
+                        <span className="text-main font-bold mx-4">
+                          {index + 1}
+                        </span>
+                        박재현 짱짱
+                      </p>
+                      <div
+                        className={`border-b-[1px] border-gray py-1 ${
+                          index === 4 || index === 9 ? "hidden" : ""
+                        }`}
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div className="flex w-[350px] h-[40px] border-[1px] border-main rounded-xl justify-between font-normal  ">
-          <Input
-            type="text"
-            color="black"
-            height={40}
-            width={350}
-            value="검색어를 입력해주세요"
-          />
-          <Image
-            className="mx-3"
-            src={"/logo/search.svg"}
-            alt="search"
-            width={14}
-            height={14}
-          />
-        </div>
-        <div className="flex items-center justify-around space-x-5">
-          <Image src="/logo/heart.svg" alt="heart" width={20} height={18} />
-          <Image src="/logo/basket.svg" alt="basket" width={18} height={18} />
-          <Image src="/logo/scrap.svg" alt="scrap" width={14} height={18} />
-          <Image
-            src="/logo/hamburger.svg"
-            alt="hamburger"
-            width={18}
-            height={12}
-          />
-          <div className="rounded-full bg-main w-[40px] h-[40px] flex items-center justify-center">
-            <Image
-              src="/logo/profile.svg"
-              alt="profile"
-              width={16}
-              height={16}
-            />
+        <div className="flex items-center space-x-4">
+          <HeartIcon color="none" />
+          <BasketIcon color="none" />
+          <ScrapIcon />
+          <HamburgerIcon />
+          <div className="bg-main w-[40px] h-[40px] rounded-full flex items-center justify-center ">
+            <ProfileIcon />
           </div>
         </div>
       </div>
+      <div className="border-t-[1px] border-gray" />
     </div>
   );
 }
