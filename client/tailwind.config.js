@@ -10,6 +10,7 @@ module.exports = {
         main: "#0CABA8",
         gray: "#D9D9D9",
         notice: "#999999",
+        lightGary: "#EDEDED",
       },
     },
   },
