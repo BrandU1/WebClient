@@ -58,7 +58,7 @@ function Nav() {
               <div className="columns-2  m-auto">
                 {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item, index) => {
                   return (
-                    <div className=" px-5 text-sm py-1 ">
+                    <div key={index} className=" px-5 text-sm py-1 ">
                       <p>
                         <span className="text-main font-bold mx-4">
                           {index + 1}

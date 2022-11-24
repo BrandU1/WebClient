@@ -2,6 +2,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import Image from "next/image";
+
 function Carousel() {
   const settings = {
     dots: false,
@@ -20,7 +21,7 @@ function Carousel() {
         <Slider {...settings}>
           {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item, index) => {
             return (
-              <div>
+              <div key={index}>
                 <Image
                   className="rounded-2xl"
                   src="/dummy/cat.png"
