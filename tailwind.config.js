@@ -11,6 +11,7 @@ module.exports = {
         gray: "#D9D9D9",
         notice: "#999999",
         lightGary: "#EDEDED",
+        modalBackground: "#F8F8FA",
       },
     },
   },

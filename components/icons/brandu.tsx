@@ -1,8 +1,13 @@
-function BranduIcon() {
+interface BranduProps {
+  width: number;
+  height: number;
+}
+
+function BranduIcon({ width, height }: BranduProps) {
   return (
     <svg
-      width="100"
-      height="22"
+      width={width}
+      height={height}
       viewBox="0 0 100 22"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

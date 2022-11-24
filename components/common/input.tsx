@@ -9,7 +9,7 @@ interface InputProps {
 function Input({ type, color, height, width, value }: InputProps) {
   return (
     <input
-      className={`text-${color} w-[${width}] h-[${height} rounded-xl text-sm font-bold border-main  focus:outline-0 px-2`}
+      className={`bg-transparent text-${color} w-[${width}] h-[${height} rounded-xl text-sm font-bold border-main  focus:outline-0 px-2`}
       type={type}
       autoComplete="off"
       value={value}
