@@ -1,13 +1,19 @@
 import Image from "next/image";
+import Pick from "../../common/pick";
 
-function Product() {
+interface ProductProps {
+  title: string;
+  subTitle: string;
+}
+
+function Product({ title, subTitle }: ProductProps) {
   return (
     <div className="max-w-4xl m-auto px-2">
       <div className="flex justify-between text-xs">
-        <p>오늘 하루만 싸게사는 초특가 상품</p>
-        <p className="text-notice cursor-pointer">전체보기</p>
+        <p className="subTitle text-base">{subTitle}</p>
+        <p className="allBtn text-xs text-gray">전체보기</p>
       </div>
-      <h2 className="font-bold">브랜뉴 오늘의 핫딜</h2>
+      <h2 className="title text-xl font-bold">{title}</h2>
       <div className="list columns-5">
         {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item, index) => {
           return (
@@ -22,6 +28,15 @@ function Product() {
               <div className="mt-4 ">
                 <p className="text-notice text-sm">미어캣</p>
                 <p className="font-bold">900,000 원</p>
+              </div>
+
+              <div className="pickBtn absolute bottom-[80px] right-[10px]">
+                <Pick
+                  li_height={16}
+                  li_width={14}
+                  bg_width={30}
+                  bg_height={30}
+                />
               </div>
             </div>
           );
