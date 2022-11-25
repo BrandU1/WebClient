@@ -12,6 +12,7 @@ module.exports = {
         notice: "#999999",
         lightGary: "#EDEDED",
         modalBackground: "#F8F8FA",
+        subContent: "#767676",
       },
     },
   },

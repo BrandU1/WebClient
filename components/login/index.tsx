@@ -7,7 +7,7 @@ import KakaoLogin from "react-kakao-login";
 
 interface LoginProps {
   open: boolean;
-  close: () => void;
+  close: () => any;
 }
 
 function LoginModal({ open, close }: LoginProps) {
@@ -71,7 +71,7 @@ function LoginModal({ open, close }: LoginProps) {
                   }}
                 />
               </div>
-              <div className="close text-center text-sm text-notice mt-32">
+              <div onClick={close} className="close text-center text-sm text-notice cursor-pointer mt-32">
                 로그인 건너뛰기
               </div>
             </div>

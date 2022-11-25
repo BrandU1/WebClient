@@ -7,7 +7,7 @@ import HamburgerIcon from "../icons/hamburger";
 import ProfileIcon from "../icons/profile";
 import BranduIcon from "../icons/brandu";
 import CloseIcon from "../icons/close";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import LoginModal from "@components/login";
 
 function Nav() {
@@ -17,13 +17,26 @@ function Nav() {
 
   // Login Modal 창
   const [modalOpen, setModalOpen] = useState(false);
+  const el = useRef();
 
   const openModal = () => {
     setModalOpen(true);
   };
-  const closeModal = () => {
-    setModalOpen(false);
-  };
+
+  const close = () =>{
+    setModalOpen(false)
+  }
+  // const closeModal = ({ e }:any) => {
+  //   if(modalOpen && (!el.current)) setModalOpen(false)
+  // };
+
+  // useEffect(()=>{
+  //   window.addEventListener('click',closeModal);
+  //   return() =>{
+  //     window.removeEventListener('click',closeModal);
+  //   }
+  // },[])
+
 
   return (
     <>
@@ -106,7 +119,7 @@ function Nav() {
         <div className="border-t-[1px] border-gray" />
       </div>
       <div className="flex justify-center">
-        <LoginModal open={modalOpen} close={closeModal} />
+        <LoginModal open={modalOpen} close={close} />
       </div>
     </>
   );
