@@ -2,8 +2,8 @@ import { useRef, useState } from "react";
 import { Link } from "react-scroll";
 import Image from "next/image";
 import ProductReview from "./productreview";
-import Star from "../../common/star";
-import ModalFrame from "@components/common/modalframe";
+import Star from "@common/star";
+import ModalFrame from "@common/modalframe";
 import * as React from "react";
 
 function Detail() {

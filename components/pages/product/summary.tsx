@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Image from "next/image";
-import Pick from "../../common/pick";
-import Badge from "../../../atoms/badge";
+import Pick from "@common/pick";
+import Badge from "@atoms/badge";
 
 function Summary() {
   const [num, setNum] = useState<number>(0);

@@ -1,10 +1,10 @@
-import Nav from "../components/header/nav";
-import SubMenu from "../components/header/Submenu";
-import Carousel from "../components/pages/home/carousel";
-import Product from "../components/pages/home/product";
+import Nav from "@components/header/nav";
+import SubMenu from "@components/header/Submenu";
+import Carousel from "@components/pages/home/carousel";
+import Product from "@components/pages/home/product";
 import Summary from "@components/pages/product/summary";
-import DetailMenu from "../components/pages/product/detailmenu";
-import Detail from "../components/pages/product/detail";
+import DetailMenu from "@components/pages/product/detailmenu";
+import Detail from "@components/pages/product/detail";
 
 export default function Home() {
   return (
