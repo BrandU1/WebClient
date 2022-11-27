@@ -3,6 +3,8 @@ import { Link } from "react-scroll";
 import Image from "next/image";
 import ProductReview from "./productreview";
 import Star from "../../common/star";
+import ModalFrame from "@components/common/modalframe";
+import * as React from "react";
 
 function Detail() {
   const [infoShow, setInfoShow] = useState<boolean>(false);
@@ -130,7 +132,7 @@ function Detail() {
                   <div
                     key={idx}
                     onClick={() => {
-                      // setReviewDetailOpen(true);
+                      setReviewDetailOpen(true);
                       // getModalId(idx);
                     }}
                   >
@@ -143,7 +145,7 @@ function Detail() {
                   <div
                     key={idx}
                     onClick={() => {
-                      // setReviewDetailOpen(true);
+                      setReviewDetailOpen(true);
                       // getModalId(idx);
                     }}
                   >
@@ -152,6 +154,51 @@ function Detail() {
                   </div>
                 );
               })}
+
+          {reviewDetailOpen ? ( //리뷰 자세히 보기
+            <ModalFrame
+              width={600}
+              height={500}
+              open={reviewDetailOpen}
+              onClose={() => {
+                setReviewDetailOpen(false);
+              }}
+              title={"리뷰상세"}
+              components={
+                <div className="flex flex-col mt-10 w-[600px] px-11">
+                  <div className="profile flex">
+                    <Image
+                      src={"/dummy/otter.png"} //element?.profile.profile_image
+                      width={40}
+                      height={40}
+                      className="profileImg w-10 h-10 mr-[5px] bg-white rounded-lg"
+                      alt={"profile"}
+                    />
+                    <div className="ml-[5px]">
+                      <span className="nickname text-xs">
+                        {/*{element?.profile.nickname}*/}
+                        닉네임
+                      </span>
+                      <Star size={"small"} count={3} />
+                    </div>
+                  </div>
+                  <span className="content text-xs text-subContent mt-2">
+                    {/*{element?.description}*/}
+                    더워요
+                  </span>
+                  <div className="reviewImg flex flex-row overflow-x-scroll space-x-5 mt-5">
+                    {[1, 2, 3, 4, 5].map((image, idx) => {
+                      return (
+                        <div>
+                          <div className="w-[150px] h-[150px] rounded-xl bg-[#D9D9D9]" />
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              }
+            />
+          ) : null}
         </div>
         {data?.length > 0 ? (
           data?.length > 3 ? (

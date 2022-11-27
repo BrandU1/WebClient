@@ -15,7 +15,7 @@ function Nav() {
   const showSearch = () => setFocused(true);
   const closeSearch = () => setFocused(false);
 
-  // Login Modal 창
+  // Login Modalframe 창
   const [modalOpen, setModalOpen] = useState(false);
   const el = useRef();
 
@@ -23,9 +23,9 @@ function Nav() {
     setModalOpen(true);
   };
 
-  const close = () =>{
-    setModalOpen(false)
-  }
+  const close = () => {
+    setModalOpen(false);
+  };
   // const closeModal = ({ e }:any) => {
   //   if(modalOpen && (!el.current)) setModalOpen(false)
   // };
@@ -36,7 +36,6 @@ function Nav() {
   //     window.removeEventListener('click',closeModal);
   //   }
   // },[])
-
 
   return (
     <>
