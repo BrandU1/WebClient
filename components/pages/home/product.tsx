@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Pick from "../../common/pick";
+import Pick from "@common/pick";
 
 interface ProductProps {
   title: string;

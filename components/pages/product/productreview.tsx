@@ -1,6 +1,6 @@
 import * as React from "react";
 import Image from "next/image";
-import Star from "../../common/star";
+import Star from "@common/star";
 
 function ProductReview() {
   // const { element } = props; // 리뷰 데이터

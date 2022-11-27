@@ -1,12 +1,12 @@
-import Input from "../common/input";
-import SearchIcon from "../icons/search";
-import HeartIcon from "../icons/heart";
-import BasketIcon from "../icons/basket";
-import ScrapIcon from "../icons/scrap";
-import HamburgerIcon from "../icons/hamburger";
-import ProfileIcon from "../icons/profile";
-import BranduIcon from "../icons/brandu";
-import CloseIcon from "../icons/close";
+import Input from "@common/input";
+import SearchIcon from "@icons/search";
+import HeartIcon from "@icons/heart";
+import BasketIcon from "@icons/basket";
+import ScrapIcon from "@icons/scrap";
+import HamburgerIcon from "@icons/hamburger";
+import ProfileIcon from "@icons//profile";
+import BranduIcon from "@icons/brandu";
+import CloseIcon from "@icons/close";
 import { useState, useEffect, useRef } from "react";
 import LoginModal from "@components/login";
 

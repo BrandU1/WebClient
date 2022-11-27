@@ -1,9 +1,9 @@
 import Link from "next/link";
 import React from "react";
-import AppleIcon from "../icons/apple";
-import PlayStore from "../icons/playstore";
-import Facebook from "../icons/facebook";
-import Instargram from "../icons/instargram";
+import AppleIcon from "@icons/apple";
+import PlayStore from "@icons/playstore";
+import Facebook from "@icons/facebook";
+import Instargram from "@icons/instargram";
 
 function Footer() {
   return (

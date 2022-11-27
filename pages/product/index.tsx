@@ -2,7 +2,7 @@ import Summary from "@components/pages/product/summary";
 import DetailMenu from "@components/pages/product/detailmenu";
 import Detail from "@components/pages/product/detail";
 
-function ProductPage() {
+function ProductDetail() {
   return (
     <div>
       <Summary />
@@ -11,4 +11,4 @@ function ProductPage() {
     </div>
   );
 }
-export default ProductPage;
+export default ProductDetail;
