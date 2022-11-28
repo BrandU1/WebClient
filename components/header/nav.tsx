@@ -9,6 +9,7 @@ import BranduIcon from "../icons/brandu";
 import CloseIcon from "../icons/close";
 import { useState, useEffect, useRef } from "react";
 import LoginModal from "@components/login";
+import Link from "next/link";
 
 function Nav() {
   const [focused, setFocused] = useState<boolean>(false);
@@ -23,9 +24,9 @@ function Nav() {
     setModalOpen(true);
   };
 
-  const close = () =>{
-    setModalOpen(false)
-  }
+  const close = () => {
+    setModalOpen(false);
+  };
   // const closeModal = ({ e }:any) => {
   //   if(modalOpen && (!el.current)) setModalOpen(false)
   // };
@@ -37,12 +38,13 @@ function Nav() {
   //   }
   // },[])
 
-
   return (
     <>
       <div className={`top-0 z-50 transition bg-white `}>
         <div className=" m-auto max-w-4xl py-3 flex justify-between items-center min-w-fit relative">
-          <BranduIcon width={100} height={22} />
+          <Link href="/">
+            <BranduIcon width={100} height={22} />
+          </Link>
           <p>스토어</p>
           <p>브랜드</p>
           <div>
