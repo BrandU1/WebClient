@@ -1,9 +1,9 @@
 import BranduIcon from "@components/icons/brandu";
-import CloseIcon from "@components/icons/close";
 import GoogleLogin from "react-google-login";
 import GoogleLoginIcon from "@components/icons/google";
 import KakaoLoginIcon from "@components/icons/kakao";
 import KakaoLogin from "react-kakao-login";
+import * as dotenv from "dotenv";
 
 interface LoginProps {
   open: boolean;
@@ -29,7 +29,7 @@ function LoginModal({ open, close }: LoginProps) {
             <div className="login-button mt-16">
               <div className="googleLogin flex justify-center ">
                 <GoogleLogin
-                  clientId=""
+                  clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || ""}
                   render={(renderProps) => (
                     <button
                       className="bg-white flex items-center px-4
@@ -49,7 +49,7 @@ function LoginModal({ open, close }: LoginProps) {
               </div>
               <div className="kakaoLogin flex justify-center mt-5">
                 <KakaoLogin
-                  token=""
+                  token={process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID || ""}
                   onSuccess={console.log}
                   onFail={console.error}
                   onLogout={console.info}
@@ -71,7 +71,10 @@ function LoginModal({ open, close }: LoginProps) {
                   }}
                 />
               </div>
-              <div onClick={close} className="close text-center text-sm text-notice cursor-pointer mt-32">
+              <div
+                onClick={close}
+                className="close text-center text-sm text-notice cursor-pointer mt-32"
+              >
                 로그인 건너뛰기
               </div>
             </div>

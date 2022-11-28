@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Pick from "@common/pick";
+import HeartIcon from "@icons/heart";
 
 interface ProductProps {
   title: string;
@@ -30,12 +31,12 @@ function Product({ title, subTitle }: ProductProps) {
                 <p className="font-bold">900,000 원</p>
               </div>
 
-              <div className="pickBtn absolute bottom-[80px] right-[10px]">
-                <Pick
-                  li_height={16}
-                  li_width={14}
-                  bg_width={30}
-                  bg_height={30}
+              <div className="pickBtn absolute bottom-[80px] right-[10px] w-8 h-8 rounded-xl bg-[#DFDFE0] flex justify-center items-center">
+                <HeartIcon
+                  color="#DFDFE0"
+                  width="20"
+                  height="17"
+                  border="#fff"
                 />
               </div>
             </div>

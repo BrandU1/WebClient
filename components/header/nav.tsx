@@ -16,6 +16,10 @@ function Nav() {
   const showSearch = () => setFocused(true);
   const closeSearch = () => setFocused(false);
 
+  // input State
+
+  const [input, setInput] = useState<string>("");
+
   // Login Modalframe 창
   const [modalOpen, setModalOpen] = useState(false);
   const el = useRef();
@@ -27,16 +31,6 @@ function Nav() {
   const close = () => {
     setModalOpen(false);
   };
-  // const closeModal = ({ e }:any) => {
-  //   if(modalOpen && (!el.current)) setModalOpen(false)
-  // };
-
-  // useEffect(()=>{
-  //   window.addEventListener('click',closeModal);
-  //   return() =>{
-  //     window.removeEventListener('click',closeModal);
-  //   }
-  // },[])
 
   return (
     <>
@@ -56,11 +50,14 @@ function Nav() {
               }`}
             >
               <Input
+                onChange={(e: any) => {
+                  setInput(e.target.value);
+                }}
                 type="text"
                 color="main"
                 height={350}
                 width={40}
-                value="검색어를 입력해주세요"
+                value={input}
               />
 
               <div className="mx-3">
@@ -106,7 +103,7 @@ function Nav() {
           </div>
 
           <div className="flex items-center space-x-4">
-            <HeartIcon color="none" />
+            <HeartIcon color="none" width="21" height="21" border="#767676" />
             <BasketIcon color="none" />
             <ScrapIcon />
             <HamburgerIcon />
