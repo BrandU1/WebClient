@@ -3,13 +3,21 @@ import { router } from "next/client";
 import Badge from "@atoms/badge";
 import { useState } from "react";
 import Pick from "@common/pick";
+import ImageSelect from "@components/pages/custom/imageselect";
 
 function Custom() {
   const [amount, setAmount] = useState<number>(1);
+  const [selectOpen, setSelectOpen] = useState<boolean>(false);
+  const handleOpen = () => {
+    setSelectOpen(true);
+  };
+  const handleClose = () => {
+    setSelectOpen(false);
+  };
 
   return (
     <div className="flex flex-col">
-      <div className="customItemList flex flex-row justify-center border-b w-full mt-4 pb-4">
+      <div className="customItemList flex flex-row justify-center border-b border-gray w-full mt-4 pb-4">
         <div className="DrawTool max-w-4xl flex flex-row space-x-[18px]">
           <Image
             src={"/custom/backBtn.svg"}
@@ -48,6 +56,7 @@ function Custom() {
             height={16}
           />
           <Image
+            onClick={handleOpen}
             src={"/custom/imageBtn.svg"}
             alt={"imageBtn"}
             width={18}
@@ -130,7 +139,7 @@ function Custom() {
         </div>
       </div>
       <div className="flex flex-row m-auto mt-3">
-        <div className="image w-[510px] h-[400px] bg-bg-gray">
+        <div className="image w-[510px] h-[400px]">
           <Image
             src={"/dummy/cat.png"}
             width={510}
@@ -250,6 +259,9 @@ function Custom() {
           </div>
         </div>
       </div>
+      {selectOpen && (
+        <ImageSelect open={selectOpen} handleClose={handleClose} />
+      )}
     </div>
   );
 }
