@@ -10,6 +10,8 @@ import CloseIcon from "@icons/close";
 import { useState, useEffect, useRef } from "react";
 import LoginModal from "@components/login";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import Category from "@components/category";
 
 function Nav() {
   const [focused, setFocused] = useState<boolean>(false);
@@ -31,6 +33,14 @@ function Nav() {
   const close = () => {
     setModalOpen(false);
   };
+
+  const router = useRouter();
+  const path = router.pathname;
+
+  //category 창
+
+  const [category, setCategory] = useState<boolean>(false);
+  const handleCategory = () => setCategory(!category);
 
   return (
     <>
@@ -103,10 +113,31 @@ function Nav() {
           </div>
 
           <div className="flex items-center space-x-4">
-            <HeartIcon color="none" width="21" height="21" border="#767676" />
-            <BasketIcon color="none" />
+            <Link href="/pick">
+              {path.includes("pick") ? (
+                <HeartIcon
+                  color="none"
+                  width="21"
+                  height="21"
+                  border="#0CABA8"
+                />
+              ) : (
+                <HeartIcon
+                  color="none"
+                  width="21"
+                  height="21"
+                  border="#767676"
+                />
+              )}
+            </Link>
+            <BasketIcon color="none" width="18" height="18" stroke="#767676" />
             <ScrapIcon />
-            <HamburgerIcon />
+            <div className="cursor-pointer">
+              <HamburgerIcon
+                onClick={handleCategory}
+                color={`${category ? "#0CABA8" : "#767676"}`}
+              />
+            </div>
             <div
               onClick={openModal}
               className="bg-main w-[40px] h-[40px] rounded-full flex items-center justify-center "
@@ -119,6 +150,13 @@ function Nav() {
       </div>
       <div className="flex justify-center">
         <LoginModal open={modalOpen} close={close} />
+      </div>
+      <div
+        className={`absolute bg-modalBackground w-full ${
+          category ? "block " : "hidden"
+        }`}
+      >
+        <Category />
       </div>
     </>
   );

@@ -1,6 +1,12 @@
-function HamburgerIcon() {
+interface HambugerProps {
+  onClick: () => void;
+  color: string;
+}
+
+function HamburgerIcon({ onClick, color }: HambugerProps) {
   return (
     <svg
+      onClick={onClick}
       width="20"
       height="14"
       viewBox="0 0 20 14"
@@ -9,7 +15,7 @@ function HamburgerIcon() {
     >
       <path
         d="M1 7H19M1 1H19M1 13H19"
-        stroke="#767676"
+        stroke={color}
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"

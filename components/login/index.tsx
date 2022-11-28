@@ -7,7 +7,7 @@ import * as dotenv from "dotenv";
 
 interface LoginProps {
   open: boolean;
-  close: () => any;
+  close: () => void;
 }
 
 function LoginModal({ open, close }: LoginProps) {
@@ -29,7 +29,7 @@ function LoginModal({ open, close }: LoginProps) {
             <div className="login-button mt-16">
               <div className="googleLogin flex justify-center ">
                 <GoogleLogin
-                  clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || ""}
+                  clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || " "}
                   render={(renderProps) => (
                     <button
                       className="bg-white flex items-center px-4
