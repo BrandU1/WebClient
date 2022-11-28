@@ -14,8 +14,8 @@ export default function Home() {
       </div>
       <div className="productList">
         <Product
-          title={"브랜뉴 오늘의 핫딜"}
-          subTitle={"오늘 하루만 싸게파는 초특가 상품"}
+          title="브랜뉴 오늘의 핫딜"
+          subTitle="오늘 하루만 싸게파는 초특가 상품"
         />
       </div>
     </div>

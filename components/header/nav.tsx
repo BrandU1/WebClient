@@ -9,11 +9,18 @@ import BranduIcon from "@icons/brandu";
 import CloseIcon from "@icons/close";
 import { useState, useEffect, useRef } from "react";
 import LoginModal from "@components/login";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import Category from "@components/category";
 
 function Nav() {
   const [focused, setFocused] = useState<boolean>(false);
   const showSearch = () => setFocused(true);
   const closeSearch = () => setFocused(false);
+
+  // input State
+
+  const [input, setInput] = useState<string>("");
 
   // Login Modalframe 창
   const [modalOpen, setModalOpen] = useState(false);
@@ -26,22 +33,22 @@ function Nav() {
   const close = () => {
     setModalOpen(false);
   };
-  // const closeModal = ({ e }:any) => {
-  //   if(modalOpen && (!el.current)) setModalOpen(false)
-  // };
 
-  // useEffect(()=>{
-  //   window.addEventListener('click',closeModal);
-  //   return() =>{
-  //     window.removeEventListener('click',closeModal);
-  //   }
-  // },[])
+  const router = useRouter();
+  const path = router.pathname;
+
+  //category 창
+
+  const [category, setCategory] = useState<boolean>(false);
+  const handleCategory = () => setCategory(!category);
 
   return (
     <>
       <div className={`top-0 z-50 transition bg-white `}>
         <div className=" m-auto max-w-4xl py-3 flex justify-between items-center min-w-fit relative">
-          <BranduIcon width={100} height={22} />
+          <Link href="/">
+            <BranduIcon width={100} height={22} />
+          </Link>
           <p>스토어</p>
           <p>브랜드</p>
           <div>
@@ -53,11 +60,14 @@ function Nav() {
               }`}
             >
               <Input
+                onChange={(e: any) => {
+                  setInput(e.target.value);
+                }}
                 type="text"
                 color="main"
                 height={350}
                 width={40}
-                value="검색어를 입력해주세요"
+                value={input}
               />
 
               <div className="mx-3">
@@ -103,10 +113,31 @@ function Nav() {
           </div>
 
           <div className="flex items-center space-x-4">
-            <HeartIcon color="none" />
-            <BasketIcon color="none" />
+            <Link href="/pick">
+              {path.includes("pick") ? (
+                <HeartIcon
+                  color="none"
+                  width="21"
+                  height="21"
+                  border="#0CABA8"
+                />
+              ) : (
+                <HeartIcon
+                  color="none"
+                  width="21"
+                  height="21"
+                  border="#767676"
+                />
+              )}
+            </Link>
+            <BasketIcon color="none" width="18" height="18" stroke="#767676" />
             <ScrapIcon />
-            <HamburgerIcon />
+            <div className="cursor-pointer">
+              <HamburgerIcon
+                onClick={handleCategory}
+                color={`${category ? "#0CABA8" : "#767676"}`}
+              />
+            </div>
             <div
               onClick={openModal}
               className="bg-main w-[40px] h-[40px] rounded-full flex items-center justify-center "
@@ -119,6 +150,13 @@ function Nav() {
       </div>
       <div className="flex justify-center">
         <LoginModal open={modalOpen} close={close} />
+      </div>
+      <div
+        className={`absolute bg-modalBackground w-full ${
+          category ? "block " : "hidden"
+        }`}
+      >
+        <Category />
       </div>
     </>
   );

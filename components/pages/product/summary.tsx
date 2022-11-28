@@ -24,7 +24,7 @@ function Summary() {
             >
               <Image
                 className="rounded-xl"
-                src={"/dummy/mouse.png"}
+                src={"/dummy/hazun.png"}
                 width={80}
                 height={80}
                 alt={"imagePreview"}
@@ -43,7 +43,14 @@ function Summary() {
           {/*  height={400}*/}
           {/*  alt={"mainImage"}*/}
           {/*/>*/}
-          <div className="w-[400px] h-[400px] bg-gray rounded-xl" />
+          <Image
+            className="rounded-xl"
+            src="/dummy/hazunmain.png"
+            alt="hazun"
+            width={400}
+            height={500}
+          />
+          {/*<div className="w-[400px] h-[400px] bg-gray rounded-xl" />*/}
         </div>
         <div
           onClick={() => {
@@ -63,9 +70,9 @@ function Summary() {
       <div className="info flex flex-col ml-5 w-fit h-fit">
         <div className="flex flex-row justify-between">
           <div className="name&tag flex flex-col">
-            <p className="w-max text-base">에코 친환경</p>
+            <p className="w-max text-base">노하준</p>
             <span className="text-[#767676] text-xs mt-1">
-              #생활용품 #칫솔 #욕실 #천연
+              #갖고싶다 #이 남자 #오늘의 남자
             </span>
           </div>
           {/*<Share link={link} />*/}
@@ -79,7 +86,7 @@ function Summary() {
             <div className="flex flex-row justify-end items-center">
               <p className="text-lg font-bold">
                 {/*{data?.price.toLocaleString()}*/}
-                6,000
+                10,000
               </p>
               <p className="text-sm ml-1">원</p>
             </div>
@@ -87,7 +94,7 @@ function Summary() {
               <p className="text-xs mr-[10px]">(시즌 특가)</p>
               <p className="text-lg font-bold">
                 {/*{data?.price.toLocaleString()}*/}
-                5,000
+                100
               </p>
               <p className="text-sm ml-1">원 </p>
             </div>

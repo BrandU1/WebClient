@@ -34,8 +34,6 @@ function ModalFrame({
     p: 4,
   };
 
-  console.log("open");
-
   return (
     <div className="focus:outline-0">
       <Modal open={open} onClose={onClose}>
