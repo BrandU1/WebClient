@@ -6,7 +6,7 @@ import { useState } from "react";
 
 interface ModalProps {
   width: number;
-  height: number;
+  height: number | string;
   onClose: any; //backBtn
   open: boolean; //Modal 열기
   title: string; //Modal 제목
