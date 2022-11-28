@@ -1,5 +1,5 @@
 // @ts-ignore
-// import { Scrollbar } from "react-scrollbars-custom";
+import { Scrollbar } from "react-scrollbars-custom";
 import Image from "next/image";
 import ModalFrame from "@common/modalframe";
 
