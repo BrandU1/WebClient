@@ -1,6 +1,6 @@
-import HeartIcon from "@icons/heart";
+import BasketIcon from "@icons/basket";
 
-interface PickProps {
+interface BasketProps {
   li_height: number;
   li_width: number;
   bg_height: number;
@@ -8,27 +8,27 @@ interface PickProps {
   li_color: string;
 }
 
-function Pick({
+function Basket({
   li_height,
   li_width,
   bg_height,
   bg_width,
   li_color,
-}: PickProps) {
+}: BasketProps) {
   return (
     <div>
       <button
         className={`w-[${bg_width}px] h-[${bg_height}px] bg-gray rounded-xl flex justify-center items-center`}
       >
-        <HeartIcon
-          color="none"
-          width={li_width}
+        <BasketIcon
           height={li_height}
-          border={li_color}
+          width={li_width}
+          color="none"
+          stroke={li_color}
         />
       </button>
     </div>
   );
 }
 
-export default Pick;
+export default Basket;

@@ -1,7 +1,7 @@
 interface HeartIconProps {
   color: string;
-  width: string;
-  height: string;
+  width: number;
+  height: number;
   border: string;
 }
 

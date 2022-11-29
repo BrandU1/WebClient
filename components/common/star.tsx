@@ -19,8 +19,7 @@ function Star({ count, size }: StarProps) {
           size={size}
           precision={0.5}
           onChange={(event, newValue) => {
-            // @ts-ignore
-            setValue(newValue);
+            setValue(newValue ?? 0);
           }}
           emptyIcon={<StarIcon style={{ opacity: 1 }} fontSize="inherit" />}
         />

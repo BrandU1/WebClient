@@ -1,7 +1,9 @@
 import { useState } from "react";
 import Image from "next/image";
-import Pick from "@common/pick";
 import Badge from "@atoms/badge";
+import Link from "next/link";
+import Pick from "@common/pick";
+import Basket from "@common/basket";
 
 function Summary() {
   const [num, setNum] = useState<number>(0);
@@ -36,13 +38,6 @@ function Summary() {
 
       <div className="mainImg ml-2 relative">
         <div className={`w-[400px] h-[400px] ${toggle ? "hidden" : "block"}`}>
-          {/*<Image*/}
-          {/*  className="rounded-xl"*/}
-          {/*  src={"/dummy/mouse.png"}*/}
-          {/*  width={400}*/}
-          {/*  height={400}*/}
-          {/*  alt={"mainImage"}*/}
-          {/*/>*/}
           <Image
             className="rounded-xl"
             src="/dummy/hazunmain.png"
@@ -50,7 +45,6 @@ function Summary() {
             width={400}
             height={500}
           />
-          {/*<div className="w-[400px] h-[400px] bg-gray rounded-xl" />*/}
         </div>
         <div
           onClick={() => {
@@ -130,19 +124,12 @@ function Summary() {
                 }
               }}
             >
-              <svg
-                width="12"
-                height="2"
-                viewBox="0 0 12 2"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M0.666016 1H11.3327"
-                  stroke="#0CABA8"
-                  strokeLinecap="round"
-                />
-              </svg>
+              <Image
+                src={"/logo/minus.svg"}
+                alt={"minus"}
+                width={16}
+                height={16}
+              />
             </button>
             <span>{String(amount).padStart(2, "0")}</span>
             <button
@@ -174,14 +161,31 @@ function Summary() {
         </div>
         <div className="flex flex-col mt-5">
           <div className="flex flex-row space-x-[10px]">
-            <Pick li_height={24} li_width={24} bg_height={45} bg_width={45} />
-            {/*<Bucket Pick={data?.is_basket} ProductNum={data?.id} />*/}
-            <button
-              className="w-64 h-11 bg-main rounded-xl flex flex-row justify-center items-center"
-              onClick={() => {}}
+            <Pick
+              li_height={24}
+              li_width={24}
+              bg_height={45}
+              bg_width={45}
+              li_color={"white"}
+            />
+            <Basket
+              li_height={22}
+              li_width={22}
+              bg_height={45}
+              bg_width={45}
+              li_color={"white"}
+            />
+            <Link
+              href={{
+                pathname: "./1/custom",
+                query: { amount },
+              }}
+              as={"./1/custom"}
             >
-              <span className="text-white font-bold text-sm">구매하기</span>
-            </button>
+              <button className="w-64 h-11 bg-main rounded-xl flex flex-row justify-center items-center">
+                <span className="text-white font-bold text-sm">구매하기</span>
+              </button>
+            </Link>
           </div>
         </div>
       </div>
