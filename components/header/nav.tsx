@@ -22,9 +22,15 @@ function Nav() {
 
   const [input, setInput] = useState<string>("");
 
-  // Login Modalframe 창
+  // Login 관련
   const [modalOpen, setModalOpen] = useState(false);
   const el = useRef();
+  const [token, setToken] = useState<any>(null);
+  useEffect(() => {
+    if (localStorage.getItem("access_token")) {
+      setToken(localStorage.getItem("access_token"));
+    }
+  });
 
   const openModal = () => {
     setModalOpen(true);
@@ -113,25 +119,36 @@ function Nav() {
           </div>
 
           <div className="flex items-center space-x-4">
-            <Link href="/pick">
-              {path.includes("pick") ? (
-                <HeartIcon
-                  color="none"
-                  width="21"
-                  height="21"
-                  border="#0CABA8"
-                />
-              ) : (
-                <HeartIcon
-                  color="none"
-                  width="21"
-                  height="21"
-                  border="#767676"
-                />
-              )}
-            </Link>
-            <BasketIcon color="none" width="18" height="18" stroke="#767676" />
-            <ScrapIcon />
+            <div className={`${token ? "block" : "hidden"} cursor-pointer`}>
+              <Link href="/pick">
+                {path.includes("pick") ? (
+                  <HeartIcon
+                    color="none"
+                    width={21}
+                    height={21}
+                    border="#0CABA8"
+                  />
+                ) : (
+                  <HeartIcon
+                    color="none"
+                    width={21}
+                    height={21}
+                    border="#767676"
+                  />
+                )}
+              </Link>
+            </div>
+            <div className={`${token ? "block" : "hidden"} cursor-pointer`}>
+              <BasketIcon
+                color="none"
+                width={18}
+                height={18}
+                stroke="#767676"
+              />
+            </div>
+            <div className={`${token ? "block" : "hidden"} cursor-pointer`}>
+              <ScrapIcon />
+            </div>
             <div className="cursor-pointer">
               <HamburgerIcon
                 onClick={handleCategory}
@@ -140,7 +157,9 @@ function Nav() {
             </div>
             <div
               onClick={openModal}
-              className="bg-main w-[40px] h-[40px] rounded-full flex items-center justify-center "
+              className={`${
+                token ? "bg-main" : "bg-notice"
+              } w-[40px] h-[40px] rounded-full flex items-center justify-center `}
             >
               <ProfileIcon />
             </div>

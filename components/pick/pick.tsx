@@ -40,8 +40,8 @@ function PickList() {
                 <div className="bg-gray rounded-lg flex justify-center items-center w-7 h-7 mt-3">
                   <BasketIcon
                     color="#D9D9D9"
-                    width="18"
-                    height="18"
+                    width={18}
+                    height={18}
                     stroke="white"
                   />
                 </div>

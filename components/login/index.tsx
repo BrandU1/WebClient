@@ -21,6 +21,19 @@ function LoginModal({ open, close }: LoginProps) {
       .then((response) => {
         localStorage.setItem("access_token", response.data.access_token);
         localStorage.setItem("refresh_token", response.data.refresh_token);
+        window.location.href = "/";
+      });
+  };
+
+  const GoogleSuccess = async (res: any) => {
+    client
+      .post(`/auth/google/login`, {
+        access_token: res.accessToken,
+      })
+      .then((response) => {
+        localStorage.setItem("access_token", response.data.access_token);
+        localStorage.setItem("refresh_token", response.data.refresh_token);
+        window.location.href = "/";
       });
   };
 
@@ -55,7 +68,7 @@ function LoginModal({ open, close }: LoginProps) {
                     </button>
                   )}
                   buttonText="구글로 로그인"
-                  // onSuccess={responseGoogle}
+                  onSuccess={GoogleSuccess}
                   // onFailure={responseGoogle}
                   cookiePolicy={"single_host_origin"}
                 />

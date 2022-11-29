@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Pick from "@common/pick";
 import HeartIcon from "@icons/heart";
+import { useEffect, useState } from "react";
 
 interface ProductProps {
   title: string;
@@ -8,6 +9,13 @@ interface ProductProps {
 }
 
 function Product({ title, subTitle }: ProductProps) {
+  const [token, setToken] = useState<any>(null);
+  useEffect(() => {
+    if (localStorage.getItem("access_token")) {
+      setToken(localStorage.getItem("access_token"));
+    }
+  });
+
   return (
     <div className="max-w-4xl m-auto px-5">
       <div className="flex justify-between text-xs">
@@ -31,11 +39,15 @@ function Product({ title, subTitle }: ProductProps) {
                 <p className="font-bold">90,000 원</p>
               </div>
 
-              <div className="pickBtn absolute bottom-[80px] right-[10px] w-8 h-8 rounded-xl bg-[#DFDFE0] flex justify-center items-center">
+              <div
+                className={`${
+                  token ? "block" : "hidden"
+                } pickBtn absolute bottom-[80px] right-[10px] w-8 h-8 rounded-xl bg-[#DFDFE0] flex justify-center items-center`}
+              >
                 <HeartIcon
                   color="#DFDFE0"
-                  width="20"
-                  height="17"
+                  width={20}
+                  height={17}
                   border="#fff"
                 />
               </div>

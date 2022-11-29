@@ -1,6 +1,26 @@
 import Image from "next/image";
+import client from "@lib/api";
+import { useQuery } from "@tanstack/react-query";
+
+interface Categories {
+  id: number;
+  name: string;
+}
 
 function Category() {
+  const getCategories = () => {
+    return client.get("/products/categories/").then((res) => res.data);
+  };
+
+  const { data, isLoading } = useQuery<Categories[]>(
+    ["category"],
+    getCategories
+  );
+
+  if (isLoading) {
+    return <div></div>;
+  }
+
   return (
     <div className="flex justify-center">
       <div className="grid grid-cols-6 pt-5 pb-40  w-[700px] ">
@@ -23,10 +43,11 @@ function Category() {
         })}
       </div>
       <div className="h-auto w-[110px] bg-white border-[1px] border-main text-center">
-        {[1, 2, 3, 4, 5, 6].map((item, index) => {
+        {data?.map((item, index) => {
+          console.log(data);
           return (
             <div key={index} className="py-6">
-              <p className="font-normal text-sm">한동연</p>
+              <p className="font-normal text-sm">{item.name}</p>
             </div>
           );
         })}

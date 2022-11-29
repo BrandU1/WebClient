@@ -3,16 +3,22 @@ import type { AppProps } from "next/app";
 import Nav from "@components/header/nav";
 import SubMenu from "@components/header/Submenu";
 import Footer from "@components/footer";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useState } from "react";
 
 export default function App({ Component, pageProps }: AppProps) {
+  const [front] = useState(() => new QueryClient());
+
   return (
     <div>
-      <div className="NavBar z-40 sticky transition top-0 border-b-[1px] border-gray">
-        <Nav />
-        <SubMenu />
-      </div>
-      <Component {...pageProps} />
-      <Footer />
+      <QueryClientProvider client={front} contextSharing={true}>
+        <div className="NavBar z-40 sticky transition top-0 border-b-[1px] border-gray">
+          <Nav />
+          <SubMenu />
+        </div>
+        <Component {...pageProps} />
+        <Footer />
+      </QueryClientProvider>
     </div>
   );
 }
