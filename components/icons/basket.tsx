@@ -1,7 +1,7 @@
 interface BasketProps {
   color: string;
-  width: string;
-  height: string;
+  width: number;
+  height: number;
   stroke: string;
 }
 

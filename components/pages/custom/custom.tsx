@@ -2,11 +2,15 @@ import Image from "next/image";
 import { router } from "next/client";
 import Badge from "@atoms/badge";
 import { useState } from "react";
-import Pick from "@common/pick";
 import ImageSelect from "@components/pages/custom/imageselect";
+import BasketIcon from "@icons/basket";
+import Pick from "@common/pick";
+import Basket from "@common/basket";
+import { useRouter } from "next/router";
 
 function Custom() {
-  const [amount, setAmount] = useState<number>(1);
+  const router = useRouter();
+  const [amount, setAmount] = useState<number>(Number(router.query.amount));
   const [selectOpen, setSelectOpen] = useState<boolean>(false);
   const handleOpen = () => {
     setSelectOpen(true);
@@ -248,8 +252,20 @@ function Custom() {
             </div>
           </div>
           <div className="flex flex-row mt-5 space-x-[10px] items-center">
-            <Pick li_height={24} li_width={24} bg_height={45} bg_width={45} />
-            {/*<Bucket Pick={data?.is_basket} ProductNum={data?.id} />*/}
+            <Pick
+              li_height={24}
+              li_width={24}
+              bg_height={45}
+              bg_width={45}
+              li_color={"white"}
+            />
+            <Basket
+              li_height={22}
+              li_width={22}
+              bg_height={45}
+              bg_width={45}
+              li_color={"white"}
+            />
             <button
               className="w-64 h-11 bg-main rounded-xl ml-[10px] flex flex-row justify-center items-center"
               onClick={() => {}}
