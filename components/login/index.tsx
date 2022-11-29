@@ -3,7 +3,9 @@ import GoogleLogin from "react-google-login";
 import GoogleLoginIcon from "@components/icons/google";
 import KakaoLoginIcon from "@components/icons/kakao";
 import KakaoLogin from "react-kakao-login";
-import * as dotenv from "dotenv";
+import Axios from "axios";
+import { setCookie } from "cookies-next";
+import client from "@lib/api";
 
 interface LoginProps {
   open: boolean;
@@ -11,6 +13,17 @@ interface LoginProps {
 }
 
 function LoginModal({ open, close }: LoginProps) {
+  const kakaoSuccess = async (res: any) => {
+    client
+      .post(`/auth/kakao/login`, {
+        access_token: res.response.access_token,
+      })
+      .then((response) => {
+        localStorage.setItem("access_token", response.data.access_token);
+        localStorage.setItem("refresh_token", response.data.refresh_token);
+      });
+  };
+
   return (
     <div
       className={`absolute flex justify-center py-36 top-0 ${
@@ -50,7 +63,7 @@ function LoginModal({ open, close }: LoginProps) {
               <div className="kakaoLogin flex justify-center mt-5">
                 <KakaoLogin
                   token={process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID || ""}
-                  onSuccess={console.log}
+                  onSuccess={kakaoSuccess}
                   onFail={console.error}
                   onLogout={console.info}
                   render={({ onClick }) => {

@@ -45,4 +45,4 @@ jspm_packages
 
 out/
 
-.env
+.env*

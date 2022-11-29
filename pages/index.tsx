@@ -5,8 +5,21 @@ import Product from "@components/pages/home/product";
 import Summary from "@components/pages/product/summary";
 import DetailMenu from "@components/pages/product/detailmenu";
 import Detail from "@components/pages/product/detail";
+import client from "@lib/api";
+import useAuth from "../hooks/useAuth";
 
 export default function Home() {
+  const isAuthenticated = useAuth();
+
+  const getAddresses = () => {
+    if (!isAuthenticated) return null;
+    return client
+      .get(`accounts/addresses`)
+      .then((res) => console.log(res.data));
+  };
+
+  getAddresses();
+
   return (
     <div className="main">
       <div className="carousel">

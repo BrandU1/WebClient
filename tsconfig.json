@@ -19,7 +19,8 @@
       "@components/*": ["components/*"],
       "@common/*": ["components/common/*"],
       "@icons/*": ["components/icons/*"],
-      "@atoms/*": ["atoms/*"]
+      "@atoms/*": ["atoms/*"],
+      "@lib/*": ["lib/*"],
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
