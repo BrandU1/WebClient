@@ -3,6 +3,8 @@ import Pick from "@common/pick";
 import HeartIcon from "@icons/heart";
 import { useEffect, useState } from "react";
 import { ProductInterface } from "../../../types/product";
+import client from "@lib/api";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface ProductProps {
   title: string;
@@ -17,6 +19,35 @@ function Product({ title, subTitle, products }: ProductProps) {
       setToken(localStorage.getItem("access_token"));
     }
   });
+
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation(
+    (id: number) =>
+      client
+        .post(`/accounts/wishes/${id}/create_with_pk`)
+        .then((res) => res.data),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["hotDeal"]);
+      },
+    }
+  );
+  const onValid = (id: number) => {
+    mutation.mutate(id);
+  };
+
+  const deletePick = useMutation(
+    (id: number) =>
+      client
+        .delete(`/accounts/wishes/${id}/delete_with_pk`)
+        .then((res) => res.data),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["hotDeal"]);
+      },
+    }
+  );
 
   return (
     <div className="max-w-4xl m-auto px-5">
@@ -42,17 +73,25 @@ function Product({ title, subTitle, products }: ProductProps) {
                 <p className="font-bold">{item.price.toLocaleString()} 원</p>
               </div>
 
-              <div
-                className={`${
-                  token ? "block" : "hidden"
-                } pickBtn absolute bottom-[80px] right-[10px] w-8 h-8 rounded-xl bg-[#DFDFE0] flex justify-center items-center`}
-              >
-                <HeartIcon
-                  color="#DFDFE0"
-                  width={20}
-                  height={17}
-                  border="#fff"
-                />
+              <div className={`${token ? "block" : "hidden"} `}>
+                <div
+                  onClick={() => {
+                    if (item.is_wish) {
+                      onValid(item.id);
+                    }
+                    deletePick.mutate(item.id);
+                  }}
+                  className={`${
+                    item.is_wish ? "bg-[#0CABA8]" : "bg-[#DFDFE0]"
+                  } pickBtn absolute bottom-[80px] right-[10px] w-8 h-8 rounded-xl bg-[#DFDFE0] flex justify-center items-center`}
+                >
+                  <HeartIcon
+                    color={`${item.is_wish ? "#fff" : "#DFDFE0"}`}
+                    width={20}
+                    height={17}
+                    border="#fff"
+                  />
+                </div>
               </div>
             </div>
           );
