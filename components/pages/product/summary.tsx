@@ -1,14 +1,27 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Badge from "@atoms/badge";
 import Link from "next/link";
 import Pick from "@common/pick";
 import Basket from "@common/basket";
+import client from "@lib/api";
+import { useRouter } from "next/router";
 
 function Summary() {
   const [num, setNum] = useState<number>(0);
   const [toggle, setToggle] = useState<boolean>(false);
   const [amount, setAmount] = useState<number>(1);
+  const [productId, setProductId] = useState<string>("");
+
+  useEffect(() => {
+    setProductId(document.location.href.substr(-1));
+  });
+
+  console.log(productId);
+
+  const getProduct = () => {
+    return client.get(`products/${productId}`);
+  };
 
   return (
     <div className="flex flex-row max-w-4xl m-auto px-3 mt-5">
