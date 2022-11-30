@@ -2,6 +2,7 @@ import Image from "next/image";
 import HeartIcon from "@icons/heart";
 import { useEffect, useState } from "react";
 import { ProductInterface } from "../../../types/product";
+import Link from "next/link";
 import client from "@lib/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
@@ -16,6 +17,7 @@ function Product({ title, subTitle, products }: ProductProps) {
   useEffect(() => {
     if (localStorage.getItem("access_token")) {
       setToken(localStorage.getItem("access_token"));
+      console.log(localStorage.getItem("access_token"));
     }
   });
 
@@ -56,18 +58,28 @@ function Product({ title, subTitle, products }: ProductProps) {
         {products?.map((item, index) => {
           return (
             <div key={index} className="py-3 relative">
-              <div className="h-60 relative">
-                <Image
-                  className="rounded-2xl"
-                  src={item.backdrop_image}
-                  alt="list"
-                  layout="fill"
-                />
-              </div>
-              <div className="mt-4">
-                <p className="text-notice text-sm">{item.name}</p>
-                <p className="font-bold">{item.price.toLocaleString()} 원</p>
-              </div>
+              <Link
+                href={{
+                  pathname: `/product/${item.id}`,
+                  query: {
+                    index: item.id,
+                  },
+                }}
+                as={`/product/${item.id}`}
+              >
+                <div className="h-60 relative">
+                  <Image
+                    className="rounded-2xl"
+                    src={item.backdrop_image}
+                    alt="list"
+                    layout="fill"
+                  />
+                </div>
+                <div className="mt-4">
+                  <p className="text-notice text-sm">{item.name}</p>
+                  <p className="font-bold">{item.price.toLocaleString()} 원</p>
+                </div>
+              </Link>
 
               <div className={`${token ? "block" : "hidden"} `}>
                 <div

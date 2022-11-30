@@ -1,14 +1,33 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Badge from "@atoms/badge";
 import Link from "next/link";
 import Pick from "@common/pick";
 import Basket from "@common/basket";
+import client from "@lib/api";
+import { useRouter } from "next/router";
+import { useQuery } from "@tanstack/react-query";
+import { ProductInfoInterface } from "../../../types/product";
 
 function Summary() {
   const [num, setNum] = useState<number>(0);
   const [toggle, setToggle] = useState<boolean>(false);
   const [amount, setAmount] = useState<number>(1);
+  const [productId, setProductId] = useState<string>("");
+
+  useEffect(() => {
+    setProductId(document.location.href.substr(-1));
+  });
+
+  console.log(productId);
+
+  const getProduct = () => {
+    return client.get(`products/${productId}`).then((res) => res.data);
+  };
+  const { data, isLoading } = useQuery<ProductInfoInterface>(
+    ["productSummary"],
+    getProduct
+  );
 
   return (
     <div className="flex flex-row max-w-4xl m-auto px-3 mt-5">
@@ -64,9 +83,9 @@ function Summary() {
       <div className="info flex flex-col ml-5 w-fit h-fit">
         <div className="flex flex-row justify-between">
           <div className="name&tag flex flex-col">
-            <p className="w-max text-base">노하준</p>
+            <p className="w-max text-base">{data?.name}</p>
             <span className="text-[#767676] text-xs mt-1">
-              #갖고싶다 #이 남자 #오늘의 남자
+              #{data?.category.name}
             </span>
           </div>
           {/*<Share link={link} />*/}
@@ -79,16 +98,14 @@ function Summary() {
           <div className="flex flex-col">
             <div className="flex flex-row justify-end items-center">
               <p className="text-lg font-bold">
-                {/*{data?.price.toLocaleString()}*/}
-                10,000
+                {data?.price.toLocaleString()}
               </p>
               <p className="text-sm ml-1">원</p>
             </div>
             <div className="flex flex-row text-main justify-end items-center">
               <p className="text-xs mr-[10px]">(시즌 특가)</p>
               <p className="text-lg font-bold">
-                {/*{data?.price.toLocaleString()}*/}
-                100
+                {data?.price.toLocaleString()}
               </p>
               <p className="text-sm ml-1">원 </p>
             </div>

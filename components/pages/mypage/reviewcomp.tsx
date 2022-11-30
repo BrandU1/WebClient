@@ -1,7 +1,31 @@
 import { useState } from "react";
+import client from "@lib/api";
+import { useQuery } from "@tanstack/react-query";
+import {
+  WritableReviewInterface,
+  WrittenReviewInterface,
+} from "../../../types/review";
 
 function ReviewComp() {
   const [reviewTab, setReviewTab] = useState<number>(0);
+  const getWrittenReview = () => {
+    return client.get(`accounts/reviews`).then((res) => res.data);
+  };
+  const { data: writtenData, isLoading: writtenIsLoading } = useQuery<
+    WrittenReviewInterface[]
+  >(["myWrittenReview"], getWrittenReview);
+  const getWritableReview = () => {
+    return client.get(`accounts/reviews/writable`).then((res) => res.data);
+  };
+  const { data: writableData, isLoading: writableIsLoading } = useQuery<
+    WritableReviewInterface[]
+  >(["myWritableReview"], getWritableReview);
+
+  if (writtenData || writableData) {
+    return <div></div>;
+  }
+
+  console.log("sssaa" + writtenData + "\n" + writableData);
 
   return (
     <div className="pl-5 flex flex-col flex-1">
@@ -32,7 +56,7 @@ function ReviewComp() {
       {/*작성 가능한 리뷰*/}
 
       <div className={`${reviewTab === 1 ? "hidden" : null}`}>
-        {/*{data?.map((list, idx) => {*/}
+        {/*{writableData?.map((list, idx) => {*/}
         {/*  return (*/}
         {/*    <div*/}
         {/*      key={idx}*/}
@@ -80,7 +104,7 @@ function ReviewComp() {
       {/*작성한 리뷰 */}
 
       <div className={`${reviewTab === 0 ? "hidden" : null}`}>
-        {/*{data?.map((list, idx) => {*/}
+        {/*{writtenData?.map((list, idx) => {*/}
         {/*  return (*/}
         {/*    <div*/}
         {/*      key={idx}*/}
