@@ -2,13 +2,15 @@ import Image from "next/image";
 import Pick from "@common/pick";
 import HeartIcon from "@icons/heart";
 import { useEffect, useState } from "react";
+import { ProductInterface } from "../../../types/product";
 
 interface ProductProps {
   title: string;
   subTitle: string;
+  products: ProductInterface[];
 }
 
-function Product({ title, subTitle }: ProductProps) {
+function Product({ title, subTitle, products }: ProductProps) {
   const [token, setToken] = useState<any>(null);
   useEffect(() => {
     if (localStorage.getItem("access_token")) {
@@ -24,19 +26,20 @@ function Product({ title, subTitle }: ProductProps) {
       </div>
       <h2 className="title text-xl font-bold">{title}</h2>
       <div className="list columns-5">
-        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item, index) => {
+        {products?.map((item, index) => {
           return (
             <div key={index} className="py-3 relative">
-              <Image
-                className="rounded-2xl"
-                src="/dummy/minwoo.png"
-                alt="list"
-                width={156}
-                height={200}
-              />
+              <div className="h-60 relative">
+                <Image
+                  className="rounded-2xl"
+                  src={item.backdrop_image}
+                  alt="list"
+                  layout="fill"
+                />
+              </div>
               <div className="mt-4">
-                <p className="text-notice text-sm">강민우 야광봉</p>
-                <p className="font-bold">90,000 원</p>
+                <p className="text-notice text-sm">{item.name}</p>
+                <p className="font-bold">{item.price.toLocaleString()} 원</p>
               </div>
 
               <div
