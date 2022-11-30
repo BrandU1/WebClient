@@ -1,10 +1,9 @@
 import Image from "next/image";
-import Pick from "@common/pick";
 import HeartIcon from "@icons/heart";
 import { useEffect, useState } from "react";
 import { ProductInterface } from "../../../types/product";
 import client from "@lib/api";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface ProductProps {
   title: string;
