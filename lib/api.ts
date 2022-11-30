@@ -12,7 +12,6 @@ client.interceptors.request.use(
     if (config.url!.includes("auth")) return config;
 
     config.headers!["Authorization"] = `Bearer ${access_token}`;
-    console.log(config);
     return config;
   },
   async (error) => {
