@@ -32,14 +32,11 @@ function Product({ title, subTitle, products }: ProductProps) {
       },
     }
   );
-  const onValid = (id: number) => {
-    mutation.mutate(id);
-  };
 
   const deletePick = useMutation(
     (id: number) =>
       client
-        .delete(`/accounts/wishes/${id}/delete_with_pk`)
+        .delete(`/accounts/wishes/${id}/create_with_pk`)
         .then((res) => res.data),
     {
       onSuccess: () => {
@@ -55,7 +52,7 @@ function Product({ title, subTitle, products }: ProductProps) {
         <p className="allBtn text-xs text-gray cursor-pointer">전체보기</p>
       </div>
       <h2 className="title text-xl font-bold">{title}</h2>
-      <div className="list columns-5">
+      <div className="list grid grid-cols-5 gap-x-4">
         {products?.map((item, index) => {
           return (
             <div key={index} className="py-3 relative">
@@ -76,9 +73,8 @@ function Product({ title, subTitle, products }: ProductProps) {
                 <div
                   onClick={() => {
                     if (item.is_wish) {
-                      onValid(item.id);
-                    }
-                    deletePick.mutate(item.id);
+                      deletePick.mutate(item.id);
+                    } else mutation.mutate(item.id);
                   }}
                   className={`${
                     item.is_wish ? "bg-[#0CABA8]" : "bg-[#DFDFE0]"

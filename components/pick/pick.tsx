@@ -1,8 +1,14 @@
 import CloseIcon from "@icons/close";
 import BasketIcon from "@icons/basket";
 import Image from "next/image";
+import { pickInterface } from "../../types/wish";
 
-function PickList() {
+interface PickList {
+  picks: pickInterface[];
+}
+
+function PickList({ picks }: PickList) {
+  console.log(picks);
   return (
     <div className="max-w-4xl m-auto ">
       <div>
@@ -10,24 +16,29 @@ function PickList() {
         <div className="border-[1px] border-black" />
       </div>
       <div className="pickList grid grid-cols-2 gap-x-7 m-auto">
-        {[1, 2, 3, 4, 5].map((res, idx) => {
+        {picks?.map((res, idx) => {
           return (
             <div key={idx} className=" py-4  flex justify-between w-full ">
               <div className="flex space-x-4">
-                <Image
-                  className="rounded-lg"
-                  src="/dummy/yohan.png"
-                  width={100}
-                  height={100}
-                  alt="product"
-                />
+                <div className="relative w-24 h-24">
+                  <Image
+                    className="rounded-lg"
+                    src={`http://192.168.0.2${res.product.backdrop_image}`}
+                    layout="fill"
+                    alt="product"
+                  />
+                </div>
+
                 <div>
                   <p className="font-semibold text-xs text-[#ff0000] py-1">
                     [품절임박]
                   </p>
-                  <h2 className="font-normal text-sm">안요한 후드티</h2>
+                  <h2 className="font-normal text-sm">{res.product.name}</h2>
                   <p>
-                    <span className="font-[1100] text-sm">8,000</span>원
+                    <span className="font-[1100] text-sm">
+                      {res.product.price.toLocaleString()}
+                    </span>
+                    원
                   </p>
                 </div>
               </div>
