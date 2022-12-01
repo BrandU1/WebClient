@@ -9,7 +9,11 @@ import { useRouter } from "next/router";
 import { useQuery } from "@tanstack/react-query";
 import { ProductInfoInterface } from "../../../types/product";
 
-function Summary() {
+interface ProductProps {
+  productInfo: ProductInfoInterface;
+}
+
+function Summary({ productInfo }: ProductProps) {
   const [num, setNum] = useState<number>(0);
   const [toggle, setToggle] = useState<boolean>(false);
   const [amount, setAmount] = useState<number>(1);
@@ -18,16 +22,6 @@ function Summary() {
   useEffect(() => {
     setProductId(document.location.href.substr(-1));
   });
-
-  console.log(productId);
-
-  const getProduct = () => {
-    return client.get(`products/${productId}`).then((res) => res.data);
-  };
-  const { data, isLoading } = useQuery<ProductInfoInterface>(
-    ["productSummary"],
-    getProduct
-  );
 
   return (
     <div className="flex flex-row max-w-4xl m-auto px-3 mt-5">
@@ -43,13 +37,14 @@ function Summary() {
                 setNum(idx);
               }}
             >
-              <Image
-                className="rounded-xl"
-                src={"/dummy/hazun.png"}
-                width={80}
-                height={80}
-                alt={"imagePreview"}
-              />
+              <div className="w-20 h-20 relative">
+                <Image
+                  className="rounded-xl"
+                  src={`${productInfo?.backdrop_image} `}
+                  layout="fill"
+                  alt={"imagePreview"}
+                />
+              </div>
             </div>
           );
         })}
@@ -59,10 +54,9 @@ function Summary() {
         <div className={`w-[400px] h-[400px] ${toggle ? "hidden" : "block"}`}>
           <Image
             className="rounded-xl"
-            src="/dummy/hazunmain.png"
-            alt="hazun"
-            width={400}
-            height={500}
+            src={productInfo?.backdrop_image || ""}
+            alt="productInfo"
+            layout="fill"
           />
         </div>
         <div
@@ -83,9 +77,9 @@ function Summary() {
       <div className="info flex flex-col ml-5 w-fit h-fit">
         <div className="flex flex-row justify-between">
           <div className="name&tag flex flex-col">
-            <p className="w-max text-base">{data?.name}</p>
+            <p className="w-max text-base">{productInfo?.name}</p>
             <span className="text-[#767676] text-xs mt-1">
-              #{data?.category.name}
+              #{productInfo?.category.name}
             </span>
           </div>
           {/*<Share link={link} />*/}
@@ -98,15 +92,21 @@ function Summary() {
           <div className="flex flex-col">
             <div className="flex flex-row justify-end items-center">
               <p className="text-lg font-bold">
-                {data?.price.toLocaleString()}
+                {productInfo?.price.toLocaleString()}
               </p>
               <p className="text-sm ml-1">원</p>
             </div>
             <div className="flex flex-row text-main justify-end items-center">
               <p className="text-xs mr-[10px]">(시즌 특가)</p>
-              <p className="text-lg font-bold">
-                {data?.price.toLocaleString()}
-              </p>
+              {productInfo?.price === 0 ? (
+                <p className="text-lg font-bold">
+                  {productInfo?.price.toLocaleString()}
+                </p>
+              ) : (
+                <p className="text-lg font-bold">
+                  {(productInfo?.price - 4000).toLocaleString()}
+                </p>
+              )}
               <p className="text-sm ml-1">원 </p>
             </div>
           </div>
