@@ -16,7 +16,10 @@ export default function App({ Component, pageProps }: AppProps) {
           <Nav />
           <SubMenu />
         </div>
-        <Component {...pageProps} />
+        <div className="max-w-4xl m-auto">
+          <Component {...pageProps} />
+        </div>
+
         <Footer />
       </QueryClientProvider>
     </div>

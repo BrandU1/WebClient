@@ -50,8 +50,8 @@ function Nav() {
 
   return (
     <>
-      <div className={`top-0 z-50 transition bg-white `}>
-        <div className=" m-auto max-w-4xl py-3 flex justify-between items-center min-w-fit relative">
+      <div className={`  top-0 z-50 transition bg-white `}>
+        <div className=" m-auto  max-w-4xl py-3 flex justify-between items-center min-w-fit relative">
           <Link href="/">
             <BranduIcon width={100} height={22} />
           </Link>
@@ -139,12 +139,23 @@ function Nav() {
               </Link>
             </div>
             <div className={`${token ? "block" : "hidden"} cursor-pointer`}>
-              <BasketIcon
-                color="none"
-                width={18}
-                height={18}
-                stroke="#767676"
-              />
+              <Link href="/basket">
+                {path.includes("basket") ? (
+                  <BasketIcon
+                    color="none"
+                    width={20}
+                    height={19}
+                    stroke="#0CABA8"
+                  />
+                ) : (
+                  <BasketIcon
+                    color="none"
+                    width={20}
+                    height={19}
+                    stroke="#767676"
+                  />
+                )}
+              </Link>
             </div>
             <div className={`${token ? "block" : "hidden"} cursor-pointer`}>
               <ScrapIcon />

@@ -15,8 +15,8 @@ function SubMenu() {
     }
   });
   return (
-    <div className="z-50 bg-white">
-      <div className="text-xs m-auto max-w-4xl font-normal flex py-2 justify-end space-x-4 text-notice ">
+    <div className=" m-auto max-w-4xl z-50 bg-white">
+      <div className="text-xs m-auto  font-normal flex py-2 justify-end space-x-4 text-notice ">
         <Link href="/notice">
           <p className="cursor-pointer">공지사항</p>
         </Link>

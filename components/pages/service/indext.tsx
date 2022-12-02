@@ -1,6 +1,6 @@
 function Service() {
   return (
-    <div className="max-w-4xl m-auto ">
+    <div className=" m-auto ">
       <div>
         <h2 className="py-5 font-bold text-xl">고객센터</h2>
         <div className="border-[1px] border-black" />

@@ -2,7 +2,7 @@ import Image from "next/image";
 
 function TopInfo() {
   return (
-    <div className="flex flex-col max-w-4xl m-auto mt-5">
+    <div className="flex flex-col  m-auto mt-5">
       <div className="flex flex-row w-full h-32 justify-between">
         <div className="profile bg-modalBackground rounded-xl w-80 h-32">
           <div className="flex flex-row space-x-2 flex flex-row items-center m-5">

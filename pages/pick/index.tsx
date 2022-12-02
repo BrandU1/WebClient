@@ -1,7 +1,7 @@
 import PickList from "@components/pick/pick";
 import client from "@lib/api";
 import { useQuery } from "@tanstack/react-query";
-import { BranduBaseResponse, pickInterface } from "../../types/wish";
+import { BranduBaseResponse, pickInterface } from "../../types/privacy";
 
 function Index() {
   const getPickList = () => {

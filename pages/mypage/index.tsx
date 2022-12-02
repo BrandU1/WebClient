@@ -4,7 +4,7 @@ import PayInfo from "@components/pages/mypage/payinfo";
 
 function MyOrder() {
   return (
-    <div className="max-w-4xl m-auto">
+    <div className=" m-auto">
       <TopInfo />
       <div className="flex flex-row">
         <SideTab num={0} />

@@ -2,6 +2,7 @@ import Image from "next/image";
 import { useState } from "react";
 import client from "@lib/api";
 import { useQuery } from "@tanstack/react-query";
+import Loading from "@common/loading";
 
 interface Categories {
   id: number;
@@ -27,7 +28,11 @@ function Category() {
   );
 
   if (isLoading) {
-    return <div></div>;
+    return (
+      <div>
+        <Loading />
+      </div>
+    );
   }
 
   return (

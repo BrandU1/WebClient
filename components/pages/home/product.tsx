@@ -17,7 +17,6 @@ function Product({ title, subTitle, products }: ProductProps) {
   useEffect(() => {
     if (localStorage.getItem("access_token")) {
       setToken(localStorage.getItem("access_token"));
-      console.log(localStorage.getItem("access_token"));
     }
   });
 
@@ -48,7 +47,7 @@ function Product({ title, subTitle, products }: ProductProps) {
   );
 
   return (
-    <div className="max-w-4xl m-auto px-5">
+    <div className=" m-auto px-5">
       <div className="flex justify-between text-xs">
         <p className="subTitle text-base">{subTitle}</p>
         <p className="allBtn text-xs text-gray cursor-pointer">전체보기</p>
@@ -89,7 +88,7 @@ function Product({ title, subTitle, products }: ProductProps) {
                     } else mutation.mutate(item.id);
                   }}
                   className={`${
-                    item.is_wish ? "bg-[#0CABA8]" : "bg-[#DFDFE0]"
+                    item.is_wish ? "bg-main " : "bg-[#DFDFE0]"
                   } pickBtn absolute bottom-[80px] right-[10px] w-8 h-8 rounded-xl bg-[#DFDFE0] flex justify-center items-center`}
                 >
                   <HeartIcon

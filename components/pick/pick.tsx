@@ -1,7 +1,9 @@
 import CloseIcon from "@icons/close";
 import BasketIcon from "@icons/basket";
 import Image from "next/image";
-import { pickInterface } from "../../types/wish";
+import { pickInterface } from "../../types/privacy";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import client from "@lib/api";
 
 interface PickList {
   picks: pickInterface[];
@@ -9,8 +11,21 @@ interface PickList {
 
 function PickList({ picks }: PickList) {
   console.log(picks);
+
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation(
+    (id: number) =>
+      client.post(`/accounts/baskets/${id}/add`).then((res) => res.data),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["basketList"]);
+      },
+    }
+  );
+
   return (
-    <div className="max-w-4xl m-auto ">
+    <div className=" m-auto ">
       <div>
         <h2 className="py-5 font-bold text-xl">찜한상품</h2>
         <div className="border-[1px] border-black" />
@@ -48,12 +63,19 @@ function PickList({ picks }: PickList) {
                   <CloseIcon />
                 </div>
 
-                <div className="bg-gray rounded-lg flex justify-center items-center w-7 h-7 mt-3">
+                <div
+                  onClick={() => {
+                    mutation.mutate(res.product.id);
+                  }}
+                  className={`${
+                    res.is_basket === true ? "bg-[#0CABA8]" : "bg-[#D9D9D9]"
+                  } bg-gray rounded-lg flex justify-center items-center w-7 h-7 mt-3`}
+                >
                   <BasketIcon
-                    color="#D9D9D9"
+                    color={`${res.is_basket === true ? "#fff" : "none"}`}
                     width={18}
                     height={18}
-                    stroke="white"
+                    stroke={`${res.is_basket === true ? "none" : "#fff"}`}
                   />
                 </div>
               </div>

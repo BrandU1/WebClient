@@ -43,7 +43,7 @@ function DetailMenu() {
   return (
     <>
       <div className="menuTab mt-12 border-b bg-white border-gray sticky top-[98px] transition z-30">
-        <div className="max-w-4xl m-auto flex flex-row justify-around">
+        <div className=" m-auto flex flex-row justify-around">
           <Link
             to="1"
             offset={-100}

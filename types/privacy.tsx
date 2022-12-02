@@ -10,6 +10,18 @@ export interface pickInterface {
   };
 }
 
+export interface basketInterface {
+  amount: number;
+  is_purchase: boolean;
+  product: {
+    backdrop_image: string;
+    id: number;
+    is_wish: boolean;
+    name: string;
+    price: number;
+  };
+}
+
 export interface BranduBaseResponse<T> {
   success: boolean;
   results: T;
