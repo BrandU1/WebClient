@@ -24,7 +24,7 @@ function Summary({ productInfo }: ProductProps) {
   });
 
   return (
-    <div className="flex flex-row max-w-4xl m-auto px-3 mt-5">
+    <div className="flex flex-row  m-auto px-3 mt-5">
       <div className="imageList flex flex-col max-h-96 overflow-y-scroll">
         {[1, 2, 3, 4, 5, 6].map((image, idx) => {
           return (

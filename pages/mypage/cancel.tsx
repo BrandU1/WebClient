@@ -4,7 +4,7 @@ import CancelComp from "@components/pages/mypage/cancelcomp";
 
 function MyOrder() {
   return (
-    <div className="max-w-4xl m-auto">
+    <div className=" m-auto">
       <TopInfo />
       <div className="flex flex-row">
         <SideTab num={1} />

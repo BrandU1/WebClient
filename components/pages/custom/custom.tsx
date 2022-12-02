@@ -22,7 +22,7 @@ function Custom() {
   return (
     <div className="flex flex-col">
       <div className="customItemList flex flex-row justify-center border-b border-gray w-full mt-4 pb-4">
-        <div className="DrawTool max-w-4xl flex flex-row space-x-[18px]">
+        <div className="DrawTool  flex flex-row space-x-[18px]">
           <Image
             src={"/custom/backBtn.svg"}
             alt={"backBtn"}

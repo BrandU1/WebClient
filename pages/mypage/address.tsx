@@ -4,7 +4,7 @@ import AddressComp from "@components/pages/mypage/addresscomp";
 
 function Address() {
   return (
-    <div className="max-w-4xl m-auto">
+    <div className=" m-auto">
       <TopInfo />
       <div className="flex flex-row">
         <SideTab num={3} />

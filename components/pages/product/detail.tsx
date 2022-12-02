@@ -15,7 +15,7 @@ function Detail() {
   const data = [1, 2, 3, 4, 5, 6]; //리뷰 개수
 
   return (
-    <div className="max-w-4xl m-auto flex flex-col justify-center items-center mt-7">
+    <div className=" m-auto flex flex-col justify-center items-center mt-7">
       <div className="info flex flex-col justify-center items-center" id="1">
         <span className="font-bold text-xl pt-7">상품정보</span>
         <div
