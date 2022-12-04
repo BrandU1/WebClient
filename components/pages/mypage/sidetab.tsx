@@ -101,33 +101,40 @@ function SideTab({ num }: tabProps) {
       </Link>
       <div className="border-b my-5 " />
       <span className="font-bold text-base">마이페이지</span>
-      <div
-        className={`text-sm my-2 ${tabNum == 4 && "text-main font-bold"}`}
-        onClick={() => {
-          setTabNum(4);
-          setStateNum(0);
-        }}
-      >
-        쿠폰
-      </div>
-      <div
-        className={`text-sm my-2 ${tabNum == 5 && "text-main font-bold"}`}
-        onClick={() => {
-          setTabNum(5);
-          setStateNum(0);
-        }}
-      >
-        포인트
-      </div>
-      <div
-        className={`text-sm my-2 ${tabNum == 6 && "text-main font-bold"}`}
-        onClick={() => {
-          setTabNum(6);
-          setStateNum(0);
-        }}
-      >
-        개인정보 수정
-      </div>
+
+      <Link href={"/mypage/coupon"}>
+        <div
+          className={`text-sm my-2 ${tabNum == 4 && "text-main font-bold"}`}
+          onClick={() => {
+            setTabNum(4);
+            setStateNum(0);
+          }}
+        >
+          쿠폰
+        </div>
+      </Link>
+      <Link href={"/mypage/point"}>
+        <div
+          className={`text-sm my-2 ${tabNum == 5 && "text-main font-bold"}`}
+          onClick={() => {
+            setTabNum(5);
+            setStateNum(0);
+          }}
+        >
+          포인트
+        </div>
+      </Link>
+      <Link href={"/mypage/myinfo"}>
+        <div
+          className={`text-sm my-2 ${tabNum == 6 && "text-main font-bold"}`}
+          onClick={() => {
+            setTabNum(6);
+            setStateNum(0);
+          }}
+        >
+          개인정보 수정
+        </div>
+      </Link>
     </div>
   );
 }

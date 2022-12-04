@@ -1,14 +1,14 @@
 import TopInfo from "@components/pages/mypage/topinfo";
-import SideTab from "../../components/pages/mypage/sidetab";
-import CancelComp from "@components/pages/mypage/cancelcomp";
+import SideTab from "@components/pages/mypage/sidetab";
+import CouponComp from "@components/pages/mypage/couponcomp";
 
 function MyOrder() {
   return (
     <div className="m-auto">
       <TopInfo />
       <div className="flex flex-row">
-        <SideTab num={1} />
-        <CancelComp />
+        <SideTab num={4} />
+        <CouponComp />
       </div>
     </div>
   );
