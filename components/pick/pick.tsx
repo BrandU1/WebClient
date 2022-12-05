@@ -45,7 +45,7 @@ function PickList({ picks }: PickList) {
                 </div>
 
                 <div>
-                  <p className="font-semibold text-xs text-[#ff0000] py-1">
+                  <p className="font-semibold text-xs text-[#ff0000] py-1 w-20">
                     [품절임박]
                   </p>
                   <h2 className="font-normal text-sm">{res.product.name}</h2>

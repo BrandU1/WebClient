@@ -1,13 +1,20 @@
 import Image from "next/image";
 import { useState } from "react";
+import { useRecoilState } from "recoil";
+import { totalAmount } from "../../recoil/totalamount";
 
 interface AmountButtonProps {
   price: number;
   setCounts: any;
+  id: number;
 }
 
-function AmountButton({ price, setCounts }: AmountButtonProps) {
+function AmountButton({ price, setCounts, id }: AmountButtonProps) {
   const [amount, setAmount] = useState<number>(1);
+
+  const [AmountPrice, setAmountPrice] = useRecoilState(totalAmount);
+
+  console.log(AmountPrice);
 
   return (
     <div className="flex items-center space-x-48 justify-between w-full">

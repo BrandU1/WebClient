@@ -134,6 +134,7 @@ function BasketList({ basketList }: BasketListProps) {
                       </div>
                       <div className="mt-8">
                         <AmountButton
+                          id={res.product.id}
                           price={res.product.price}
                           setCounts={setCounts}
                         />
