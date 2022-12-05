@@ -11,7 +11,10 @@ interface AddressList {
 }
 
 function AddressComp({ address }: AddressList) {
+<<<<<<< HEAD
 
+=======
+>>>>>>> cbecc4d (address 삭제 api 연결)
   const [open, setOpen] = useState(false);
   const onClose = () => setOpen(false);
 
@@ -25,6 +28,7 @@ function AddressComp({ address }: AddressList) {
       },
     }
   );
+<<<<<<< HEAD
   const [addressModal, setAddressModal] = useState<boolean>(false);
 
   const addressEl = useRef<HTMLDivElement>(null);
@@ -37,6 +41,8 @@ function AddressComp({ address }: AddressList) {
     setAddressModal(false);
   };
 
+=======
+>>>>>>> cbecc4d (address 삭제 api 연결)
 
   return (
     <div className="flex flex-col px-5 mt-10 flex-1 relative">
@@ -44,15 +50,21 @@ function AddressComp({ address }: AddressList) {
         <div className="flex items-center justify-between">
           <span className="font-bold text-lg">배송지 관리</span>
           <button
+<<<<<<< HEAD
 
+=======
+>>>>>>> cbecc4d (address 삭제 api 연결)
             onClick={() => {
               setOpen(true);
             }}
             className="w-24 h-9 flex justify-center items-center text-white bg-main rounded-xl"
+<<<<<<< HEAD
             className="w-24 h-9 flex justify-center items-center text-white bg-main rounded-xl"
             onClick={() => {
               setAddressModal(true);
             }}
+=======
+>>>>>>> cbecc4d (address 삭제 api 연결)
           >
             추가하기
           </button>
@@ -87,7 +99,10 @@ function AddressComp({ address }: AddressList) {
               </div>
             </div>
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> cbecc4d (address 삭제 api 연결)
             <div className="flex-row">
               <button className="w-24 h-9 border border-main text-main rounded-xl text-sm mt-5">
                 수정하기
@@ -101,6 +116,7 @@ function AddressComp({ address }: AddressList) {
                 삭제하기
               </button>
             </div>
+<<<<<<< HEAD
           </div>
         );
       })}
@@ -128,6 +144,18 @@ function AddressComp({ address }: AddressList) {
         </div>
       )}
 
+=======
+          </div>
+        );
+      })}
+      <div
+        className={` ${
+          open ? "block" : "hidden"
+        } bg-white bg-opacity-90 absolute w-full h-full flex justify-center `}
+      >
+        <AddAddress onClose={onClose} />
+      </div>
+>>>>>>> cbecc4d (address 삭제 api 연결)
     </div>
   );
 }
