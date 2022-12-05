@@ -6,9 +6,11 @@ function PayDetail() {
   return (
     <div className=" m-auto">
       <TopInfo />
-      <div className="flex flex-row">
-        <SideTab num={0} />
-        <Inquiry />
+      <div className="max-w-4xl m-auto">
+        <div className="flex flex-row">
+          <SideTab num={0} />
+          <Inquiry />
+        </div>
       </div>
     </div>
   );

@@ -1,24 +1,23 @@
 import { Scrollbars } from "react-custom-scrollbars";
 import Image from "next/image";
 import ModalFrame from "@common/modalframe";
+import { useRef, useState } from "react";
 
 interface existModalProps {
-  handleClose: () => any;
-  open: boolean;
+  handleClose: () => void;
 }
 
-function ExistModal({ handleClose, open }: existModalProps) {
+function ExistModal({ handleClose }: existModalProps) {
   return (
     <ModalFrame
+      close={handleClose}
       width={600}
       height={500}
-      onClose={handleClose}
-      open={open}
       title={"기존이미지 선택"}
       components={
         <div className="mt-10">
-          <div className="h-[258px] mt-10 overflow-y-scroll scrollbar-hide w-[340px] justify-center items-center">
-            <Scrollbars style={{ width: 340, height: 258 }} thumbSize={5}>
+          <div className="h-[258px] overflow-y-scroll scrollbar-hide w-[340px] justify-center items-center">
+            <Scrollbars style={{ width: 340, height: 258 }} thumbSize={20}>
               <div className="grid grid-cols-3 gap-[14px] mr-[10px]">
                 {[1, 2, 3, 4, 5, 6, 7, 8].map((pics, idx) => {
                   return (
