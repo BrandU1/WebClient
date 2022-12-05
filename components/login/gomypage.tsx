@@ -11,7 +11,7 @@ function GOTOMyPage() {
             </Link>
           </div>
           <div className="py-3 hover:bg-[#CEEEEE] rounded-b-lg">
-            <Link href={"/mypage/myinfo"}>
+            <Link href={"/mypage/profile"}>
               <p>마이페이지</p>
             </Link>
           </div>
