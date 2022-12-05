@@ -124,7 +124,7 @@ function SideTab({ num }: tabProps) {
           포인트
         </div>
       </Link>
-      <Link href={"/mypage/myinfo"}>
+      <Link href={"/mypage/profile"}>
         <div
           className={`text-sm my-2 ${tabNum == 6 && "text-main font-bold"}`}
           onClick={() => {
