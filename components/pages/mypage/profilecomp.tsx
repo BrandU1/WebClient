@@ -6,19 +6,15 @@ import GoogleLoginIcon from "@icons/google";
 import KakaoLoginIcon from "@icons/kakao";
 import NaverIcon from "@icons/naver";
 import AppleIcon from "@icons/apple";
+import { UserInterface } from "../../../types/privacy";
 
 interface ProfileForm {
-  description: string;
-  email: string;
-  name: string;
-  nickname: string;
-  phone_number: string;
-  social_link: string;
-  backdrop_image: string;
-  profile_image: string;
+  profile: UserInterface;
 }
 
-function ProfileComp() {
+function ProfileComp({ profile }: ProfileForm) {
+  console.log(profile);
+
   //프로필 이미지
   const [imgBase64, setImgBase64] = useState("");
   const [imgFile, setImgFile] = useState(null);
@@ -56,7 +52,7 @@ function ProfileComp() {
     }
   };
 
-  const { register, handleSubmit, watch } = useForm<ProfileForm>();
+  const { register, handleSubmit, watch } = useForm<UserInterface>();
 
   const onValid = () => {
     const formData = new FormData();
@@ -66,15 +62,15 @@ function ProfileComp() {
     if (imgFile) {
       formData.append("profile_image", imgFile);
     }
-    formData.append("nickname", watch("nickname"));
-    formData.append("name", watch("name"));
-    formData.append("phone_number", watch("phone_number"));
-    formData.append("email", watch("email"));
-    formData.append("social_link", watch("social_link"));
-    formData.append("description ", watch("description"));
+    formData.append("nickname", watch("nickname")!);
+    formData.append("name", watch("name")!);
+    formData.append("phone_number", watch("phone_number")!);
+    formData.append("email", watch("email")!);
+    formData.append("social_link", watch("social_link")!);
+    formData.append("description ", watch("description")!);
 
     client
-      .patch("accounts/edit/", formData, {
+      .patch("accounts/edit", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -82,18 +78,24 @@ function ProfileComp() {
       .then((res) => res.data);
   };
 
+  if (!profile) return <div></div>;
+
   return (
     <div className="pl-5 flex flex-col">
       <form onSubmit={handleSubmit(onValid)} className="registerForm">
         <div className="back relative">
           <div className="backImage bg-lightGary rounded-[10px]">
-            <Image
-              src={backBase64}
-              width={674}
-              height={200}
-              decoding="async"
-              alt={"backImage"}
-            />
+            {backBase64 ? (
+              <Image
+                src={`http://192.168.0.2/${backBase64}`}
+                width={674}
+                height={200}
+                decoding="async"
+                alt={"backImage"}
+              />
+            ) : (
+              <div className="w-[674px] h-[200px]"></div>
+            )}
           </div>
           <div className="border-[1px] text-center border-main bg-white rounded-2xl absolute right-5 bottom-5 text-main text-xs w-[35px] h-[20px] cursor-pointer">
             <label className="input-file-button" htmlFor="backImage">
@@ -111,34 +113,45 @@ function ProfileComp() {
             className={`bg-gray w-[100px] h-[100px] rounded-xl flex justify-center text-center items-center absolute -bottom-12 right-72 `}
           >
             <div className="profile ">
-              {imgBase64 === undefined ? (
-                <>
-                  <svg
-                    width="42"
-                    height="46"
-                    viewBox="0 0 42 46"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M41 45C41 41.5886 41 39.8829 40.5694 38.495C39.5999 35.37 37.0989 32.9245 33.9029 31.9766C32.4834 31.5555 30.7389 31.5555 27.25 31.5555H14.75C11.2611 31.5555 9.51664 31.5555 8.09715 31.9766C4.90114 32.9245 2.4001 35.37 1.4306 38.495C1 39.8829 1 41.5886 1 45M32.25 12C32.25 18.0751 27.2132 23 21 23C14.7868 23 9.75 18.0751 9.75 12C9.75 5.92487 14.7868 1 21 1C27.2132 1 32.25 5.92487 32.25 12Z"
-                      stroke="white"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </>
-              ) : (
+              {profile.profile_image && (
                 <Image
                   className="rounded-xl"
-                  src={imgBase64}
+                  src={`http://192.168.0.2/${profile.profile_image}`}
                   height={105}
                   width={100}
                   decoding="async"
                   alt={"profile"}
                 />
               )}
+              {!profile.profile_image &&
+                (!imgBase64 ? (
+                  <>
+                    <svg
+                      width="42"
+                      height="46"
+                      viewBox="0 0 42 46"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M41 45C41 41.5886 41 39.8829 40.5694 38.495C39.5999 35.37 37.0989 32.9245 33.9029 31.9766C32.4834 31.5555 30.7389 31.5555 27.25 31.5555H14.75C11.2611 31.5555 9.51664 31.5555 8.09715 31.9766C4.90114 32.9245 2.4001 35.37 1.4306 38.495C1 39.8829 1 41.5886 1 45M32.25 12C32.25 18.0751 27.2132 23 21 23C14.7868 23 9.75 18.0751 9.75 12C9.75 5.92487 14.7868 1 21 1C27.2132 1 32.25 5.92487 32.25 12Z"
+                        stroke="white"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </>
+                ) : (
+                  <Image
+                    className="rounded-xl"
+                    src={imgBase64}
+                    height={105}
+                    width={100}
+                    decoding="async"
+                    alt={"profile"}
+                  />
+                ))}
               <div className="edit border-[1px] text-center border-main bg-white rounded-2xl text-[4px] absolute left-[68px] text-main justify-center items-center w-[35px] bottom-3 left-14">
                 <label
                   className="input-file-button cursor-pointer"
@@ -163,7 +176,7 @@ function ProfileComp() {
           </div>
           <div className="InputBar">
             <input
-              defaultValue={"하늘보리"}
+              defaultValue={profile?.nickname}
               {...register("nickname")}
               className={`border-[1px] border-gray w-[566px] h-[30px] rounded-[10px] text-sm ml-[10px] px-1`}
               placeholder="닉네임"
@@ -176,7 +189,7 @@ function ProfileComp() {
           </div>
           <div className="InputBar">
             <input
-              defaultValue={"이름"}
+              defaultValue={profile?.name}
               {...register("name")}
               className={`border-[1px] border-gray w-[566px] h-[30px] rounded-[10px] text-sm ml-[10px] px-1`}
               placeholder="이름"
@@ -189,7 +202,7 @@ function ProfileComp() {
           </div>
           <div className="InputBar">
             <input
-              defaultValue={"010-0123-1231"}
+              defaultValue={profile.phone_number}
               {...register("phone_number")}
               className={`border-[1px] border-gray w-[566px] h-[30px] rounded-[10px] text-sm ml-[10px] px-1`}
               placeholder="연락처"
@@ -202,7 +215,7 @@ function ProfileComp() {
           </div>
           <div className="InputBar">
             <input
-              defaultValue={"email"}
+              defaultValue={profile.email}
               {...register("email")}
               className={`border-[1px] border-gray w-[566px] h-[30px] rounded-[10px] text-sm ml-[10px] px-1`}
               placeholder="이메일"
@@ -215,7 +228,7 @@ function ProfileComp() {
           </div>
           <div className="InputBar">
             <input
-              defaultValue={"snsnsns"}
+              defaultValue={profile.social_link}
               {...register("social_link")}
               className={`border-[1px] border-gray w-[566px] h-[30px] rounded-[10px] text-sm ml-[10px] px-1`}
               placeholder="SNS"
@@ -228,7 +241,7 @@ function ProfileComp() {
           </div>
           <div className="InputBar">
             <input
-              defaultValue={"Hi~"}
+              defaultValue={profile.description}
               {...register("description")}
               className={`border-[1px] border-gray w-[566px] h-[30px] rounded-[10px] text-sm ml-[10px] px-1`}
               placeholder="소개"

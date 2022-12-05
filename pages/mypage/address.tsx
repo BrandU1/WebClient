@@ -15,7 +15,7 @@ function Address() {
   };
 
   const { data, isLoading } = useQuery<BranduBaseResponse<AddressInterface[]>>(
-    ["addressList"],
+    ["address"],
     getAddress
   );
 
