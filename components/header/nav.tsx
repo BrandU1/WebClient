@@ -12,6 +12,7 @@ import LoginModal from "@components/login";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Category from "@components/category";
+import GOTOMyPage from "@components/login/gomypage";
 
 function Nav() {
   const [focused, setFocused] = useState<boolean>(false);
@@ -24,7 +25,7 @@ function Nav() {
 
   // Login 관련
   const [modalOpen, setModalOpen] = useState(false);
-  const el = useRef();
+
   const [token, setToken] = useState<any>(null);
   useEffect(() => {
     if (localStorage.getItem("access_token")) {
@@ -48,9 +49,19 @@ function Nav() {
   const [category, setCategory] = useState<boolean>(false);
   const handleCategory = () => setCategory(!category);
 
+  // 마이페이지 바로가기
+  const [open, setOpen] = useState<boolean>(false);
+
+  const el = useRef<HTMLDivElement>(null);
+
+  const handleClickOutside = (e: any) => {
+    if (modalOpen && (!el.current || !el.current.contains(e.target))) {
+      setModalOpen(false);
+    }
+  };
   return (
     <>
-      <div className={`  top-0 z-50 transition bg-white `}>
+      <div className={`  top-0 z-50 transition bg-white  `}>
         <div className=" m-auto  max-w-4xl py-3 flex justify-between items-center min-w-fit relative">
           <Link href="/">
             <BranduIcon width={100} height={22} />
@@ -170,7 +181,7 @@ function Nav() {
               onClick={openModal}
               className={`${
                 token ? "bg-main" : "bg-notice"
-              } w-[40px] h-[40px] rounded-full flex items-center justify-center `}
+              } w-[40px] h-[40px] rounded-full flex items-center justify-center group `}
             >
               <ProfileIcon />
             </div>
@@ -178,9 +189,41 @@ function Nav() {
         </div>
         <div className="border-t-[1px] border-gray" />
       </div>
-      <div className="flex justify-center">
-        <LoginModal open={modalOpen} close={close} />
-      </div>
+      {token ? (
+        <div onClick={handleClickOutside} className="goPage">
+          <GOTOMyPage pageRef={el} open={modalOpen} />
+        </div>
+      ) : (
+        <div
+          onClick={handleClickOutside}
+          className={` ${token ? "hidden" : "block"} flex justify-center `}
+        >
+          <LoginModal open={modalOpen} pageRef={el} close={close} />
+        </div>
+      )}
+      {/*<div className={` ${token ? "hidden" : "block"} flex justify-center `}>*/}
+      {/*  <LoginModal open={modalOpen} close={close} />*/}
+      {/*</div>*/}
+      {/*<div*/}
+      {/*  className={`${*/}
+      {/*    token ? "block" : "hidden"*/}
+      {/*  } max-w-5xl m-auto flex justify-end pr-7 hidden group group-hover:block `}*/}
+      {/*>*/}
+      {/*  <div className="rounded-lg border-[1px] border-main w-28 text-center absolute bg-white ml-3 ">*/}
+      {/*    <div className="py-3 hover:bg-[#CEEEEE] rounded-t-lg">*/}
+      {/*      <Link href="/mypage">*/}
+      {/*        <p>주문/배송</p>*/}
+      {/*      </Link>*/}
+      {/*    </div>*/}
+      {/*    <div className="py-3 hover:bg-[#CEEEEE] rounded-b-lg">*/}
+      {/*      <p>마이페이지</p>*/}
+      {/*    </div>*/}
+      {/*    /!*<div className="py-3">*!/*/}
+      {/*    /!*  <p>프로필</p>*!/*/}
+      {/*    /!*</div>*!/*/}
+      {/*  </div>*/}
+      {/*</div>*/}
+
       <div
         className={`absolute bg-modalBackground w-full ${
           category ? "block " : "hidden"

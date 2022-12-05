@@ -10,9 +10,10 @@ import client from "@lib/api";
 interface LoginProps {
   open: boolean;
   close: () => void;
+  pageRef: React.ForwardedRef<HTMLDivElement>;
 }
 
-function LoginModal({ open, close }: LoginProps) {
+function LoginModal({ open, close, pageRef }: LoginProps) {
   const kakaoSuccess = async (res: any) => {
     client
       .post(`/auth/kakao/login`, {
