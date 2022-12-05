@@ -1,7 +1,12 @@
 import { useRef, useState } from "react";
 import AddressAdd from "@components/modal/addressadd";
+import { AddressInterface } from "../../../types/privacy";
 
-function AddressComp() {
+interface AddressList {
+  address: AddressInterface[];
+}
+
+function AddressComp({ address }: AddressList) {
   const [addressModal, setAddressModal] = useState<boolean>(false);
 
   const addressEl = useRef<HTMLDivElement>(null);

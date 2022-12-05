@@ -22,6 +22,17 @@ export interface basketInterface {
   };
 }
 
+export interface AddressInterface {
+  id: number;
+  name: string;
+  recipient: string;
+  road_name_address: string;
+  zip_code: number;
+  detail_address: string;
+  phone_number: string;
+  is_main: boolean;
+}
+
 export interface BranduBaseResponse<T> {
   success: boolean;
   results: T;
