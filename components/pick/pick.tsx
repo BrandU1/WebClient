@@ -10,8 +10,6 @@ interface PickList {
 }
 
 function PickList({ picks }: PickList) {
-  console.log(picks);
-
   const queryClient = useQueryClient();
 
   const mutation = useMutation(
@@ -79,8 +77,6 @@ function PickList({ picks }: PickList) {
                   />
                 </div>
               </div>
-
-              <div></div>
 
               {/*<div className="bg-gray w-7 h-7 rounded-lg flex justify-center items-center  ">*/}
               {/*  <BasketIcon color="white  ₩₩  " width="18" height="18" />*/}
