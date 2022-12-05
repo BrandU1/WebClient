@@ -15,7 +15,7 @@ function AddressComp({ address }: AddressList) {
           </button>
         </div>
       </div>
-      {[1, 2].map((list, index) => {
+      {address?.map((list, index) => {
         return (
           <div
             className="border-b border-gray pb-5 mt-5 flex flex-row justify-between px-2 "

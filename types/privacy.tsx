@@ -33,6 +33,23 @@ export interface AddressInterface {
   is_main: boolean;
 }
 
+export interface UserInterface {
+  id: number;
+  name?: string;
+  backdrop_image?: string;
+  nickname?: string;
+  email?: string;
+  description?: string;
+  phone_number?: string;
+  profile_image?: string;
+  social_link?: string;
+  platforms: Platform[];
+}
+export interface Platform {
+  created: string;
+  platform: string;
+}
+
 export interface BranduBaseResponse<T> {
   success: boolean;
   results: T;
