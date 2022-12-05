@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { router } from "next/client";
 import Badge from "@atoms/badge";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import ImageSelect from "@components/pages/custom/imageselect";
 import BasketIcon from "@icons/basket";
 import Pick from "@common/pick";
@@ -12,10 +12,14 @@ function Custom() {
   const router = useRouter();
   const [amount, setAmount] = useState<number>(Number(router.query.amount));
   const [selectOpen, setSelectOpen] = useState<boolean>(false);
-  const handleOpen = () => {
-    setSelectOpen(true);
+
+  const imgSelectEl = useRef<HTMLDivElement>(null);
+  const handleSelectModal = (e: any) => {
+    if (!imgSelectEl.current?.contains(e.target)) {
+      handleSelectClose();
+    }
   };
-  const handleClose = () => {
+  const handleSelectClose = () => {
     setSelectOpen(false);
   };
 
@@ -60,7 +64,9 @@ function Custom() {
             height={16}
           />
           <Image
-            onClick={handleOpen}
+            onClick={() => {
+              setSelectOpen(true);
+            }}
             src={"/custom/imageBtn.svg"}
             alt={"imageBtn"}
             width={18}
@@ -276,7 +282,9 @@ function Custom() {
         </div>
       </div>
       {selectOpen && (
-        <ImageSelect open={selectOpen} handleClose={handleClose} />
+        <div onClick={handleSelectClose}>
+          <ImageSelect handleClose={handleSelectClose} />
+        </div>
       )}
     </div>
   );

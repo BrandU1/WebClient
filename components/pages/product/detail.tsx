@@ -3,7 +3,7 @@ import { Link } from "react-scroll";
 import Image from "next/image";
 import ProductReview from "./productreview";
 import Star from "@common/star";
-import ModalFrame from "@common/modalframe";
+import ModalFrame from "@common/2modalframe";
 import * as React from "react";
 
 function Detail() {

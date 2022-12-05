@@ -1,47 +1,25 @@
-import * as React from "react";
-import Box from "@mui/material/Box";
-import Modal from "@mui/material/Modal";
 import Image from "next/image";
-import { useState } from "react";
+import * as React from "react";
 
 interface ModalProps {
+  close: () => void;
   width: number;
-  height: number | string;
-  onClose: any; //backBtn
-  open: boolean; //Modal 열기
-  title: string; //Modal 제목
-  components: any; //제목 밑 Modal 내용
+  height: number;
+  title: string; //Modal 타이틀
+  components: any; //Modal 내용
 }
 
-function ModalFrame({
-  width,
-  height,
-  onClose,
-  title,
-  components,
-  open,
-}: ModalProps) {
-  const style = {
-    position: "absolute" as "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: { width },
-    height: { height },
-    boxShadow: 24,
-    background: "#FFFFFF",
-    borderRadius: "15px",
-    p: 4,
-  };
-
+function ModalFrame({ close, width, height, title, components }: ModalProps) {
   return (
-    <div className="focus:outline-0">
-      <Modal open={open} onClose={onClose}>
-        <Box sx={style}>
+    <div className="absolute flex justify-center py-36 top-0 z-50 w-full h-full bg-black bg-opacity-40 ">
+      <div onBlur={close} className="openModal modal">
+        <div
+          className={`w-[${width}px] h-[${height}px] bg-modalBackground rounded-2xl p-8`}
+        >
           <div className="flex flex-col">
             <div>
               <Image
-                onClick={onClose}
+                onClick={close}
                 src={"/logo/backBtn.svg"}
                 alt={"backBtn"}
                 width={16}
@@ -55,8 +33,8 @@ function ModalFrame({
               {components}
             </div>
           </div>
-        </Box>
-      </Modal>
+        </div>
+      </div>
     </div>
   );
 }

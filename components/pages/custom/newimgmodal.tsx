@@ -3,11 +3,10 @@ import { useState } from "react";
 import Image from "next/image";
 
 interface newModalProps {
-  handleClose: () => any;
-  open: boolean;
+  handleClose: () => void;
 }
 
-function NewImgModal({ handleClose, open }: newModalProps) {
+function NewImgModal({ handleClose }: newModalProps) {
   const [imgBase64, setImgBase64] = useState<string>("");
   const [imgFile, setImgFile] = useState(null);
 
@@ -47,10 +46,9 @@ function NewImgModal({ handleClose, open }: newModalProps) {
   return (
     <ModalFrame
       width={600}
-      height={"min-h-fit"}
-      onClose={handleClose}
-      open={open}
-      title={"기존이미지 선택"}
+      height={500}
+      close={handleClose}
+      title={"신규이미지 추가"}
       components={
         <div className="mt-10">
           {imgBase64 === "" ? (

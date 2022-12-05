@@ -6,9 +6,11 @@ function MyOrder() {
   return (
     <div className="m-auto">
       <TopInfo />
-      <div className="flex flex-row">
-        <SideTab num={1} />
-        <CancelComp />
+      <div className="max-w-4xl m-auto">
+        <div className="flex flex-row">
+          <SideTab num={1} />
+          <CancelComp />
+        </div>
       </div>
     </div>
   );
