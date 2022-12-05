@@ -1,12 +1,10 @@
 interface HambugerProps {
-  onClick: () => void;
   color: string;
 }
 
-function HamburgerIcon({ onClick, color }: HambugerProps) {
+function HamburgerIcon({ color }: HambugerProps) {
   return (
     <svg
-      onClick={onClick}
       width="20"
       height="14"
       viewBox="0 0 20 14"

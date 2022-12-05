@@ -35,6 +35,7 @@ function Nav() {
 
   const openModal = () => {
     setModalOpen(true);
+    setOpen(true);
   };
 
   const close = () => {
@@ -47,18 +48,47 @@ function Nav() {
   //category 창
 
   const [category, setCategory] = useState<boolean>(false);
-  const handleCategory = () => setCategory(!category);
+  const normalClose = () => {
+    setCategory(!category);
+  };
+
+  const outside = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    document.addEventListener("mouseup", handlerOutSideCategory);
+    return () => {
+      document.removeEventListener("mouseup ", handlerOutSideCategory);
+    };
+  });
+  const handlerOutSideCategory = (e: any) => {
+    if (!outside.current?.contains(e.target)) {
+      handleCategory();
+    }
+  };
+
+  const handleCategory = () => setCategory(false);
 
   // 마이페이지 바로가기
   const [open, setOpen] = useState<boolean>(false);
 
   const el = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    document.addEventListener("mouseup", handleClickOutside);
+    return () => {
+      document.removeEventListener("mouseup ", handleClickOutside);
+    };
+  });
+
   const handleClickOutside = (e: any) => {
-    if (modalOpen && (!el.current || !el.current.contains(e.target))) {
-      setModalOpen(false);
+    if (!el.current?.contains(e.target)) {
+      handleMyPage();
     }
   };
+
+  const handleMyPage = () => setOpen(false);
+
+  // const Login = useRef<any>();
   return (
     <>
       <div className={`  top-0 z-50 transition bg-white  `}>
@@ -171,11 +201,9 @@ function Nav() {
             <div className={`${token ? "block" : "hidden"} cursor-pointer`}>
               <ScrapIcon />
             </div>
-            <div className="cursor-pointer">
-              <HamburgerIcon
-                onClick={handleCategory}
-                color={`${category ? "#0CABA8" : "#767676"}`}
-              />
+            <div ref={outside} onClick={normalClose} className="cursor-pointer">
+              <HamburgerIcon color={`${category ? "#0CABA8" : "#767676"}`} />
+              {/*<Category ref={outside} />*/}
             </div>
             <div
               onClick={openModal}
@@ -190,8 +218,8 @@ function Nav() {
         <div className="border-t-[1px] border-gray" />
       </div>
       {token ? (
-        <div onClick={handleClickOutside} className="goPage">
-          <GOTOMyPage pageRef={el} open={modalOpen} />
+        <div className={`${open ? "block" : "hidden"} `}>
+          <GOTOMyPage />
         </div>
       ) : (
         <div
@@ -201,35 +229,12 @@ function Nav() {
           <LoginModal open={modalOpen} pageRef={el} close={close} />
         </div>
       )}
-      {/*<div className={` ${token ? "hidden" : "block"} flex justify-center `}>*/}
-      {/*  <LoginModal open={modalOpen} close={close} />*/}
-      {/*</div>*/}
-      {/*<div*/}
-      {/*  className={`${*/}
-      {/*    token ? "block" : "hidden"*/}
-      {/*  } max-w-5xl m-auto flex justify-end pr-7 hidden group group-hover:block `}*/}
-      {/*>*/}
-      {/*  <div className="rounded-lg border-[1px] border-main w-28 text-center absolute bg-white ml-3 ">*/}
-      {/*    <div className="py-3 hover:bg-[#CEEEEE] rounded-t-lg">*/}
-      {/*      <Link href="/mypage">*/}
-      {/*        <p>주문/배송</p>*/}
-      {/*      </Link>*/}
-      {/*    </div>*/}
-      {/*    <div className="py-3 hover:bg-[#CEEEEE] rounded-b-lg">*/}
-      {/*      <p>마이페이지</p>*/}
-      {/*    </div>*/}
-      {/*    /!*<div className="py-3">*!/*/}
-      {/*    /!*  <p>프로필</p>*!/*/}
-      {/*    /!*</div>*!/*/}
-      {/*  </div>*/}
-      {/*</div>*/}
-
       <div
         className={`absolute bg-modalBackground w-full ${
           category ? "block " : "hidden"
         }`}
       >
-        <Category />
+        <Category ref={outside} />
       </div>
     </>
   );

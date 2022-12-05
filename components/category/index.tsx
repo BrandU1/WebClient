@@ -15,7 +15,11 @@ interface SubCategories {
   backdrop_image: string;
 }
 
-function Category() {
+interface CategoryProps {
+  ref: React.ForwardedRef<HTMLDivElement>;
+}
+
+function Category({ ref }: CategoryProps) {
   const [id, setIndex] = useState(1);
 
   const getCategories = () => {
