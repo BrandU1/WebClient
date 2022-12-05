@@ -9,10 +9,22 @@ interface BasketListProps {
   basketList: basketInterface[];
 }
 
+interface Count {
+  count: number;
+  counts: ProductCount;
+}
+
+interface ProductCount {
+  product: number;
+  count: number;
+}
+
 function BasketList({ basketList }: BasketListProps) {
+  const [counts, setCounts] = useState<number>(1);
+  const [amountPrice, setAmountPrice] = useState<number>(0);
+
   //선택 리스트 State
   const [checkList, setCheckList] = useState<number[]>([]);
-  console.log(basketList.length, 123);
 
   // 단일 선택 리스트
   const handleSingleCheck = (checked: boolean, id: number) => {
@@ -65,66 +77,71 @@ function BasketList({ basketList }: BasketListProps) {
         <div className="basketList">
           {basketList?.map((res, idx) => {
             return (
-              <div
-                key={idx}
-                className="border-[#DBDBDB] border-b-[1px] flex justify-between relative"
-              >
-                <div className="flex space-x-4 items-center p-4">
-                  {/*체크 박스 Div*/}
-                  <div className="absolute top-6 left-10 z-40">
-                    <label
-                      className={`text-sm font-bold flex w-5 h-5 rounded-full flex justify-center items-center ${
-                        checkList.includes(res.product.id)
-                          ? "bg-main"
-                          : "bg-gray"
-                      }`}
-                      htmlFor={`check${idx}`}
-                    >
-                      <CheckBox />
-                      <input
-                        onChange={(e) =>
-                          handleSingleCheck(e.target.checked, res.product.id)
-                        }
-                        className="hidden"
-                        type="checkbox"
-                        id={`check${idx}`}
-                        name="checkList"
-                        checked={checkList.includes(res.product.id)}
+              <>
+                <div
+                  key={idx}
+                  className="border-[#DBDBDB] border-b-[1px] flex justify-between relative"
+                >
+                  <div className="flex space-x-4 items-center p-4">
+                    {/*체크 박스 Div*/}
+                    <div className="absolute top-6 left-10 z-20">
+                      <label
+                        className={`text-sm font-bold flex w-5 h-5 rounded-full flex justify-center items-center ${
+                          checkList.includes(res.product.id)
+                            ? "bg-main"
+                            : "bg-gray"
+                        }`}
+                        htmlFor={`check${idx}`}
+                      >
+                        <CheckBox />
+                        <input
+                          onChange={(e) =>
+                            handleSingleCheck(e.target.checked, res.product.id)
+                          }
+                          className="hidden"
+                          type="checkbox"
+                          id={`check${idx}`}
+                          name="checkList"
+                          checked={checkList.includes(res.product.id)}
+                        />
+                      </label>
+                    </div>
+                    <div className="w-[120px] h-[120px] relative  ">
+                      <Image
+                        className="rounded-lg "
+                        src={`http://192.168.0.2${res.product.backdrop_image}`}
+                        layout="fill"
+                        alt="productImage"
                       />
-                    </label>
-                  </div>
-                  <div className="w-[120px] h-[120px] relative  ">
-                    <Image
-                      className="rounded-lg "
-                      src={`http://192.168.0.2${res.product.backdrop_image}`}
-                      layout="fill"
-                      alt="productImage"
-                    />
-                  </div>
-                  <div>
-                    <div>
-                      <p className="text-subContent text-sm">
-                        {res.product.name}
-                      </p>
                     </div>
                     <div>
-                      <p className="font-bold">
-                        {res.product.price.toLocaleString()} 원
-                      </p>
-                    </div>
-                    <div className="mt-8">
-                      <AmountButton />
+                      <div className="flex items-start space-x-80">
+                        <div className="w-24">
+                          <div>
+                            <p className="text-subContent text-sm">
+                              {res.product.name}
+                            </p>
+                          </div>
+                          <div>
+                            <p className="font-bold">
+                              {res.product.price.toLocaleString()} 원
+                            </p>
+                          </div>
+                        </div>
+                        <div>
+                          <CloseIcon />
+                        </div>
+                      </div>
+                      <div className="mt-8">
+                        <AmountButton
+                          price={res.product.price}
+                          setCounts={setCounts}
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
-
-                <div className="p-5 space-y-20 ">
-                  <div className="float-right">
-                    <CloseIcon />
-                  </div>
-                  <div>8,000원</div>
-                </div>
-              </div>
+              </>
             );
           })}
         </div>
