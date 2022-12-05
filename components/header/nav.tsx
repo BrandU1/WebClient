@@ -42,6 +42,23 @@ function Nav() {
     setModalOpen(false);
   };
 
+  const loginEl = useRef<HTMLDivElement>(null);
+
+  // useEffect(() => {
+  //   document.addEventListener("mouseup", handleLogin);
+  //   return () => {
+  //     document.removeEventListener("mouseup ", handleLogin);
+  //   };
+  // });
+
+  const handleLogin = (e: any) => {
+    if (!loginEl.current?.contains(e.target)) {
+      closeOutside();
+    }
+  };
+
+  const closeOutside = () => setModalOpen(false);
+
   const router = useRouter();
   const path = router.pathname;
 
@@ -223,10 +240,10 @@ function Nav() {
         </div>
       ) : (
         <div
-          onClick={handleClickOutside}
+          onClick={handleLogin}
           className={` ${token ? "hidden" : "block"} flex justify-center `}
         >
-          <LoginModal open={modalOpen} pageRef={el} close={close} />
+          <LoginModal pageRef={loginEl} open={modalOpen} close={close} />
         </div>
       )}
       <div
