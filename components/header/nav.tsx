@@ -13,6 +13,9 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import Category from "@components/category";
 import GOTOMyPage from "@components/login/gomypage";
+import client from "@lib/api";
+import { useQuery } from "@tanstack/react-query";
+import { BranduBaseResponse, History } from "../../types/privacy";
 
 function Nav() {
   const [focused, setFocused] = useState<boolean>(false);
@@ -105,6 +108,17 @@ function Nav() {
 
   const handleMyPage = () => setOpen(false);
 
+  // History API 연동
+
+  const getHistory = () => {
+    return client.get("search/history").then((res) => res.data);
+  };
+
+  const { data, isLoading } = useQuery<BranduBaseResponse<History[]>>(
+    ["history"],
+    getHistory
+  );
+
   // const Login = useRef<any>();
   return (
     <>
@@ -148,8 +162,16 @@ function Nav() {
                 <p className="text-xs">전체삭제</p>
               </div>
               <div className="recently px-5 flex items-center justify-between text-sm text-notice border-b-[1px] border-gray w-[95%] m-auto">
-                <p className="py-3">크라프트 백</p>
-                <CloseIcon />
+                {data?.results.map((item, index) => {
+                  return (
+                    <>
+                      <div key={index}>
+                        <p className="py-3">{item.search_word}</p>
+                      </div>
+                      <CloseIcon />
+                    </>
+                  );
+                })}
               </div>
               <div className="topic">
                 <h3 className="p-3 text-sm">급상승 검색어</h3>

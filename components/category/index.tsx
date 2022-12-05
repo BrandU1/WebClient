@@ -23,7 +23,7 @@ function Category({ ref }: CategoryProps) {
   const [id, setIndex] = useState(1);
 
   const getCategories = () => {
-    return client.get("/products/categories/").then((res) => res.data);
+    return client.get("/products/categories").then((res) => res.data);
   };
 
   const { data, isLoading } = useQuery<Categories[]>(
@@ -33,8 +33,8 @@ function Category({ ref }: CategoryProps) {
 
   if (isLoading) {
     return (
-      <div>
-        <Loading />
+      <div className="flex justify-center">
+        <p>API 연동 중입니다. 새로고침 후에도 문제가 발생 시 문의바랍니다.</p>
       </div>
     );
   }

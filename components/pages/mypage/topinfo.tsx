@@ -1,6 +1,22 @@
 import Image from "next/image";
+import client from "@lib/api";
+import { useQuery } from "@tanstack/react-query";
+import { BranduBaseResponse, SummaryProfile } from "../../../types/privacy";
+
+interface summary {}
 
 function TopInfo() {
+  const getSummary = () => {
+    return client.get("accounts/summary/profile").then((res) => res.data);
+  };
+
+  const { data, isLoading } = useQuery<BranduBaseResponse<SummaryProfile>>(
+    ["summary"],
+    getSummary
+  );
+
+  console.log(data?.results);
+
   return (
     <div className="flex flex-col max-w-4xl m-auto mt-5">
       <div className="flex flex-row w-full h-32 justify-between">
@@ -31,7 +47,9 @@ function TopInfo() {
               />
               <span className="text-subContent text-sm">쿠폰</span>
             </div>
-            <span className="font-bold text-lg">0</span>
+            <span className="font-bold text-lg">
+              {data?.results.coupon_count}
+            </span>
           </div>
           <div className="point space-y-2 flex flex-col justify-center items-center">
             <div className="space-x-1 flex flex-col justify-center items-center">
@@ -43,7 +61,7 @@ function TopInfo() {
               />
               <span className="text-subContent text-sm">포인트</span>
             </div>
-            <span className="font-bold text-lg">1,000</span>
+            <span className="font-bold text-lg">{data?.results.point}</span>
           </div>
         </div>
         <div className="pay bg-modalBackground rounded-xl w-96 h-32 space-x-10 flex flex-row px-6">

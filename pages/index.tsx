@@ -9,6 +9,7 @@ import client from "@lib/api";
 import useAuth from "../hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
 import { ProductInterface } from "../types/product";
+import { BranduBaseResponse, HotDeal } from "../types/privacy";
 
 export default function Home() {
   const isAuthenticated = useAuth();
@@ -22,9 +23,9 @@ export default function Home() {
   // getAddresses();
 
   const getHotDeal = () => {
-    return client.get(`products/hot-deal/`).then((res) => res.data);
+    return client.get(`products/contents/hot-deal`).then((res) => res.data);
   };
-  const { data, isLoading } = useQuery<ProductInterface[]>(
+  const { data, isLoading } = useQuery<BranduBaseResponse<HotDeal[]>>(
     ["hotDeal"],
     getHotDeal
   );
@@ -36,7 +37,7 @@ export default function Home() {
       </div>
       <div className="productList">
         <Product
-          products={data!}
+          products={data?.results!}
           title="브랜뉴 오늘의 핫딜"
           subTitle="오늘 하루만 싸게파는 초특가 상품"
         />
