@@ -1,3 +1,5 @@
+import { useRef, useState } from "react";
+import AddressAdd from "@components/modal/addressadd";
 import { AddressInterface } from "../../../types/privacy";
 import { useState } from "react";
 import AddAddress from "@components/modal/addaddress";
@@ -9,6 +11,7 @@ interface AddressList {
 }
 
 function AddressComp({ address }: AddressList) {
+
   const [open, setOpen] = useState(false);
   const onClose = () => setOpen(false);
 
@@ -22,6 +25,18 @@ function AddressComp({ address }: AddressList) {
       },
     }
   );
+  const [addressModal, setAddressModal] = useState<boolean>(false);
+
+  const addressEl = useRef<HTMLDivElement>(null);
+  const handleAddressModal = (e: any) => {
+    if (!addressEl.current?.contains(e.target)) {
+      handleAddressClose();
+    }
+  };
+  const handleAddressClose = () => {
+    setAddressModal(false);
+  };
+
 
   return (
     <div className="flex flex-col px-5 mt-10 flex-1 relative">
@@ -29,10 +44,15 @@ function AddressComp({ address }: AddressList) {
         <div className="flex items-center justify-between">
           <span className="font-bold text-lg">배송지 관리</span>
           <button
+
             onClick={() => {
               setOpen(true);
             }}
             className="w-24 h-9 flex justify-center items-center text-white bg-main rounded-xl"
+            className="w-24 h-9 flex justify-center items-center text-white bg-main rounded-xl"
+            onClick={() => {
+              setAddressModal(true);
+            }}
           >
             추가하기
           </button>
@@ -67,6 +87,7 @@ function AddressComp({ address }: AddressList) {
               </div>
             </div>
 
+
             <div className="flex-row">
               <button className="w-24 h-9 border border-main text-main rounded-xl text-sm mt-5">
                 수정하기
@@ -90,6 +111,23 @@ function AddressComp({ address }: AddressList) {
       >
         <AddAddress onClose={onClose} />
       </div>
+            <button
+              className="w-24 h-9 border border-main text-main rounded-xl text-sm mt-5"
+              onClick={() => {
+                setAddressModal(true);
+              }}
+            >
+              수정하기
+            </button>
+          </div>
+        );
+      })}
+      {addressModal && (
+        <div onClick={handleAddressModal}>
+          <AddressAdd handleClose={handleAddressClose} />
+        </div>
+      )}
+
     </div>
   );
 }

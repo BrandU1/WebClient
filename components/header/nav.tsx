@@ -108,7 +108,7 @@ function Nav() {
   // const Login = useRef<any>();
   return (
     <>
-      <div className={`  top-0 z-50 transition bg-white  `}>
+      <div className={`top-0 z-50 transition bg-white`}>
         <div className=" m-auto  max-w-4xl py-3 flex justify-between items-center min-w-fit relative">
           <Link href="/">
             <BranduIcon width={100} height={22} />

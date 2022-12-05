@@ -18,6 +18,7 @@ function Profile() {
   return (
     <div className="m-auto">
       <TopInfo />
+
       <div className="flex flex-row">
         <SideTab num={6} />
         <ProfileComp profile={data?.results!} />

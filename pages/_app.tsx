@@ -18,7 +18,7 @@ export default function App({ Component, pageProps }: AppProps) {
             <Nav />
             <SubMenu />
           </div>
-          <div className="max-w-4xl m-auto">
+          <div>
             <Component {...pageProps} />
           </div>
 
