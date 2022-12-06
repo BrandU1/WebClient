@@ -50,7 +50,7 @@ function Service({ inquiries }: ServiceProps) {
         {inquiries?.map((list, index) => {
           return (
             <div key={index} className="flex">
-              <p className="text-sm py-3 text-subContent flex">
+              <p className="text-sm pt-3  text-subContent flex">
                 <span
                   className={`${
                     list.is_answer ? "block" : "hidden"
