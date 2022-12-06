@@ -282,8 +282,15 @@ function Custom() {
         </div>
       </div>
       {selectOpen && (
-        <div onClick={handleSelectClose}>
-          <ImageSelect handleClose={handleSelectClose} />
+        <div
+          onClick={handleSelectModal}
+          className="absolute top-0 z-50 w-full h-full bg-black bg-opacity-40"
+        >
+          <div className="mt-[248px] flex justify-center">
+            <div ref={imgSelectEl}>
+              <ImageSelect />
+            </div>
+          </div>
         </div>
       )}
     </div>

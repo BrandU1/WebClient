@@ -30,7 +30,7 @@ export default function Home() {
   );
 
   return (
-    <div className="main">
+    <div className="main max-w-4xl m-auto">
       <div className="carousel">
         <Carousel />
       </div>

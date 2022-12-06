@@ -3,14 +3,24 @@ import { Link } from "react-scroll";
 import Image from "next/image";
 import ProductReview from "./productreview";
 import Star from "@common/star";
-import ModalFrame from "@common/2modalframe";
+import ModalFrame from "@common/modalframe";
 import * as React from "react";
 
 function Detail() {
   const [infoShow, setInfoShow] = useState<boolean>(false);
   const contentSpace = useRef(null);
-  const [reviewShow, setReviewShow] = useState<boolean>(false);
-  const [reviewDetailOpen, setReviewDetailOpen] = useState<boolean>(false);
+  const [reviewShow, setReviewShow] = useState<boolean>(false); //리뷰 리스트 펼치기
+  const [reviewDetailOpen, setReviewDetailOpen] = useState<boolean>(false); //리뷰 자세히보기
+
+  const reviewEl = useRef<HTMLDivElement>(null);
+  const handleReviewDetail = (e: any) => {
+    if (!reviewEl.current?.contains(e.target)) {
+      handleDetailClose();
+    }
+  };
+  const handleDetailClose = () => {
+    setReviewDetailOpen(false);
+  };
 
   const data = [1, 2, 3, 4, 5, 6]; //리뷰 개수
 
@@ -159,10 +169,9 @@ function Detail() {
             <ModalFrame
               width={600}
               height={500}
-              open={reviewDetailOpen}
-              onClose={() => {
-                setReviewDetailOpen(false);
-              }}
+              close={handleDetailClose}
+              blur={handleReviewDetail}
+              pageRef={reviewEl}
               title={"리뷰상세"}
               components={
                 <div className="flex flex-col mt-10 w-[600px] px-11">

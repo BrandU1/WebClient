@@ -1,6 +1,7 @@
 import ModalFrame from "@common/modalframe";
 import { useForm } from "react-hook-form";
 import CheckBtn from "@icons/checkBtn";
+import { useRef } from "react";
 
 interface addressAddProps {
   handleClose: () => void;
@@ -26,9 +27,18 @@ function AddressAdd({ handleClose }: addressAddProps) {
     formData.append("detail_address", watch("detail_address"));
     // formData.append("main ", watch("main"));
   };
+
+  const addressEl = useRef<HTMLDivElement>(null);
+  const handleAddressModal = (e: any) => {
+    if (!addressEl.current?.contains(e.target)) {
+      handleClose();
+    }
+  };
   return (
     <ModalFrame
       close={handleClose}
+      blur={handleAddressModal}
+      pageRef={addressEl}
       width={600}
       height={500}
       title={"배송지 정보"}
