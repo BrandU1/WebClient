@@ -26,18 +26,12 @@ function AddressComp({ address }: AddressList) {
 
   const [addressModal, setAddressModal] = useState<boolean>(false);
 
-  const addressEl = useRef<HTMLDivElement>(null);
-  const handleAddressModal = (e: any) => {
-    if (!addressEl.current?.contains(e.target)) {
-      handleAddressClose();
-    }
-  };
   const handleAddressClose = () => {
     setAddressModal(false);
   };
 
   return (
-    <div className="flex flex-col px-5 mt-10 flex-1 relative">
+    <div className="flex flex-col px-5 mt-10 flex-1">
       <div className="border-b pb-5">
         <div className="flex items-center justify-between">
           <span className="font-bold text-lg">배송지 관리</span>
@@ -101,25 +95,7 @@ function AddressComp({ address }: AddressList) {
           </div>
         );
       })}
-      {addressModal && (
-        <div onClick={handleAddressModal}>
-          <AddressAdd handleClose={handleAddressClose} />
-        </div>
-      )}
-      {/*<div*/}
-      {/*  className={` ${*/}
-      {/*    open ? "block" : "hidden"*/}
-      {/*  } bg-white bg-opacity-90 absolute w-full h-full flex justify-center `}*/}
-      {/*>*/}
-      {/*  <AddAddress onClose={onClose} />*/}
-      {/*</div>*/}
-      {/*<div*/}
-      {/*  className={` ${*/}
-      {/*    open ? "block" : "hidden"*/}
-      {/*  } bg-white bg-opacity-90 absolute w-full h-full flex justify-center `}*/}
-      {/*>*/}
-      {/*  <AddAddress onClose={onClose} />*/}
-      {/*</div>*/}
+      {addressModal && <AddressAdd handleClose={handleAddressClose} />}
     </div>
   );
 }

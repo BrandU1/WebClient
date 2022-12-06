@@ -8,9 +8,18 @@ interface existModalProps {
 }
 
 function ExistModal({ handleClose }: existModalProps) {
+  const secondEl = useRef<HTMLDivElement>(null);
+  const handleSecondModal = (e: any) => {
+    if (!secondEl.current?.contains(e.target)) {
+      handleClose();
+    }
+  };
+
   return (
     <ModalFrame
       close={handleClose}
+      blur={handleSecondModal}
+      pageRef={secondEl}
       width={600}
       height={500}
       title={"기존이미지 선택"}

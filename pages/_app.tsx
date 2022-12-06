@@ -14,11 +14,11 @@ export default function App({ Component, pageProps }: AppProps) {
     <div>
       <RecoilRoot>
         <QueryClientProvider client={front} contextSharing={true}>
-          <div className="NavBar z-40 sticky transition top-0 border-b-[1px] border-grayv">
+          <div className="NavBar z-40 sticky transition top-0 border-b-[1px] border-gray">
             <Nav />
             <SubMenu />
           </div>
-          <div className="max-w-4xl m-auto">
+          <div>
             <Component {...pageProps} />
           </div>
 

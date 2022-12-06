@@ -4,11 +4,7 @@ import NewImgModal from "@components/pages/custom/newimgmodal";
 import ExistModal from "@components/pages/custom/existmodal";
 import * as React from "react";
 
-interface selectModalProps {
-  handleClose: () => any;
-}
-
-function ImageSelect({ handleClose }: selectModalProps) {
+function ImageSelect() {
   const [newModalOpen, setNewModalOpen] = useState<boolean>(false);
   const [existModalOpen, setExistModalOpen] = useState<boolean>(false);
 
@@ -24,14 +20,10 @@ function ImageSelect({ handleClose }: selectModalProps) {
   };
 
   return (
-    <div className="absolute flex justify-center py-36 top-0 z-50 w-full h-full bg-black bg-opacity-40 ">
-      <div
-        onBlur={handleClose}
-        className={`${!newModalOpen && !existModalOpen ? null : "hidden"}`}
-      >
-        <div className="flex flex-row space-x-5 h-[500px] focus:outline-none">
+    <div className="flex flex-row h-[500px] w-[620px]">
+      <div className={`${!newModalOpen && !existModalOpen ? null : "hidden"}`}>
+        <div className="flex flex-row space-x-5 h-full focus:outline-none">
           <div
-            // onBlur={dis} blur 막기
             className="flex flex-col h-full w-[300px] justify-center items-center m-auto bg-white rounded-xl"
             onClick={() => {
               setExistModalOpen(true);
@@ -61,16 +53,8 @@ function ImageSelect({ handleClose }: selectModalProps) {
           </div>
         </div>
       </div>
-      {newModalOpen && (
-        <div onClick={handleSecondModal}>
-          <NewImgModal handleClose={handleSecondClose} />
-        </div>
-      )}
-      {existModalOpen && (
-        <div onClick={handleSecondModal}>
-          <ExistModal handleClose={handleSecondClose} />
-        </div>
-      )}
+      {newModalOpen && <NewImgModal handleClose={handleSecondClose} />}
+      {existModalOpen && <ExistModal handleClose={handleSecondClose} />}
     </div>
   );
 }

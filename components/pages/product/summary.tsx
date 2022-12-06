@@ -20,7 +20,7 @@ function Summary({ productInfo }: ProductProps) {
   const [productId, setProductId] = useState<string>("");
 
   useEffect(() => {
-    setProductId(document.location.href.substr(-1));
+    setProductId(document.location?.href.substr(-1));
   });
 
   return (

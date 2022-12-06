@@ -129,10 +129,9 @@ function Nav() {
           </Link>
           <p>스토어</p>
           <p>브랜드</p>
-          <div>
+          <div onBlur={closeSearch}>
             <div
-              onBlur={closeSearch}
-              onClick={showSearch}
+              onClick={() => setFocused(!focused)}
               className={`flex items-center justify-between border-[1px] border-main rounded-t-xl w-[350px] h-[40px] ${
                 focused ? "border-b-0" : "rounded-b-xl"
               }`}
@@ -147,7 +146,6 @@ function Nav() {
                 width={40}
                 value={input}
               />
-
               <div className="mx-3">
                 <SearchIcon />
               </div>

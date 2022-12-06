@@ -1,5 +1,5 @@
 import ModalFrame from "@common/modalframe";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
 
 interface newModalProps {
@@ -43,11 +43,20 @@ function NewImgModal({ handleClose }: newModalProps) {
 
   console.log(imgBase64);
 
+  const secondEl = useRef<HTMLDivElement>(null);
+  const handleSecondModal = (e: any) => {
+    if (!secondEl.current?.contains(e.target)) {
+      handleClose();
+    }
+  };
+
   return (
     <ModalFrame
       width={600}
       height={500}
       close={handleClose}
+      blur={handleSecondModal}
+      pageRef={secondEl}
       title={"신규이미지 추가"}
       components={
         <div className="mt-10">

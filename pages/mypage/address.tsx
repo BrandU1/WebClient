@@ -20,7 +20,7 @@ function Address() {
   );
 
   return (
-    <div className=" m-auto">
+    <div className="m-auto">
       <TopInfo />
       <div className="max-w-4xl m-auto">
         <div className="flex flex-row">
