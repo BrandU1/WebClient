@@ -6,6 +6,7 @@ import { router } from "next/client";
 import client from "@lib/api";
 import { useQuery } from "@tanstack/react-query";
 import { ProductInfoInterface } from "../../../types/product";
+import { BranduBaseResponse, Product } from "../../../types/privacy";
 
 function ProductDetail() {
   const [id, setId] = useState<string>("");
@@ -13,14 +14,13 @@ function ProductDetail() {
     setId(router.query.id as string);
   }, [router.isReady, router.query.id]);
 
-  const getProduct = (id: string) => {
-    if (!id) return null;
+  const getProduct = (id: number) => {
     return client.get(`products/${id}`).then((res) => res.data);
   };
 
-  const { data, isLoading } = useQuery<ProductInfoInterface | null>(
+  const { data, isLoading } = useQuery<BranduBaseResponse<Product>>(
     ["productSummary", id],
-    () => getProduct(id)
+    () => getProduct(Number(id))
   );
 
   if (isLoading)
@@ -28,7 +28,7 @@ function ProductDetail() {
 
   return (
     <div>
-      <Summary productInfo={data!} />
+      <Summary productInfo={data?.results!} />
       <DetailMenu />
       <Detail />
     </div>

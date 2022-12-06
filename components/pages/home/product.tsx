@@ -58,7 +58,7 @@ function Product({ title, subTitle, products }: ProductProps) {
                 href={{
                   pathname: `/product/${item.id}`,
                   query: {
-                    index: item.id,
+                    index: item?.id,
                   },
                 }}
                 as={`/product/${item.id}`}

@@ -8,9 +8,10 @@ import client from "@lib/api";
 import { useRouter } from "next/router";
 import { useQuery } from "@tanstack/react-query";
 import { ProductInfoInterface } from "../../../types/product";
+import { Product } from "../../../types/privacy";
 
 interface ProductProps {
-  productInfo: ProductInfoInterface;
+  productInfo: Product;
 }
 
 function Summary({ productInfo }: ProductProps) {
@@ -20,7 +21,7 @@ function Summary({ productInfo }: ProductProps) {
   const [productId, setProductId] = useState<string>("");
 
   useEffect(() => {
-    setProductId(document.location?.href.substr(-1));
+    setProductId(document.location.href.substr(-1));
   });
 
   return (
@@ -40,7 +41,7 @@ function Summary({ productInfo }: ProductProps) {
               <div className="w-20 h-20 relative">
                 <Image
                   className="rounded-xl"
-                  src={`${productInfo?.backdrop_image} `}
+                  src={`http://192.168.0.2/${productInfo?.backdrop_image} `}
                   layout="fill"
                   alt={"imagePreview"}
                 />
@@ -54,7 +55,7 @@ function Summary({ productInfo }: ProductProps) {
         <div className={`w-[400px] h-[400px] ${toggle ? "hidden" : "block"}`}>
           <Image
             className="rounded-xl"
-            src={productInfo?.backdrop_image || ""}
+            src={`http://192.168.0.2/${productInfo?.backdrop_image}`}
             alt="productInfo"
             layout="fill"
           />
@@ -79,7 +80,7 @@ function Summary({ productInfo }: ProductProps) {
           <div className="name&tag flex flex-col">
             <p className="w-max text-base">{productInfo?.name}</p>
             <span className="text-[#767676] text-xs mt-1">
-              #{productInfo?.category.name}
+              #{productInfo?.category}
             </span>
           </div>
           {/*<Share link={link} />*/}

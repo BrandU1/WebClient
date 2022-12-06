@@ -70,6 +70,34 @@ export interface SummaryProfile {
   coupon_count: number;
 }
 
+export interface Product {
+  id: number;
+  tags: Tags[];
+  images: any[];
+  options: [];
+  is_wish: boolean;
+  is_basket: boolean;
+  name: string;
+  backdrop_image: string;
+  price: number;
+  brand: number;
+  category: number;
+  view_count: number;
+}
+export interface Tags {
+  id: number;
+  name: string;
+}
+
+export interface Inquiry {
+  id: number;
+  title: string;
+  description: string;
+  images: any[];
+  created: string;
+  is_answer: boolean;
+}
+
 export interface BranduBaseResponse<T> {
   success: boolean;
   results: T;

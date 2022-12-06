@@ -1,4 +1,18 @@
-function Service() {
+import { Inquiry } from "../../../types/privacy";
+import { useState } from "react";
+import Addinquiry from "@components/modal/addinquiry";
+
+interface ServiceProps {
+  inquiries: Inquiry[];
+}
+
+function Service({ inquiries }: ServiceProps) {
+  const [inquiry, setInquiry] = useState<boolean>(false);
+
+  const handleInquiryClose = () => {
+    setInquiry(false);
+  };
+
   return (
     <div className=" m-auto ">
       <div>
@@ -33,13 +47,43 @@ function Service() {
       </div>
       <div className="py-3 border-b-[1px] border-[#EDEDED]">
         <h1>1:1 문의내역</h1>
-        <p className="text-sm py-3 text-subContent ">문의내역이 없습니다.</p>
+        {inquiries?.map((list, index) => {
+          return (
+            <div key={index} className="flex">
+              <p className="text-sm py-3 text-subContent flex">
+                <span
+                  className={`${
+                    list.is_answer ? "block" : "hidden"
+                  } font-bold  text-main mr-2`}
+                >
+                  [답변 완료]
+                </span>
+                <span
+                  className={`${
+                    list.is_answer ? "hidden" : "block"
+                  } font-bold text-red mr-2`}
+                >
+                  [답변 미완료]
+                </span>
+
+                {list.title}
+              </p>
+            </div>
+          );
+        })}
+        <p className="text-sm py-3 text-subContent "></p>
       </div>
       <div className="flex justify-center py-10">
-        <button className="text-main text-base border-[1px] border-main rounded-xl w-[259px] h-[45px] flex justify-center items-center">
+        <button
+          onClick={() => {
+            setInquiry(true);
+          }}
+          className="text-main text-base border-[1px] border-main rounded-xl w-[259px] h-[45px] flex justify-center items-center"
+        >
           1:1 문의하기
         </button>
       </div>
+      {inquiry && <Addinquiry handleClose={handleInquiryClose} />}
     </div>
   );
 }

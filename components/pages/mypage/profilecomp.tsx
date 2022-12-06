@@ -75,7 +75,9 @@ function ProfileComp({ profile }: ProfileForm) {
           "Content-Type": "multipart/form-data",
         },
       })
-      .then((res) => res.data);
+      .then((res) => {
+        alert("수정되었습니다.");
+      });
   };
 
   if (!profile) return <div></div>;
@@ -85,17 +87,56 @@ function ProfileComp({ profile }: ProfileForm) {
       <form onSubmit={handleSubmit(onValid)} className="registerForm">
         <div className="back relative">
           <div className="backImage bg-lightGary rounded-[10px]">
-            {backBase64 ? (
+            {profile.backdrop_image && (
               <Image
-                src={`http://192.168.0.2/${backBase64}`}
-                width={674}
-                height={200}
+                className="rounded-xl"
+                src={`http://192.168.0.2/${profile.backdrop_image}`}
+                height={105}
+                width={100}
                 decoding="async"
-                alt={"backImage"}
+                alt={"profile"}
               />
-            ) : (
-              <div className="w-[674px] h-[200px]"></div>
             )}
+            {!profile.backdrop_image &&
+              (!backBase64 ? (
+                <>
+                  <svg
+                    width="42"
+                    height="46"
+                    viewBox="0 0 42 46"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M41 45C41 41.5886 41 39.8829 40.5694 38.495C39.5999 35.37 37.0989 32.9245 33.9029 31.9766C32.4834 31.5555 30.7389 31.5555 27.25 31.5555H14.75C11.2611 31.5555 9.51664 31.5555 8.09715 31.9766C4.90114 32.9245 2.4001 35.37 1.4306 38.495C1 39.8829 1 41.5886 1 45M32.25 12C32.25 18.0751 27.2132 23 21 23C14.7868 23 9.75 18.0751 9.75 12C9.75 5.92487 14.7868 1 21 1C27.2132 1 32.25 5.92487 32.25 12Z"
+                      stroke="white"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </>
+              ) : (
+                <Image
+                  className="rounded-xl"
+                  src={backBase64}
+                  height={105}
+                  width={100}
+                  decoding="async"
+                  alt={"profile"}
+                />
+              ))}
+            {/*{backBase64 ? (*/}
+            {/*  <Image*/}
+            {/*    src={`http://192.168.0.2/${backBase64}`}*/}
+            {/*    width={674}*/}
+            {/*    height={200}*/}
+            {/*    decoding="async"*/}
+            {/*    alt={"backImage"}*/}
+            {/*  />*/}
+            {/*) : (*/}
+            {/*  <div className="w-[674px] h-[200px]"></div>*/}
+            {/*)}*/}
           </div>
           <div className="border-[1px] text-center border-main bg-white rounded-2xl absolute right-5 bottom-5 text-main text-xs w-[35px] h-[20px] cursor-pointer">
             <label className="input-file-button" htmlFor="backImage">

@@ -15,7 +15,9 @@ function TopInfo() {
     getSummary
   );
 
-  console.log(data?.results);
+  if (isLoading) {
+    return <div></div>;
+  }
 
   return (
     <div className="flex flex-col max-w-4xl m-auto mt-5">

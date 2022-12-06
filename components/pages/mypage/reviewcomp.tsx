@@ -25,8 +25,6 @@ function ReviewComp() {
     return <div></div>;
   }
 
-  console.log("sssaa" + writtenData + "\n" + writableData);
-
   return (
     <div className="pl-5 flex flex-col flex-1">
       <div className="title flex flex-row items-center border-b pb-5">
