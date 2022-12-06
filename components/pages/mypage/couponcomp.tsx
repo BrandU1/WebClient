@@ -16,7 +16,7 @@ function CouponComp() {
       </div>
       <div className="searchbar mt-5 mr-[10px] ml-[10px] flex justify-between border border-main rounded-xl h-10 mb-5">
         <input
-          className={`bg-transparent w-[654px] h-[40px] rounded-xl text-sm font-bold border-main  focus:outline-0 px-2`}
+          className={`bg-transparent w-full h-[40px] rounded-xl text-sm font-bold border-main  focus:outline-0 px-2`}
           type="text"
           autoComplete="off"
           value={regist}
@@ -25,7 +25,7 @@ function CouponComp() {
             setRegist(e.target.value);
           }}
         />
-        <div className="m-3 w-7 cursor-pointer">
+        <div className="m-3 w-8 cursor-pointer">
           <p className="font-bold text-sm text-main">등록</p>
         </div>
       </div>

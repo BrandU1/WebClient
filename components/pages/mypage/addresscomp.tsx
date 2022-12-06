@@ -24,6 +24,49 @@ function AddressComp({ address }: AddressList) {
     }
   );
 
+  const temp = [
+    {
+      id: 1,
+      name: "test",
+      recipient: "asdf",
+      road_name_address: "ddddd",
+      zip_cod: 12312,
+      detail_address: "asdasdf",
+      phone_number: "010100101",
+      is_main: false,
+    },
+    {
+      id: 2,
+      name: "second",
+      recipient: "asdf",
+      road_name_address: "ddddd",
+      zip_cod: 12312,
+      detail_address: "asdasdf",
+      phone_number: "010100101",
+      is_main: true,
+    },
+    {
+      id: 3,
+      name: "333",
+      recipient: "asdf",
+      road_name_address: "ddddd",
+      zip_cod: 12312,
+      detail_address: "asdasdf",
+      phone_number: "010100101",
+      is_main: false,
+    },
+    {
+      id: 4,
+      name: "444",
+      recipient: "asdf",
+      road_name_address: "ddddd",
+      zip_cod: 12312,
+      detail_address: "asdasdf",
+      phone_number: "010100101",
+      is_main: true,
+    },
+  ];
+
   const [addressModal, setAddressModal] = useState<boolean>(false);
 
   const handleAddressClose = () => {
@@ -45,7 +88,7 @@ function AddressComp({ address }: AddressList) {
           </button>
         </div>
       </div>
-      {address?.map((list, index) => {
+      {temp?.map((list, index) => {
         return (
           <div
             className="border-b border-gray pb-5 mt-5 flex flex-row justify-between px-2 "
@@ -66,7 +109,7 @@ function AddressComp({ address }: AddressList) {
                 >
                   대표
                 </div>
-                <p>{list?.name}</p>
+                <p className={`${!list.is_main && "pt-6"}`}>{list?.name}</p>
                 <p>{list?.phone_number}</p>
                 <p>
                   {list?.road_name_address} {list?.detail_address}
@@ -74,12 +117,12 @@ function AddressComp({ address }: AddressList) {
               </div>
             </div>
 
-            <div className="flex-row">
+            <div className="flex flex-col">
               <button
                 onClick={() => {
                   setAddressModal(true);
                 }}
-                className="w-24 h-9 border border-main text-main rounded-xl text-sm mt-5"
+                className="w-24 h-9 border border-main text-main rounded-xl text-sm"
               >
                 수정하기
               </button>
@@ -87,7 +130,7 @@ function AddressComp({ address }: AddressList) {
                 onClick={() => {
                   mutationDelete.mutate(list.id);
                 }}
-                className="w-24 h-9 border border-red text-red rounded-xl text-sm mt-5"
+                className="w-24 h-9 border border-red text-red rounded-xl text-sm mt-3"
               >
                 삭제하기
               </button>
