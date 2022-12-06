@@ -9,7 +9,7 @@ function SideTab({ num }: tabProps) {
   const [tabNum, setTabNum] = useState<number>(num ?? 0);
   const [stateNum, setStateNum] = useState<number>(0);
   return (
-    <div className="border border-main rounded-xl p-5 w-fit min-h-80">
+    <div className="border border-main rounded-xl p-5 w-fit h-fit">
       <span className="font-bold text-base">주문/배송</span>
       <Link href={"/mypage"}>
         <div

@@ -57,6 +57,7 @@ function AddressComp({ address }: AddressList) {
       },
     }
   );
+
   return (
     <div className={` flex flex-col px-5 mt-10 flex-1 `}>
       <div className="border-b pb-5">
