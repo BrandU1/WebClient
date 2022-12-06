@@ -48,7 +48,7 @@ function BasketList({ basketList }: BasketListProps) {
   };
 
   return (
-    <div className=" m-auto flex space-x-10 ">
+    <div className="max-w-4xl m-auto flex space-x-10 ">
       <div className="rightSection w-[70%]">
         <h1 className="text-xl font-bold py-5">장바구니</h1>
         <div className="border-b-[1px] border-[black]" />

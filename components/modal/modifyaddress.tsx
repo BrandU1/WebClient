@@ -8,26 +8,40 @@ import DaumPostcode from "react-daum-postcode";
 
 interface addressAddProps {
   handleClose: () => void;
+  infoAddress: AddressForm;
 }
 interface AddressForm {
+  id: number;
   name: string;
   recipient: string;
   phone_number: string;
   road_name_address: string;
   detail_address: string;
-  main: boolean;
+  is_main: boolean;
   memo: string;
   zip_code: string;
   address: string;
 }
-function AddressAdd({ handleClose }: addressAddProps) {
-  const { register, handleSubmit, watch, setValue } = useForm<AddressForm>({});
+function ModifyAddress({ handleClose, infoAddress }: addressAddProps) {
+  const { register, handleSubmit, setValue } = useForm<AddressForm>({
+    defaultValues: {
+      name: infoAddress?.name,
+      recipient: infoAddress?.recipient,
+      phone_number: infoAddress?.phone_number,
+      road_name_address: infoAddress?.road_name_address,
+      detail_address: infoAddress?.detail_address,
+      is_main: infoAddress?.is_main,
+      memo: infoAddress?.memo,
+      zip_code: infoAddress?.zip_code,
+      address: infoAddress?.address,
+    },
+  });
 
   const queryClient = useQueryClient();
 
   const mutation = useMutation(
     (data: AddressForm) => {
-      return client.post(`accounts/addresses`, data);
+      return client.patch(`accounts/addresses/${infoAddress.id}`, data);
     },
     {
       onSuccess: () => {
@@ -135,7 +149,11 @@ function AddressAdd({ handleClose }: addressAddProps) {
               </div>
             </div>
             <div className="flex flex-row">
-              <CheckBtn color={"gray"} width={20} height={20} />
+              <CheckBtn
+                color={`${infoAddress?.is_main ? "main" : "gray"}`}
+                width={20}
+                height={20}
+              />
               <span className="text-xs ml-2">대표 배송지로 선택</span>
             </div>
 
@@ -157,4 +175,4 @@ function AddressAdd({ handleClose }: addressAddProps) {
   );
 }
 
-export default AddressAdd;
+export default ModifyAddress;

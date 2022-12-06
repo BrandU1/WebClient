@@ -1,4 +1,5 @@
 import Image from "next/image";
+import DaumPostcode from "react-daum-postcode";
 
 interface ModalProps {
   close: () => void;
@@ -8,9 +9,10 @@ interface ModalProps {
   height: number;
   title: string; //Modal 타이틀
   components: any; //Modal 내용
+  searchAddress: boolean;
 }
 
-function ModalFrame({
+function AddressModalFrame({
   close,
   blur,
   pageRef,
@@ -18,10 +20,11 @@ function ModalFrame({
   height,
   title,
   components,
+  searchAddress,
 }: ModalProps) {
   return (
     <div
-      className="absolute top-0 left-0 z-50 w-full h-[140vh]   bg-black bg-opacity-40 "
+      className="absolute top-0 left-0 z-40 w-full h-[140vh]   bg-black bg-opacity-40 "
       onClick={blur}
     >
       <div className="mt-[248px] flex justify-center ">
@@ -53,4 +56,4 @@ function ModalFrame({
   );
 }
 
-export default ModalFrame;
+export default AddressModalFrame;

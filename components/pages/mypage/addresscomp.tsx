@@ -1,18 +1,28 @@
 import { useRef, useState } from "react";
-import AddressAdd from "@components/modal/addressadd";
-import { AddressInterface } from "../../../types/privacy";
-import AddAddress from "@components/modal/addaddress";
+import AddressAdd from "@components/modal/addaddress";
+import { AddressInterface, BranduBaseResponse } from "../../../types/privacy";
 import client from "@lib/api";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import ModifyAddress from "@components/modal/modifyaddress";
+import addaddress from "@components/modal/addaddress";
 
 interface AddressList {
   address: AddressInterface[];
 }
+interface modifyAddress {
+  id: number;
+  name: string;
+  recipient: string;
+  road_name_address: string;
+  zip_code: string;
+  detail_address: string;
+  phone_number: string;
+  is_main: boolean;
+  memo: string;
+  address: string;
+}
 
 function AddressComp({ address }: AddressList) {
-  const [open, setOpen] = useState(false);
-  const onClose = () => setOpen(false);
-
   const queryClient = useQueryClient();
 
   const mutationDelete = useMutation(
@@ -24,57 +34,31 @@ function AddressComp({ address }: AddressList) {
     }
   );
 
-  const temp = [
-    {
-      id: 1,
-      name: "test",
-      recipient: "asdf",
-      road_name_address: "ddddd",
-      zip_cod: 12312,
-      detail_address: "asdasdf",
-      phone_number: "010100101",
-      is_main: false,
-    },
-    {
-      id: 2,
-      name: "second",
-      recipient: "asdf",
-      road_name_address: "ddddd",
-      zip_cod: 12312,
-      detail_address: "asdasdf",
-      phone_number: "010100101",
-      is_main: true,
-    },
-    {
-      id: 3,
-      name: "333",
-      recipient: "asdf",
-      road_name_address: "ddddd",
-      zip_cod: 12312,
-      detail_address: "asdasdf",
-      phone_number: "010100101",
-      is_main: false,
-    },
-    {
-      id: 4,
-      name: "444",
-      recipient: "asdf",
-      road_name_address: "ddddd",
-      zip_cod: 12312,
-      detail_address: "asdasdf",
-      phone_number: "010100101",
-      is_main: true,
-    },
-  ];
-
   const [addressModal, setAddressModal] = useState<boolean>(false);
+  const [modifyModal, setModifyModal] = useState<boolean>(false);
 
   const handleAddressClose = () => {
     setAddressModal(false);
   };
+  const handleModifyClose = () => {
+    setModifyModal(false);
+  };
 
+  const [infoAddress, setInfoAddress] = useState<modifyAddress>();
+
+  const mutationModify = useMutation(
+    (id: number) =>
+      client
+        .get(`accounts/addresses/${id}`)
+        .then((res) => setInfoAddress(res.data.results)),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["address"]);
+      },
+    }
+  );
   return (
-    <div className="flex flex-col px-5 mt-10 flex-1">
+    <div className={` flex flex-col px-5 mt-10 flex-1 `}>
       <div className="border-b pb-5">
         <div className="flex items-center justify-between">
           <span className="font-bold text-lg">배송지 관리</span>
@@ -88,7 +72,7 @@ function AddressComp({ address }: AddressList) {
           </button>
         </div>
       </div>
-      {temp?.map((list, index) => {
+      {address?.map((list, index) => {
         return (
           <div
             className="border-b border-gray pb-5 mt-5 flex flex-row justify-between px-2 "
@@ -120,7 +104,8 @@ function AddressComp({ address }: AddressList) {
             <div className="flex flex-col">
               <button
                 onClick={() => {
-                  setAddressModal(true);
+                  mutationModify.mutate(list.id);
+                  setModifyModal(true);
                 }}
                 className="w-24 h-9 border border-main text-main rounded-xl text-sm"
               >
@@ -139,6 +124,12 @@ function AddressComp({ address }: AddressList) {
         );
       })}
       {addressModal && <AddressAdd handleClose={handleAddressClose} />}
+      {modifyModal && (
+        <ModifyAddress
+          infoAddress={infoAddress!}
+          handleClose={handleModifyClose}
+        />
+      )}
     </div>
   );
 }
