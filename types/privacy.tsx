@@ -50,6 +50,26 @@ export interface Platform {
   platform: string;
 }
 
+export interface History {
+  search_word: string;
+}
+
+export interface HotDeal {
+  backdrop_image: string;
+  id: number;
+  is_wish: boolean;
+  name: string;
+  price: number;
+}
+
+export interface SummaryProfile {
+  point: number;
+  wish_count: number;
+  basket_count: number;
+  scrap_count: number;
+  coupon_count: number;
+}
+
 export interface BranduBaseResponse<T> {
   success: boolean;
   results: T;

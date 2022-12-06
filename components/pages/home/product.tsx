@@ -5,11 +5,12 @@ import { ProductInterface } from "../../../types/product";
 import Link from "next/link";
 import client from "@lib/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { HotDeal } from "../../../types/privacy";
 
 interface ProductProps {
   title: string;
   subTitle: string;
-  products: ProductInterface[];
+  products: HotDeal[];
 }
 
 function Product({ title, subTitle, products }: ProductProps) {
@@ -24,9 +25,7 @@ function Product({ title, subTitle, products }: ProductProps) {
 
   const mutation = useMutation(
     (id: number) =>
-      client
-        .post(`/accounts/wishes/${id}/create_with_pk`)
-        .then((res) => res.data),
+      client.post(`/accounts/wishes/${id}`).then((res) => res.data),
     {
       onSuccess: () => {
         queryClient.invalidateQueries(["hotDeal"]);
@@ -36,9 +35,7 @@ function Product({ title, subTitle, products }: ProductProps) {
 
   const deletePick = useMutation(
     (id: number) =>
-      client
-        .delete(`/accounts/wishes/${id}/create_with_pk`)
-        .then((res) => res.data),
+      client.delete(`/accounts/wishes/${id}`).then((res) => res.data),
     {
       onSuccess: () => {
         queryClient.invalidateQueries(["hotDeal"]);
@@ -69,7 +66,7 @@ function Product({ title, subTitle, products }: ProductProps) {
                 <div className="h-60 relative">
                   <Image
                     className="rounded-2xl"
-                    src={item.backdrop_image}
+                    src={`http://192.168.0.2${item.backdrop_image}`}
                     alt="list"
                     layout="fill"
                   />
