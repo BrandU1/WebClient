@@ -3,12 +3,17 @@ import Image from "next/image";
 import Input from "@common/input";
 import SearchIcon from "@icons/search";
 import Link from "next/link";
+import OrderCancel from "@components/modal/ordercancel";
 
 function PayInfo() {
   const [focused, setFocused] = useState<boolean>(false);
   const [period, setPeriod] = useState<number>(0);
 
   const [search, setSearch] = useState<string>("");
+  const [cancelModal, setCancelModal] = useState<boolean>(false);
+  const cancelClose = () => {
+    setCancelModal(false);
+  };
 
   return (
     <div className="pl-5 flex flex-col flex-1">
@@ -90,13 +95,17 @@ function PayInfo() {
                 <button className="w-24 h-9 bg-white text-main text-sm border border-main rounded-xl flex justify-center items-center">
                   배송조회
                 </button>
-                <button className="w-24 h-9 bg-white text-main text-sm border border-main rounded-xl flex justify-center items-center">
+                <button
+                  className="w-24 h-9 bg-white text-main text-sm border border-main rounded-xl flex justify-center items-center"
+                  onClick={() => setCancelModal(true)}
+                >
                   주문취소
                 </button>
                 <button className="w-24 h-9 bg-white text-main text-sm border border-main rounded-xl flex justify-center items-center">
                   교환/환불
                 </button>
               </div>
+              {cancelModal && <OrderCancel onClose={cancelClose} />}
             </div>
           );
         })}
