@@ -217,12 +217,14 @@ function Nav() {
                 <div className="recently px-5  text-sm text-notice border-b-[1px] border-gray w-[95%] m-auto">
                   {data?.results.map((item, index) => {
                     return (
-                      <>
+                      <div className="flex items-center justify-between">
                         <div key={index}>
-                          <p className="py-3">{item.search_word}</p>
+                          <p className="py-2">{item.search_word}</p>
                         </div>
-                        <CloseIcon />
-                      </>
+                        <div onClick={() => deleteHistory.mutate(item.id)}>
+                          <CloseIcon />
+                        </div>
+                      </div>
                     );
                   })}
                 </div>
