@@ -7,7 +7,7 @@ import HamburgerIcon from "@icons/hamburger";
 import ProfileIcon from "@icons//profile";
 import BranduIcon from "@icons/brandu";
 import CloseIcon from "@icons/close";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import LoginModal from "@components/login";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -21,6 +21,22 @@ function Nav() {
   const [focused, setFocused] = useState<boolean>(false);
   const showSearch = () => setFocused(true);
   const closeSearch = () => setFocused(false);
+
+  // inputBar blur
+  const inputEl = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    document.addEventListener("mouseup", handleInput);
+    return () => {
+      document.removeEventListener("mouseup ", handleInput);
+    };
+  });
+
+  const handleInput = (e: any) => {
+    if (!inputEl.current?.contains(e.target)) {
+      closeSearch();
+    }
+  };
 
   // input State
 
@@ -48,7 +64,10 @@ function Nav() {
   const loginEl = useRef<HTMLDivElement>(null);
 
   const handleLogin = (e: any) => {
-    if (!loginEl.current?.contains(e.target)) {
+    if (
+      !loginEl.current?.contains(e.target) &&
+      document.activeElement?.contains(e.target)
+    ) {
       closeOutside();
     }
   };
@@ -161,7 +180,7 @@ function Nav() {
           </Link>
           <p>스토어</p>
           <p>커뮤니티</p>
-          <div>
+          <div ref={inputEl}>
             <div
               onClick={() => setFocused(!focused)}
               className={`flex items-center justify-between border-[1px] border-main rounded-t-xl w-[350px] h-[40px] ${
@@ -182,61 +201,58 @@ function Nav() {
                 <SearchIcon />
               </div>
             </div>
-            <div
-              className={`dropdown  bg-white border-[1px] border-main border-t-white rounded-b-xl py-3 absolute  w-[350px] ${
-                focused ? "block" : "hidden"
-              }`}
-            >
-              <div className="flex justify-between px-3 py-2">
-                <h3 className="text-sm">최근 검색어</h3>
-                <p
-                  onClick={() => {
-                    deleteAllHistory.mutate();
-                  }}
-                  className="text-xs cursor-pointer"
-                >
-                  전체삭제
-                </p>
-              </div>
-              <div className="recently px-5  text-sm text-notice border-b-[1px] border-gray w-[95%] m-auto">
-                {data?.results.map((item, index) => {
-                  return (
-                    <div className="flex items-center justify-between">
-                      <div key={index}>
-                        <p className="py-2">{item.search_word}</p>
-                      </div>
-                      <div onClick={() => deleteHistory.mutate(item.id)}>
-                        <CloseIcon />
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-              <div className="topic">
-                <h3 className="p-3 text-sm">급상승 검색어</h3>
-                <div className="columns-2  m-auto">
-                  {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item, index) => {
+            {focused && (
+              <div className="dropdown bg-white border-[1px] border-main border-t-white rounded-b-xl py-3 absolute  w-[350px]">
+                <div className="flex justify-between px-3 py-2">
+                  <h3 className="text-sm">최근 검색어</h3>
+                  <p
+                    onClick={() => {
+                      deleteAllHistory.mutate();
+                    }}
+                    className="text-xs cursor-pointer"
+                  >
+                    전체삭제
+                  </p>
+                </div>
+                <div className="recently px-5  text-sm text-notice border-b-[1px] border-gray w-[95%] m-auto">
+                  {data?.results.map((item, index) => {
                     return (
-                      <div key={index} className=" px-5 text-sm py-1 ">
-                        <p>
-                          <span className="text-main font-bold mx-4">
-                            {index + 1}
-                          </span>
-                          박재현 짱짱
-                        </p>
-                        <div
-                          className={`border-b-[1px] border-gray py-1 ${
-                            index === 4 || index === 9 ? "hidden" : ""
-                          }`}
-                        />
+                      <div className="flex items-center justify-between">
+                        <div key={index}>
+                          <p className="py-2">{item.search_word}</p>
+                        </div>
+                        <div onClick={() => deleteHistory.mutate(item.id)}>
+                          <CloseIcon />
+                        </div>
                       </div>
                     );
                   })}
                 </div>
+                <div className="topic">
+                  <h3 className="p-3 text-sm">급상승 검색어</h3>
+                  <div className="columns-2  m-auto">
+                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item, index) => {
+                      return (
+                        <div key={index} className=" px-5 text-sm py-1 ">
+                          <p>
+                            <span className="text-main font-bold mx-4">
+                              {index + 1}
+                            </span>
+                            박재현 짱짱
+                          </p>
+                          <div
+                            className={`border-b-[1px] border-gray py-1 ${
+                              index === 4 || index === 9 ? "hidden" : ""
+                            }`}
+                          />
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
               </div>
-            </div>
+            )}
           </div>
-
           <div className="flex items-center space-x-4">
             <div className={`${token ? "block" : "hidden"} cursor-pointer`}>
               <Link href="/pick">
