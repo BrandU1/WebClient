@@ -51,6 +51,7 @@ export interface Platform {
 }
 
 export interface History {
+  id: number;
   search_word: string;
 }
 
@@ -96,6 +97,20 @@ export interface Inquiry {
   images: any[];
   created: string;
   is_answer: boolean;
+}
+
+export interface SearchBase {
+  count: number;
+  next: string;
+  previous: string;
+  results: SearchResult[];
+}
+export interface SearchResult {
+  id: number;
+  name: string;
+  price: number;
+  backdrop_image: string;
+  is_wish: boolean;
 }
 
 export interface BranduBaseResponse<T> {

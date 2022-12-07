@@ -14,7 +14,7 @@ import { useRouter } from "next/router";
 import Category from "@components/category";
 import GOTOMyPage from "@components/login/gomypage";
 import client from "@lib/api";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { BranduBaseResponse, History } from "../../types/privacy";
 
 function Nav() {
@@ -46,13 +46,6 @@ function Nav() {
   };
 
   const loginEl = useRef<HTMLDivElement>(null);
-
-  // useEffect(() => {
-  //   document.addEventListener("mouseup", handleLogin);
-  //   return () => {
-  //     document.removeEventListener("mouseup ", handleLogin);
-  //   };
-  // });
 
   const handleLogin = (e: any) => {
     if (!loginEl.current?.contains(e.target)) {
@@ -119,7 +112,46 @@ function Nav() {
     getHistory
   );
 
-  // const Login = useRef<any>();
+  const onClicksSearch = () => {
+    if (input !== "" && input.replace(/ /g, "") !== "") {
+      router.push(`/search?query=${input}`);
+      setFocused(false);
+    } else if (input === "") {
+      setFocused(false);
+      alert("검색어를 입력해주세요");
+    }
+    if (input.replace(/ /g, "") === "") {
+      setFocused(false);
+      alert("공백은 검색이 불가능합니다.");
+    }
+  };
+  const onKeyPress = (e: any) => {
+    if (e.key === "Enter") {
+      onClicksSearch();
+    }
+  };
+
+  const queryClient = useQueryClient();
+
+  const deleteHistory = useMutation(
+    (id: number) =>
+      client.delete(`/search/history/${id}`).then((res) => res.data),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["history"]);
+      },
+    }
+  );
+
+  const deleteAllHistory = useMutation(
+    () => client.delete(`/search/history/all`).then((res) => res.data),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["history"]);
+      },
+    }
+  );
+
   return (
     <>
       <div className={`top-0 z-50 transition bg-white`}>
@@ -128,25 +160,25 @@ function Nav() {
             <BranduIcon width={100} height={22} />
           </Link>
           <p>스토어</p>
-          <p>브랜드</p>
-          <div onBlur={closeSearch}>
+          <p>커뮤니티</p>
+          <div>
             <div
               onClick={() => setFocused(!focused)}
               className={`flex items-center justify-between border-[1px] border-main rounded-t-xl w-[350px] h-[40px] ${
                 focused ? "border-b-0" : "rounded-b-xl"
               }`}
             >
-              <Input
+              <input
+                className={`bg-transparent text-main w-full h-[350px] rounded-xl text-sm font-bold border-main  focus:outline-0 px-2`}
                 onChange={(e: any) => {
                   setInput(e.target.value);
                 }}
                 type="text"
-                color="main"
-                height={350}
-                width={40}
+                placeholder="검색어를 입력해주세요"
                 value={input}
+                onKeyPress={onKeyPress}
               />
-              <div className="mx-3">
+              <div onClick={onClicksSearch} className="mx-3">
                 <SearchIcon />
               </div>
             </div>
@@ -157,17 +189,26 @@ function Nav() {
             >
               <div className="flex justify-between px-3 py-2">
                 <h3 className="text-sm">최근 검색어</h3>
-                <p className="text-xs">전체삭제</p>
+                <p
+                  onClick={() => {
+                    deleteAllHistory.mutate();
+                  }}
+                  className="text-xs cursor-pointer"
+                >
+                  전체삭제
+                </p>
               </div>
-              <div className="recently px-5 flex items-center justify-between text-sm text-notice border-b-[1px] border-gray w-[95%] m-auto">
+              <div className="recently px-5  text-sm text-notice border-b-[1px] border-gray w-[95%] m-auto">
                 {data?.results.map((item, index) => {
                   return (
-                    <>
+                    <div className="flex items-center justify-between">
                       <div key={index}>
-                        <p className="py-3">{item.search_word}</p>
+                        <p className="py-2">{item.search_word}</p>
                       </div>
-                      <CloseIcon />
-                    </>
+                      <div onClick={() => deleteHistory.mutate(item.id)}>
+                        <CloseIcon />
+                      </div>
+                    </div>
                   );
                 })}
               </div>
