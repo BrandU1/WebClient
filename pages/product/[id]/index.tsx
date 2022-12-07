@@ -2,13 +2,14 @@ import Summary from "@components/pages/product/summary";
 import DetailMenu from "@components/pages/product/detailmenu";
 import Detail from "@components/pages/product/detail";
 import { useEffect, useState } from "react";
-import { router } from "next/client";
+import { useRouter } from "next/dist/client/router";
 import client from "@lib/api";
 import { useQuery } from "@tanstack/react-query";
 import { ProductInfoInterface } from "../../../types/product";
 import { BranduBaseResponse, Product } from "../../../types/privacy";
 
 function ProductDetail() {
+  const router = useRouter();
   const [id, setId] = useState<string>("");
   useEffect(() => {
     setId(router.query.id as string);

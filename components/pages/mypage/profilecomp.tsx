@@ -2,10 +2,6 @@ import { useState } from "react";
 import Image from "next/image";
 import client from "@lib/api";
 import { useForm } from "react-hook-form";
-import GoogleLoginIcon from "@icons/google";
-import KakaoLoginIcon from "@icons/kakao";
-import NaverIcon from "@icons/naver";
-import AppleIcon from "@icons/apple";
 import { UserInterface } from "../../../types/privacy";
 
 interface ProfileForm {
@@ -13,8 +9,6 @@ interface ProfileForm {
 }
 
 function ProfileComp({ profile }: ProfileForm) {
-  console.log(profile);
-
   //프로필 이미지
   const [imgBase64, setImgBase64] = useState("");
   const [imgFile, setImgFile] = useState(null);

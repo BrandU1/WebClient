@@ -10,7 +10,7 @@ function Profile() {
     return client.get(`accounts/me`).then((res) => res.data);
   };
 
-  const { data, isLoading } = useQuery<BranduBaseResponse<UserInterface[]>>(
+  const { data, isLoading } = useQuery<BranduBaseResponse<UserInterface>>(
     ["profile"],
     getProfile
   );
