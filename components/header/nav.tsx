@@ -173,7 +173,9 @@ function Nav() {
 
   return (
     <>
-      <div className={`top-0 z-50 transition bg-white`}>
+      <div
+        className={`top-0 z-50 transition bg-white border-b-[1px] border-gray`}
+      >
         <div className=" m-auto  max-w-4xl py-3 flex justify-between items-center min-w-fit relative">
           <Link href="/">
             <BranduIcon width={100} height={22} />
@@ -254,81 +256,92 @@ function Nav() {
             )}
           </div>
           <div className="flex items-center space-x-4">
-            <div className={`${token ? "block" : "hidden"} cursor-pointer`}>
-              <Link href="/pick">
-                {path.includes("pick") ? (
-                  <HeartIcon
-                    color="none"
-                    width={21}
-                    height={21}
-                    border="#0CABA8"
-                  />
-                ) : (
-                  <HeartIcon
-                    color="none"
-                    width={21}
-                    height={21}
-                    border="#767676"
-                  />
-                )}
-              </Link>
-            </div>
-            <div className={`${token ? "block" : "hidden"} cursor-pointer`}>
-              <Link href="/basket">
-                {path.includes("basket") ? (
-                  <BasketIcon
-                    color="none"
-                    width={20}
-                    height={19}
-                    stroke="#0CABA8"
-                  />
-                ) : (
-                  <BasketIcon
-                    color="none"
-                    width={20}
-                    height={19}
-                    stroke="#767676"
-                  />
-                )}
-              </Link>
-            </div>
-            <div className={`${token ? "block" : "hidden"} cursor-pointer`}>
-              <ScrapIcon />
-            </div>
-            <div ref={outside} onClick={normalClose} className="cursor-pointer">
-              <HamburgerIcon color={`${category ? "#0CABA8" : "#767676"}`} />
-              {/*<Category ref={outside} />*/}
-            </div>
             <div
-              onClick={openModal}
-              className={`${
-                token ? "bg-main" : "bg-notice"
-              } w-[40px] h-[40px] rounded-full flex items-center justify-center group `}
+              onClick={() => {
+                setInput("");
+              }}
+              className="flex items-center space-x-4"
             >
-              <ProfileIcon />
+              <div className={`${token ? "block" : "hidden"} cursor-pointer`}>
+                <Link href="/pick">
+                  {path.includes("pick") ? (
+                    <HeartIcon
+                      color="none"
+                      width={21}
+                      height={21}
+                      border="#0CABA8"
+                    />
+                  ) : (
+                    <HeartIcon
+                      color="none"
+                      width={21}
+                      height={21}
+                      border="#767676"
+                    />
+                  )}
+                </Link>
+              </div>
+              <div className={`${token ? "block" : "hidden"} cursor-pointer`}>
+                <Link href="/basket">
+                  {path.includes("basket") ? (
+                    <BasketIcon
+                      color="none"
+                      width={20}
+                      height={19}
+                      stroke="#0CABA8"
+                    />
+                  ) : (
+                    <BasketIcon
+                      color="none"
+                      width={20}
+                      height={19}
+                      stroke="#767676"
+                    />
+                  )}
+                </Link>
+              </div>
+              <div className={`${token ? "block" : "hidden"} cursor-pointer`}>
+                <ScrapIcon />
+              </div>
+              <div
+                ref={outside}
+                onClick={normalClose}
+                className="cursor-pointer"
+              >
+                <HamburgerIcon color={`${category ? "#0CABA8" : "#767676"}`} />
+                {/*<Category ref={outside} />*/}
+              </div>
+              <div
+                onClick={openModal}
+                className={`${
+                  token ? "bg-main" : "bg-notice"
+                } w-[40px] h-[40px] rounded-full flex items-center justify-center group `}
+              >
+                <ProfileIcon />
+              </div>
             </div>
           </div>
+          <div className="border-t-[1px] border-gray" />
         </div>
-        <div className="border-t-[1px] border-gray" />
-      </div>
-      {token ? (
-        <div className={`${open ? "block" : "hidden"} `}>
-          <GOTOMyPage />
-        </div>
-      ) : (
+        {token ? (
+          <div className={`${open ? "block" : "hidden"} `}>
+            <GOTOMyPage />
+          </div>
+        ) : (
+          <div
+            onClick={handleLogin}
+            className={` ${token ? "hidden" : "block"} flex justify-center `}
+          >
+            <LoginModal pageRef={loginEl} open={modalOpen} close={close} />
+          </div>
+        )}
         <div
-          onClick={handleLogin}
-          className={` ${token ? "hidden" : "block"} flex justify-center `}
+          className={`absolute bg-modalBackground w-full ${
+            category ? "block " : "hidden"
+          }`}
         >
-          <LoginModal pageRef={loginEl} open={modalOpen} close={close} />
+          <Category ref={outside} />
         </div>
-      )}
-      <div
-        className={`absolute bg-modalBackground w-full ${
-          category ? "block " : "hidden"
-        }`}
-      >
-        <Category ref={outside} />
       </div>
     </>
   );
