@@ -58,6 +58,7 @@ function NewImgModal({ handleClose }: newModalProps) {
       blur={handleSecondModal}
       pageRef={secondEl}
       title={"신규이미지 추가"}
+      bgColor={"none"}
       components={
         <div className="mt-10">
           {imgBase64 === "" ? (

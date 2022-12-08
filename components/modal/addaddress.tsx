@@ -73,6 +73,7 @@ function AddressAdd({ handleClose }: addressAddProps) {
           width={600}
           height={500}
           title={"배송지 정보"}
+          bgColor={"black"}
           components={
             <form className="mt-10 flex flex-col">
               <div className="flex justify-around my-2">

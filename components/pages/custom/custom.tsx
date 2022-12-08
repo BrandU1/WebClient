@@ -284,9 +284,9 @@ function Custom() {
       {selectOpen && (
         <div
           onClick={handleSelectModal}
-          className="absolute top-0 z-50 w-full h-full bg-black bg-opacity-40"
+          className="fixed top-0 left-0 z-50 w-full h-full bg-black bg-opacity-40"
         >
-          <div className="mt-[248px] flex justify-center">
+          <div className="mt-[70px] flex justify-center">
             <div ref={imgSelectEl}>
               <ImageSelect />
             </div>

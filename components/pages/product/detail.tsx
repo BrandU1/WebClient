@@ -173,6 +173,7 @@ function Detail() {
               blur={handleReviewDetail}
               pageRef={reviewEl}
               title={"리뷰상세"}
+              bgColor={"black"}
               components={
                 <div className="flex flex-col mt-10 w-[600px] px-11">
                   <div className="profile flex">

@@ -8,6 +8,7 @@ interface ModalProps {
   height: number;
   title: string; //Modal 타이틀
   components: any; //Modal 내용
+  bgColor: string; // default:black, modal 겹칠 때:none
 }
 
 function ModalFrame({
@@ -18,13 +19,14 @@ function ModalFrame({
   height,
   title,
   components,
+  bgColor,
 }: ModalProps) {
   return (
     <div
-      className="absolute top-0 left-0 z-50 w-full h-[140vh] bg-black bg-opacity-40 "
+      className={`fixed top-0 top-0 left-0 z-50 w-full h-[140vh] bg-${bgColor} bg-opacity-40`}
       onClick={blur}
     >
-      <div className="mt-[248px] flex justify-center ">
+      <div className="mt-[70px] flex justify-center items-center">
         <div ref={pageRef}>
           <div className={`flex flex-row h-[${height}px] w-[${width}px]`}>
             <div className="w-full h-full bg-modalBackground rounded-2xl p-8">

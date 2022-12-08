@@ -190,7 +190,7 @@ function Nav() {
               }`}
             >
               <input
-                className={`bg-transparent text-main w-full h-[350px] rounded-xl text-sm font-bold border-main  focus:outline-0 px-2`}
+                className={`bg-transparent text-main w-full h-fit rounded-xl text-sm font-bold border-main  focus:outline-0 px-2`}
                 onChange={(e: any) => {
                   setInput(e.target.value);
                 }}

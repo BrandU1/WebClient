@@ -52,10 +52,11 @@ function AddInquiryForm({ handleClose }: closeProps) {
         width={600}
         height={500}
         title={"1:1 문의하기"}
+        bgColor={"black"}
         components={
           <form className="mt-10 flex flex-col">
             <div className="">
-              <div className="title w-[60px] text-black text-sm my-2">
+              <div className="title w-fit text-black text-sm my-2">
                 <h2>문의 제목</h2>
               </div>
               <div className="InputBar">
@@ -67,7 +68,7 @@ function AddInquiryForm({ handleClose }: closeProps) {
               </div>
             </div>
             <div className="">
-              <div className="title w-[60px] text-black text-sm my-2">
+              <div className="title w-fit text-black text-sm my-2">
                 <h2>문의 내용</h2>
               </div>
               <div className="InputBar">

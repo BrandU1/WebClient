@@ -17,7 +17,7 @@ function Service({ inquiries }: ServiceProps) {
     <div className=" m-auto ">
       <div>
         <h2 className="py-5 font-bold text-xl">고객센터</h2>
-        <div className="border-[1px] border-black" />
+        <div className="border-b-[1px] border-black" />
       </div>
       <div className="grid grid-cols-2 space-x-6 py-3 border-b-[1px] border-[#EDEDED]">
         <div className="left">

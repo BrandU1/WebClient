@@ -21,6 +21,7 @@ function OrderCancel({ onClose }: CancelProps) {
       width={600}
       height={500}
       title={"주문취소"}
+      bgColor={"black"}
       components={
         <div>
           <div>asd</div>

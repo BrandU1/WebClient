@@ -88,6 +88,7 @@ function ModifyAddress({ handleClose, infoAddress }: addressModifyProps) {
           width={600}
           height={500}
           title={"배송지 수정"}
+          bgColor={"black"}
           components={
             <form className="mt-10 flex flex-col">
               <div className="flex justify-around my-2">
