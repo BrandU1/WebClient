@@ -23,6 +23,7 @@ function ExistModal({ handleClose }: existModalProps) {
       width={600}
       height={500}
       title={"기존이미지 선택"}
+      bgColor={"none"}
       components={
         <div className="mt-10">
           <div className="h-[258px] overflow-y-scroll scrollbar-hide w-[340px] justify-center items-center">
