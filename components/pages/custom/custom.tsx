@@ -22,7 +22,7 @@ function Custom() {
   const [clear, setClear] = useState<boolean>(false);
 
   // 드래그 박스 ref
-  const [imgBase64, setImgBase64] = useState<string>("");
+  const [imgBase64, setImgBase64] = useState<string>("/dummy/white.png");
   const [imgFile, setImgFile] = useState(null);
   const handleChangeFile = (e: any) => {
     const reader = new FileReader();
@@ -53,7 +53,7 @@ function Custom() {
 
   const onDownloadBtn = () => {
     domtoimage.toBlob(document.querySelector(".custom")!).then((blob) => {
-      console.log(blob, 123);
+      saveAs(blob, "custom.png");
     });
   };
 
@@ -237,23 +237,20 @@ function Custom() {
         </div>
       </div>
       <div className="flex flex-row m-auto mt-3  z-30   ">
-        <div className=" custom bg-[url('/dummy/hoodie.png')] w-[510px] h-[400px] bg-center bg-contain bg-no-repeat">
+        <div className="custom bg-[url('/dummy/hoodie.png')] w-[510px] h-[400px] bg-center bg-contain bg-no-repeat">
           <Draggable defaultPosition={{ x: 0, y: 0 }}>
-            <div className=" w-[100px] h-[100px]">
-              <div
-                className={`w-[100px] h-[100px] bg-contain bg-no-repeat ${
-                  imgBase64 === "" ? "hidden" : "block"
-                }`}
-              >
-                <Image
-                  className="rounded-2xl"
-                  src={imgBase64}
-                  alt={"Img Uploaded"}
-                  width={350}
-                  height={350}
-                  draggable={false}
-                />
-              </div>
+            <div
+              className={`w-[100px] h-[100px] bg-contain bg-no-repeat ${
+                imgBase64 === "/dummy/white.png" ? "hidden" : "block"
+              }`}
+            >
+              <Image
+                src={imgBase64}
+                alt={"Img Uploaded"}
+                width={350}
+                height={350}
+                draggable={false}
+              />
             </div>
           </Draggable>
           <div className={`${openText ? "inline " : "hidden"}`}>
@@ -268,8 +265,7 @@ function Custom() {
               />
             </Draggable>
           </div>
-
-          <div className={`${pencil ? "block" : "hidden"}  `}>
+          <div className={`${pencil ? "block" : "hidden"}`}>
             <ColorPencil
               width={510}
               height={300}
@@ -277,25 +273,6 @@ function Custom() {
               clear={clear}
             />
           </div>
-
-          {/*<Draggable scale={1} defaultPosition={{ x: 0, y: 0 }}>*/}
-          {/*  <div className="fixed w-[100px] h-[100px]">*/}
-          {/*    <div className="bg-[url('/dummy/cat.png')] w-[100px] h-[100px] bg-contain bg-no-repeat" />*/}
-          {/*  </div>*/}
-          {/*</Draggable>*/}
-          {/*<Draggable scale={1} defaultPosition={{ x: 0, y: 0 }}>*/}
-          {/*  <div className="fixed w-[100px] h-[100px]">*/}
-          {/*    <div className="bg-[url('/dummy/cat.png')] w-[100px] h-[100px] bg-contain bg-no-repeat" />*/}
-          {/*  </div>*/}
-          {/*</Draggable>*/}
-          {/*<div className="image w-[510px] h-[400px]">*/}
-          {/*  <Image*/}
-          {/*    src={"/dummy/cat.png"}*/}
-          {/*    width={510}*/}
-          {/*    height={400}*/}
-          {/*    alt={"productImg"}*/}
-          {/*  />*/}
-          {/*</div>*/}
         </div>
         <div className="rightSide flex flex-col mt-5 ml-5">
           <div className="flex flex-row justify-between">
@@ -328,21 +305,6 @@ function Custom() {
           <div className="border border-t-0 w-[314px] my-[22px] border-gray" />
           <div className="color flex flex-col mb-[10px]">
             <span className="text-xs mb-[10px]">색상</span>
-            {/*{data?.options?.color?.map((color, idx) => {*/}
-            {/*  return (*/}
-            {/*    <div*/}
-            {/*      className={`flex mb-2.5 cursor-pointer bg-${color.hashcode} ${*/}
-            {/*        color === idx*/}
-            {/*          ? "border-2 rounded-xl border-Main-deepblue"*/}
-            {/*          : " "*/}
-            {/*      }`}*/}
-            {/*      key={idx}*/}
-            {/*      onClick={() => {*/}
-            {/*        setColor(idx);*/}
-            {/*      }}*/}
-            {/*    ></div>*/}
-            {/*  );*/}
-            {/*})}*/}
           </div>
           <div className="size flex flex-col mb-[10px]">
             <span className="text-xs mb-[10px]">사이즈</span>
