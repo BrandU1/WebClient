@@ -45,7 +45,7 @@ function ExistModal({ handleClose }: existModalProps) {
                 width={19}
                 height={19}
               />
-              <span className="font-bold text-sm ml-[7px]">배경제거</span>
+              <span className="font-bold text-sm ml-[7px]"></span>
             </button>
             <button className="border rounded-xl bg-main w-[218px] h-[45px] text-white font-bold tet-sm flex justify-center items-center">
               추가하기

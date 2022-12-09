@@ -41,8 +41,6 @@ function NewImgModal({ handleClose }: newModalProps) {
     }
   };
 
-  console.log(imgBase64);
-
   const secondEl = useRef<HTMLDivElement>(null);
   const handleSecondModal = (e: any) => {
     if (!secondEl.current?.contains(e.target)) {
@@ -53,7 +51,7 @@ function NewImgModal({ handleClose }: newModalProps) {
   return (
     <ModalFrame
       width={600}
-      height={500}
+      height="auto"
       close={handleClose}
       blur={handleSecondModal}
       pageRef={secondEl}
