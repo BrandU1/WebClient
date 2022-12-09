@@ -5,7 +5,7 @@ interface ModalProps {
   blur: (e: any) => void;
   pageRef: React.ForwardedRef<HTMLDivElement>;
   width: number;
-  height: number;
+  height: number | string;
   title: string; //Modal 타이틀
   components: any; //Modal 내용
   bgColor: string; // default:black, modal 겹칠 때:none
