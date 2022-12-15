@@ -1,14 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { CanvasState } from "../../pages/product/[id]/custom/custom";
-
-import { useRecoilState, useRecoilValue } from "recoil";
+import { fabric } from "fabric";
 import {
+  canvasAction,
+  canvasActionSelected,
+  CanvasActionType,
   canvasHistories,
-  canvasHistory,
   canvasHistoryIndex,
+  canvasText,
   canvasUndoOrRedo,
-  ElementProps,
 } from "../../recoil/canvas";
+import { useRecoilState } from "recoil";
 
 const initialPosition = {
   y: 180,
@@ -32,176 +34,196 @@ const Canvas = ({
   height,
   state,
   images,
-  canvasRef,
 }: CanvasProps) => {
-  // const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
-  const [elements, setElements] = useState<ElementProps[]>([]);
-  const [isDown, setIsDown] = useState<boolean>(false);
-  const [target, setTarget] = useState<ElementProps | null>(null);
-  const [startX, setStartX] = useState<number>(0);
-  const [startY, setStartY] = useState<number>(0);
+  const [canvas, setCanvas] = useState<fabric.Canvas>();
+  const [usedImages, setUsedImages] = useState<number[]>([]);
+  const fabricRef = useRef<any>(null);
+  const [texts, setTexts] = useRecoilState(canvasText);
+  const [usedTexts, setUsedTexts] = useState<number[]>([]);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const [histories, setHistories] = useRecoilState(canvasHistories);
-  const [step, setStep] = useRecoilState(canvasHistoryIndex);
+  const [historyIndex, setHistoryIndex] = useRecoilState(canvasHistoryIndex);
   const [undoOrRedo, setUndoOrRedo] = useRecoilState(canvasUndoOrRedo);
-  const history = useRecoilValue(canvasHistory);
+  const [action, setAction] = useRecoilState(canvasAction);
+  const [actionSelected, setActionSelected] =
+    useRecoilState(canvasActionSelected);
 
-  useEffect(() => {
-    if (!canvasRef) return;
-    const element = canvasRef.current;
-    setContext(element!.getContext("2d"));
-    draw();
-  }, [canvasRef]);
+  const baseLine = new fabric.Rect({
+    top: initialPosition.y,
+    left: initialPosition.x,
+    width: initialPosition.width,
+    height: initialPosition.height,
+    stroke: "green",
+    strokeWidth: 1,
+    fill: "transparent",
+    lockMovementX: true,
+    lockMovementY: true,
+    lockRotation: true,
+    lockScalingX: true,
+    lockScalingY: true,
+    selectable: false,
+    absolutePositioned: true,
+  });
 
+  /* Fabric 시작 */
   useEffect(() => {
-    images.forEach((image, index) => {
-      if (elements.every((element) => element.id !== index)) {
-        const newImage = new Image();
-        newImage.src = image;
-        newImage.style.pointerEvents = "move";
-        newImage.onload = () => {
-          const { width, height } = formatImageSize(newImage);
-          setElements((prev) => [
-            ...prev,
-            {
-              id: index,
-              x: 0,
-              y: 0,
-              width: width,
-              height: height,
-              isImage: true,
-              image: newImage,
-              isText: false,
-            },
-          ]);
-        };
+    const initFabric = () => {
+      fabricRef.current = new fabric.Canvas(canvasRef.current);
+
+      fabricRef.current.on("mouse:down", (e: any) => {
+        if (e.target) {
+          saveHistory();
+        }
+      });
+
+      // TODO: 키보드 입력시 처리 필요
+      fabricRef.current.on("keyup", (e: any) => {
+        if (e.target) {
+          saveHistory();
+        }
+      });
+      fabricRef.current.setBackgroundImage(
+        backgroundImage,
+        fabricRef.current.renderAll.bind(fabricRef.current),
+        {
+          width: width,
+          height: height,
+        }
+      );
+      fabricRef.current.add(baseLine);
+      return fabricRef.current;
+    };
+
+    setCanvas(initFabric());
+
+    const disposeFabric = () => {
+      fabricRef.current.dispose();
+    };
+
+    return () => {
+      disposeFabric();
+    };
+  }, []);
+
+  /* Action 처리 */
+  useEffect(() => {
+    const currentTarget = canvas?.getActiveObject();
+    if (!currentTarget) return;
+    let isModified = true;
+    if (actionSelected) {
+      switch (action) {
+        case CanvasActionType.MOVE_DOWN:
+          currentTarget.top =
+            initialPosition.y + initialPosition.height - currentTarget.height!;
+          canvas!.renderAll();
+          break;
+
+        case CanvasActionType.MOVE_UP:
+          currentTarget.top = initialPosition.y;
+          canvas!.renderAll();
+          break;
+        case CanvasActionType.MOVE_LEFT:
+          currentTarget.left = initialPosition.x;
+          canvas!.renderAll();
+          break;
+        case CanvasActionType.MOVE_RIGHT:
+          currentTarget.left =
+            initialPosition.x + initialPosition.width - currentTarget.width!;
+          canvas!.renderAll();
+          break;
+        case CanvasActionType.MOVE_HORIZONTAL_CENTER:
+          currentTarget.left =
+            initialPosition.x +
+            (initialPosition.width - currentTarget.width!) / 2;
+          canvas!.renderAll();
+          break;
+        case CanvasActionType.MOVE_VERTICAL_CENTER:
+          currentTarget.top =
+            initialPosition.y +
+            (initialPosition.height - currentTarget.height!) / 2;
+          canvas!.renderAll();
+          break;
+        case CanvasActionType.MOVE_FORWARD:
+          canvas!.bringForward(currentTarget);
+          canvas!.discardActiveObject();
+          canvas!.renderAll();
+          break;
+        case CanvasActionType.MOVE_BACKWARD:
+          canvas!.sendBackwards(currentTarget);
+          canvas!.discardActiveObject();
+          canvas!.renderAll();
+          break;
+        default:
+          isModified = false;
+          break;
       }
+      if (isModified) {
+        saveHistory();
+      }
+      setActionSelected(false);
+    }
+  }, [action]);
+
+  /* 이미지 추가 */
+  useEffect(() => {
+    images.forEach((src, index) => {
+      if (usedImages.includes(index)) {
+        return;
+      }
+      fabric.Image.fromURL(backgroundImage, (image) => {
+        setUsedImages((prev) => [...prev, index]);
+        image.scale(1);
+        canvas!.add(image);
+        canvas!.renderAll();
+      });
     });
   }, [images]);
 
+  /* Undo 혹은 Redo 처리 */
   useEffect(() => {
-    if (history && undoOrRedo) {
-      setElements(history);
+    if (undoOrRedo) {
+      canvas!.loadFromJSON(histories[historyIndex], () => {
+        canvas!.add(baseLine);
+        canvas!.renderAll();
+      });
       setUndoOrRedo(false);
     }
-    draw();
-  }, [step]);
+  }, [historyIndex]);
 
-  // previous state
-  const push = () => {
-    setStep((prev) => prev + 1);
-    if (step < histories.length) {
-    }
-    setHistories((prev) => {
-      return [...prev, elements];
-    });
-  };
-
-  const formatImageSize = (image: HTMLImageElement) => {
-    const ratio = image.naturalWidth / image.naturalHeight;
-    const width = 100;
-    const height = width / ratio ?? 100;
-    return {
-      width,
-      height,
-    };
-  };
-
-  const draw = () => {
-    if (!context) return;
-    context.clearRect(
-      0,
-      0,
-      canvasRef!.current!.clientWidth,
-      canvasRef!.current!.clientHeight
-    );
-    elements.forEach((element) => drawFillRect(element));
-  };
-
-  const drawFillRect = (element: ElementProps, style = {}) => {
-    const { x, y, width, height, isText, isImage } = element;
-    context!.beginPath();
-    context!.fillStyle = "black";
-    if (isText) {
-      context!.fillText(element.text!, x, y);
-    }
-    if (isImage) {
-      context!.drawImage(element.image!, x, y, width, height);
-    } else {
-      context!.fillRect(x, y, width, height);
-    }
-  };
-
-  const hitBox = (x: number, y: number) => {
-    for (let i = 0; i < elements.length; i++) {
-      const element = elements[i];
-      if (
-        x >= element.x &&
-        x <= element.x + element.width &&
-        y >= element.y &&
-        y <= element.y + element.height
-      ) {
-        setTarget(element);
-        return true;
-      }
-    }
-    return false;
-  };
-
-  const handleMouseDown = (event: any) => {
-    setStartX(event.nativeEvent.offsetX - canvasRef?.current!.clientLeft);
-    setStartY(event.nativeEvent.offsetY - canvasRef?.current!.clientTop);
-    setIsDown((prev) => hitBox(startX, startY));
-  };
-
-  const handleMouseMove = (event: any) => {
-    if (!isDown) return;
-
-    const mouseX = event.nativeEvent.offsetX - canvasRef?.current!.clientLeft;
-    const mouseY = event.nativeEvent.offsetY - canvasRef?.current!.clientTop;
-    const dx = mouseX - startX;
-    const dy = mouseY - startY;
-    setStartX(mouseX);
-    setStartY(mouseY);
-    setTarget((prev: any) => ({
-      ...prev!,
-      x: prev!.x + dx,
-      y: prev!.y + dy,
-    }));
-    setElements((prev) => [
-      ...prev.filter((element) => element.id !== target!.id),
-      target!,
-    ]);
-    draw();
-  };
-  const handleMouseUp = (event: any) => {
-    setIsDown(false);
-    push();
-  };
-  const handleMouseOut = (event: any) => {
-    handleMouseUp(event);
-  };
-
+  /* 텍스트 추가 */
   useEffect(() => {
-    const context = canvasRef.current?.getContext("2d");
-    const customImage = new Image();
-    customImage.src = images[0];
-    customImage.onload = () => {
-      context?.drawImage(customImage, 0, 0, 100, 100);
-    };
-  }, [images]);
+    texts.forEach((text, index) => {
+      if (usedTexts.includes(index)) return;
+      const newText = new fabric.Textbox(text, {
+        top: initialPosition.y,
+        left: initialPosition.x,
+        height: initialPosition.height,
+        fontSize: 20,
+        fontFamily: "Noto Sans KR",
+        fill: "red",
+        textAlign: "center",
+      });
+
+      newText.on("mousemove", (event) => {
+        console.log(event);
+      });
+
+      canvas!.add(newText);
+    });
+  }, [texts]);
+
+  const saveHistory = () => {
+    setHistoryIndex((prev) => prev + 1);
+    setHistories((prev) => [...prev, fabricRef.current.toJSON()]);
+  };
 
   return (
     <canvas
       width={500}
       height={500}
       ref={canvasRef}
-      onMouseDown={handleMouseDown}
-      onMouseMove={handleMouseMove}
-      onMouseUp={handleMouseUp}
-      onMouseOut={handleMouseOut}
       style={{
-        backgroundImage: `url(${backgroundImage})`,
+        // backgroundImage: `url(${backgroundImage})`,
         backgroundRepeat: "no-repeat",
         backgroundPosition: "center",
         backgroundSize: "contain",

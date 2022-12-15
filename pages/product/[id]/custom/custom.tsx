@@ -1,8 +1,9 @@
 import { useRouter } from "next/router";
 import type { ReactElement } from "react";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import Badge from "@atoms/badge";
 import Pick from "@common/pick";
+import Image from "next/image";
 import Basket from "@common/basket";
 import Canvas from "@components/ImageCustom/canvas";
 import BackButton from "@icons/back-button";
@@ -14,8 +15,12 @@ import ImageButton from "@icons/image-button";
 import useImage from "@hooks/useImage";
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
+  canvasAction,
+  canvasActionSelected,
+  CanvasActionType,
   canvasHistoriesLength,
   canvasHistoryIndex,
+  canvasText,
   canvasUndoOrRedo,
 } from "../../../../recoil/canvas";
 
@@ -29,13 +34,15 @@ function Custom(): ReactElement {
   const router = useRouter();
   const { id } = router.query;
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [canvasState, setCanvasState] = React.useState<CanvasState>(
-    CanvasState.DRAW
-  );
+  const [canvasState, setCanvasState] = useState<CanvasState>(CanvasState.DRAW);
   const [step, setStep] = useRecoilState(canvasHistoryIndex);
   const [undoOrRedo, setUndoOrRedo] = useRecoilState(canvasUndoOrRedo);
   const historiesLength = useRecoilValue(canvasHistoriesLength);
+  const [text, setText] = useRecoilState(canvasText);
   const { size, images, imgBase64s, handleChangeFile } = useImage();
+  const [action, setAction] = useRecoilState(canvasAction);
+  const [actionSelected, setActionSelected] =
+    useRecoilState(canvasActionSelected);
 
   const undo = () => {
     if (step > 0) {
@@ -49,6 +56,50 @@ function Custom(): ReactElement {
       setStep((prev) => prev + 1);
       setUndoOrRedo(true);
     }
+  };
+
+  const moveDown = () => {
+    setActionSelected(true);
+    setAction(CanvasActionType.MOVE_DOWN);
+  };
+
+  const moveUp = () => {
+    setActionSelected(true);
+    setAction(CanvasActionType.MOVE_UP);
+  };
+
+  const moveLeft = () => {
+    setActionSelected(true);
+    setAction(CanvasActionType.MOVE_LEFT);
+  };
+
+  const moveRight = () => {
+    setActionSelected(true);
+    setAction(CanvasActionType.MOVE_RIGHT);
+  };
+
+  const moveHorizontalCenter = () => {
+    setActionSelected(true);
+    setAction(CanvasActionType.MOVE_HORIZONTAL_CENTER);
+  };
+
+  const moveVerticalCenter = () => {
+    setActionSelected(true);
+    setAction(CanvasActionType.MOVE_VERTICAL_CENTER);
+  };
+
+  const moveForward = () => {
+    setActionSelected(true);
+    setAction(CanvasActionType.MOVE_FORWARD);
+  };
+
+  const moveBackward = () => {
+    setActionSelected(true);
+    setAction(CanvasActionType.MOVE_BACKWARD);
+  };
+
+  const createText = () => {
+    setText((prev) => [...prev, "asdfasdfasdf"]);
   };
 
   return (
@@ -68,7 +119,9 @@ function Custom(): ReactElement {
             <div onClick={() => setCanvasState(CanvasState.DRAW)}>
               <PencilButton />
             </div>
-            <TextButton />
+            <div onClick={createText}>
+              <TextButton />
+            </div>
 
             <label htmlFor="removeBg">
               <ImageButton />
@@ -82,92 +135,98 @@ function Custom(): ReactElement {
               id="removeBg"
               className="hidden border rounded-xl bg-main w-[218px] h-[45px] text-white font-bold tet-sm flex justify-center items-center"
             />
-            {/*<Image*/}
-            {/*  src={"/custom/figureBtn.svg"}*/}
-            {/*  alt={"figureBtn"}*/}
-            {/*  width={18}*/}
-            {/*  height={18}*/}
-            {/*/>*/}
+            <Image
+              src={"/custom/figureBtn.svg"}
+              alt={"figureBtn"}
+              width={18}
+              height={18}
+            />
           </div>
-          {/*<div className="sortTool flex flex-row ml-[56px] space-x-4">*/}
-          {/*  <Image*/}
-          {/*    src={"/custom/bottomLine.svg"}*/}
-          {/*    alt={"bottomLine"}*/}
-          {/*    width={18}*/}
-          {/*    height={18}*/}
-          {/*  />*/}
-          {/*  <Image*/}
-          {/*    src={"/custom/leftLine.svg"}*/}
-          {/*    alt={"leftLine"}*/}
-          {/*    width={18}*/}
-          {/*    height={18}*/}
-          {/*  />*/}
-          {/*  <Image*/}
-          {/*    src={"/custom/rightLine.svg"}*/}
-          {/*    alt={"rightLine"}*/}
-          {/*    width={18}*/}
-          {/*    height={18}*/}
-          {/*  />*/}
-          {/*  <Image*/}
-          {/*    src={"/custom/topLine.svg"}*/}
-          {/*    alt={"topLine"}*/}
-          {/*    width={18}*/}
-          {/*    height={18}*/}
-          {/*  />*/}
-          {/*  <Image*/}
-          {/*    src={"/custom/centerLine.svg"}*/}
-          {/*    alt={"centerLine"}*/}
-          {/*    width={16}*/}
-          {/*    height={18}*/}
-          {/*  />*/}
-          {/*  <Image*/}
-          {/*    src={"/custom/middleLine.svg"}*/}
-          {/*    alt={"middleLine"}*/}
-          {/*    width={18}*/}
-          {/*    height={16}*/}
-          {/*  />*/}
-          {/*  <Image*/}
-          {/*    src={"/custom/symmetryLR.svg"}*/}
-          {/*    alt={"symmetryLR"}*/}
-          {/*    width={20}*/}
-          {/*    height={18}*/}
-          {/*  />*/}
-          {/*  <Image*/}
-          {/*    src={"/custom/symmetryTB.svg"}*/}
-          {/*    alt={"symmetryTB"}*/}
-          {/*    width={18}*/}
-          {/*    height={20}*/}
-          {/*  />*/}
-          {/*  <Image*/}
-          {/*    src={"/custom/leftAlign.svg"}*/}
-          {/*    alt={"leftAlign"}*/}
-          {/*    width={18}*/}
-          {/*    height={18}*/}
-          {/*  />*/}
-          {/*  <Image*/}
-          {/*    src={"/custom/centerAlign.svg"}*/}
-          {/*    alt={"centerAlign"}*/}
-          {/*    width={18}*/}
-          {/*    height={18}*/}
-          {/*  />*/}
-          {/*  <Image*/}
-          {/*    src={"/custom/rightAlign.svg"}*/}
-          {/*    alt={"rightAlign"}*/}
-          {/*    width={18}*/}
-          {/*    height={18}*/}
-          {/*  />*/}
-          {/*</div>*/}
+          <div className="sortTool flex flex-row ml-[56px] space-x-4">
+            <Image
+              onClick={moveDown}
+              src={"/custom/bottomLine.svg"}
+              alt={"bottomLine"}
+              width={18}
+              height={18}
+            />
+            <Image
+              onClick={moveLeft}
+              src={"/custom/leftLine.svg"}
+              alt={"leftLine"}
+              width={18}
+              height={18}
+            />
+            <Image
+              onClick={moveRight}
+              src={"/custom/rightLine.svg"}
+              alt={"rightLine"}
+              width={18}
+              height={18}
+            />
+            <Image
+              onClick={moveUp}
+              src={"/custom/topLine.svg"}
+              alt={"topLine"}
+              width={18}
+              height={18}
+            />
+            <Image
+              onClick={moveHorizontalCenter}
+              src={"/custom/centerLine.svg"}
+              alt={"centerLine"}
+              width={16}
+              height={18}
+            />
+            <Image
+              onClick={moveVerticalCenter}
+              src={"/custom/middleLine.svg"}
+              alt={"middleLine"}
+              width={18}
+              height={16}
+            />
+            <Image
+              src={"/custom/symmetryLR.svg"}
+              alt={"symmetryLR"}
+              width={20}
+              height={18}
+            />
+            <Image
+              src={"/custom/symmetryTB.svg"}
+              alt={"symmetryTB"}
+              width={18}
+              height={20}
+            />
+            <Image
+              src={"/custom/leftAlign.svg"}
+              alt={"leftAlign"}
+              width={18}
+              height={18}
+            />
+            <Image
+              src={"/custom/centerAlign.svg"}
+              alt={"centerAlign"}
+              width={18}
+              height={18}
+            />
+            <Image
+              src={"/custom/rightAlign.svg"}
+              alt={"rightAlign"}
+              width={18}
+              height={18}
+            />
+          </div>
         </div>
         <div className="flex flex-row m-auto mt-3 z-30">
           <Canvas
             canvasRef={canvasRef}
-            images={imgBase64s}
+            images={images}
             backgroundImage="/dummy/hoodie.png"
             width={500}
             height={500}
             state={canvasState}
           />
-          <div className="rightSide flex flex-col mt-5 ml-5">
+          <div className="rightSide flex  flex-col mt-5 ml-5">
             <div className="flex flex-row justify-between">
               <div className="flex flex-col">
                 <span className="productName text-base">후드티</span>
