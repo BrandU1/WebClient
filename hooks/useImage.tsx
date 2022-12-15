@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const useImage = () => {
   const [images, setImages] = useState<string[]>([]);
   const [imgBase64s, setImgBase64s] = useState<string[]>([]);
   const [size, setSize] = useState<number>(0);
+
+  useEffect(() => {}, [size]);
 
   const handleChangeFile = (event: any) => {
     const reader = new FileReader();
@@ -20,6 +22,7 @@ const useImage = () => {
         setImgBase64s((prev) => [...prev, base64.toString()]);
       }
     };
+
     if (event.target.files[0]) {
       reader.readAsDataURL(event.target.files[0]);
       setImages((prev) => [...prev, event.target.files![0].name]);

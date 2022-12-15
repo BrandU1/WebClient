@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { CanvasState } from "../../pages/product/[id]/custom/custom";
-import ColorPencil from "@components/ImageCustom/_canvas";
-import Image from "next/image";
-import { Rnd } from "react-rnd";
+
+import { useRecoilState, useRecoilValue } from "recoil";
+import {
+  canvasHistories,
+  canvasHistory,
+  canvasHistoryIndex,
+  canvasUndoOrRedo,
+  ElementProps,
+} from "../../recoil/canvas";
 
 const initialPosition = {
   y: 180,
@@ -20,17 +26,6 @@ interface CanvasProps {
   images: string[];
 }
 
-type RndProps = {
-  position: {
-    x: number;
-    y: number;
-  };
-  size: {
-    width: number;
-    height: number;
-  };
-};
-
 const Canvas = ({
   backgroundImage,
   width,
@@ -39,103 +34,179 @@ const Canvas = ({
   images,
   canvasRef,
 }: CanvasProps) => {
-  const [color, setColor] = useState<string>("black");
-  const [clear, setClear] = useState<boolean>(false);
-  const [rndProps, setRndProps] = useState<RndProps[]>([]);
+  // const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
+  const [elements, setElements] = useState<ElementProps[]>([]);
+  const [isDown, setIsDown] = useState<boolean>(false);
+  const [target, setTarget] = useState<ElementProps | null>(null);
+  const [startX, setStartX] = useState<number>(0);
+  const [startY, setStartY] = useState<number>(0);
+  const [histories, setHistories] = useRecoilState(canvasHistories);
+  const [step, setStep] = useRecoilState(canvasHistoryIndex);
+  const [undoOrRedo, setUndoOrRedo] = useRecoilState(canvasUndoOrRedo);
+  const history = useRecoilValue(canvasHistory);
 
   useEffect(() => {
-    setRndProps((prev) => {
-      return [
-        ...prev,
-        {
-          position: {
-            x: initialPosition.x,
-            y: initialPosition.y,
-          },
-          size: {
-            width: initialPosition.width / 2,
-            height: initialPosition.height / 2,
-          },
-        },
-      ];
+    if (!canvasRef) return;
+    const element = canvasRef.current;
+    setContext(element!.getContext("2d"));
+    draw();
+  }, [canvasRef]);
+
+  useEffect(() => {
+    images.forEach((image, index) => {
+      if (elements.every((element) => element.id !== index)) {
+        const newImage = new Image();
+        newImage.src = image;
+        newImage.style.pointerEvents = "move";
+        newImage.onload = () => {
+          const { width, height } = formatImageSize(newImage);
+          setElements((prev) => [
+            ...prev,
+            {
+              id: index,
+              x: 0,
+              y: 0,
+              width: width,
+              height: height,
+              isImage: true,
+              image: newImage,
+              isText: false,
+            },
+          ]);
+        };
+      }
     });
   }, [images]);
 
+  useEffect(() => {
+    if (history && undoOrRedo) {
+      setElements(history);
+      setUndoOrRedo(false);
+    }
+    draw();
+  }, [step]);
+
+  // previous state
+  const push = () => {
+    setStep((prev) => prev + 1);
+    if (step < histories.length) {
+    }
+    setHistories((prev) => {
+      return [...prev, elements];
+    });
+  };
+
+  const formatImageSize = (image: HTMLImageElement) => {
+    const ratio = image.naturalWidth / image.naturalHeight;
+    const width = 100;
+    const height = width / ratio ?? 100;
+    return {
+      width,
+      height,
+    };
+  };
+
+  const draw = () => {
+    if (!context) return;
+    context.clearRect(
+      0,
+      0,
+      canvasRef!.current!.clientWidth,
+      canvasRef!.current!.clientHeight
+    );
+    elements.forEach((element) => drawFillRect(element));
+  };
+
+  const drawFillRect = (element: ElementProps, style = {}) => {
+    const { x, y, width, height, isText, isImage } = element;
+    context!.beginPath();
+    context!.fillStyle = "black";
+    if (isText) {
+      context!.fillText(element.text!, x, y);
+    }
+    if (isImage) {
+      context!.drawImage(element.image!, x, y, width, height);
+    } else {
+      context!.fillRect(x, y, width, height);
+    }
+  };
+
+  const hitBox = (x: number, y: number) => {
+    for (let i = 0; i < elements.length; i++) {
+      const element = elements[i];
+      if (
+        x >= element.x &&
+        x <= element.x + element.width &&
+        y >= element.y &&
+        y <= element.y + element.height
+      ) {
+        setTarget(element);
+        return true;
+      }
+    }
+    return false;
+  };
+
+  const handleMouseDown = (event: any) => {
+    setStartX(event.nativeEvent.offsetX - canvasRef?.current!.clientLeft);
+    setStartY(event.nativeEvent.offsetY - canvasRef?.current!.clientTop);
+    setIsDown((prev) => hitBox(startX, startY));
+  };
+
+  const handleMouseMove = (event: any) => {
+    if (!isDown) return;
+
+    const mouseX = event.nativeEvent.offsetX - canvasRef?.current!.clientLeft;
+    const mouseY = event.nativeEvent.offsetY - canvasRef?.current!.clientTop;
+    const dx = mouseX - startX;
+    const dy = mouseY - startY;
+    setStartX(mouseX);
+    setStartY(mouseY);
+    setTarget((prev: any) => ({
+      ...prev!,
+      x: prev!.x + dx,
+      y: prev!.y + dy,
+    }));
+    setElements((prev) => [
+      ...prev.filter((element) => element.id !== target!.id),
+      target!,
+    ]);
+    draw();
+  };
+  const handleMouseUp = (event: any) => {
+    setIsDown(false);
+    push();
+  };
+  const handleMouseOut = (event: any) => {
+    handleMouseUp(event);
+  };
+
+  useEffect(() => {
+    const context = canvasRef.current?.getContext("2d");
+    const customImage = new Image();
+    customImage.src = images[0];
+    customImage.onload = () => {
+      context?.drawImage(customImage, 0, 0, 100, 100);
+    };
+  }, [images]);
+
   return (
-    <div className={`relative w-[500px] h-[500px] -z-50`}>
-      <div
-        className={`absolute w-[500px] h-[500px] -z-50`}
-        style={{
-          backgroundImage: `url(${backgroundImage})`,
-        }}
-      >
-        <div
-          className="absolute flex justify-center border-2 border-main m-auto"
-          style={{
-            top: initialPosition.y,
-            left: initialPosition.x,
-            height: initialPosition.height,
-            width: initialPosition.width,
-          }}
-        />
-        <div className="absolute">
-          <ColorPencil
-            enable={state === CanvasState.DRAW}
-            canvasRef={canvasRef}
-            width={width}
-            height={height}
-            pencilColor={color}
-            clear={clear}
-          />
-        </div>
-        <div className="absolute">
-          {images.map((image, index) => {
-            return (
-              <Rnd
-                key={index}
-                size={rndProps[index].size}
-                position={rndProps[index].position}
-                onDragStop={(e, d) => {
-                  if (
-                    d.x > initialPosition.x + initialPosition.width ||
-                    d.y > initialPosition.y + initialPosition.height ||
-                    d.x < initialPosition.x ||
-                    d.y < initialPosition.y
-                  )
-                    return;
-                  setRndProps((prev) => {
-                    const newProps = [...prev];
-                    newProps[index].position = {
-                      x: d.x,
-                      y: d.y,
-                    };
-                    return newProps;
-                  });
-                }}
-                onResizeStop={(e, direction, ref, delta, position) => {
-                  setRndProps((prev) => {
-                    const newProps = [...prev];
-                    newProps[index].size = {
-                      width: Number(ref.style.width),
-                      height: Number(ref.style.height),
-                    };
-                    return newProps;
-                  });
-                }}
-              >
-                <Image
-                  className="relative"
-                  src={image}
-                  alt={`image-${index}`}
-                  layout="fill"
-                  draggable="false"
-                />
-              </Rnd>
-            );
-          })}
-        </div>
-      </div>
-    </div>
+    <canvas
+      width={500}
+      height={500}
+      ref={canvasRef}
+      onMouseDown={handleMouseDown}
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
+      onMouseOut={handleMouseOut}
+      style={{
+        backgroundImage: `url(${backgroundImage})`,
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center",
+        backgroundSize: "contain",
+      }}
+    />
   );
 };
 export default Canvas;

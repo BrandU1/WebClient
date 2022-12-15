@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
-import type { ReactElement, RefObject } from "react";
-import React, { useEffect, useRef, useState } from "react";
+import type { ReactElement } from "react";
+import React, { useRef } from "react";
 import Badge from "@atoms/badge";
 import Pick from "@common/pick";
 import Basket from "@common/basket";
@@ -12,6 +12,12 @@ import PencilButton from "@icons/pencil-button";
 import TextButton from "@icons/text-button";
 import ImageButton from "@icons/image-button";
 import useImage from "@hooks/useImage";
+import { useRecoilState, useRecoilValue } from "recoil";
+import {
+  canvasHistoriesLength,
+  canvasHistoryIndex,
+  canvasUndoOrRedo,
+} from "../../../../recoil/canvas";
 
 export enum CanvasState {
   DRAG = "DRAG",
@@ -22,51 +28,26 @@ export enum CanvasState {
 function Custom(): ReactElement {
   const router = useRouter();
   const { id } = router.query;
-  const [canvases, setCanvases] = React.useState<string[]>([]);
-  const [step, setStep] = useState<number>(-1);
-  const drawCanvasRef = useRef<HTMLCanvasElement>(null);
-  const [canvas, setCanvas] =
-    useState<RefObject<HTMLCanvasElement>>(drawCanvasRef);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const [canvasState, setCanvasState] = React.useState<CanvasState>(
     CanvasState.DRAW
   );
+  const [step, setStep] = useRecoilState(canvasHistoryIndex);
+  const [undoOrRedo, setUndoOrRedo] = useRecoilState(canvasUndoOrRedo);
+  const historiesLength = useRecoilValue(canvasHistoriesLength);
   const { size, images, imgBase64s, handleChangeFile } = useImage();
-
-  useEffect(() => {
-    canvas.current?.addEventListener("mouseup", push);
-  }, [canvasState]);
-
-  const push = () => {
-    setStep((prev) => prev + 1);
-    if (step < canvases.length) {
-    }
-    setCanvases((prev) => {
-      return [...prev, canvas.current?.toDataURL() ?? ""];
-    });
-  };
 
   const undo = () => {
     if (step > 0) {
       setStep((prev) => prev - 1);
-      const context = canvas.current!.getContext("2d");
-      const canvasPic = new Image();
-      canvasPic.src = canvases[step];
-      canvasPic.onload = () => {
-        context!.drawImage(canvasPic, 0, 0);
-      };
+      setUndoOrRedo(true);
     }
   };
 
   const redo = () => {
-    console.log(canvases);
-    if (step < canvases.length - 1) {
+    if (step < historiesLength - 1) {
       setStep((prev) => prev + 1);
-      const context = canvas.current!.getContext("2d");
-      let canvasPic = new Image();
-      canvasPic.src = canvases[step];
-      canvasPic.onload = () => {
-        context!.drawImage(canvasPic, 0, 0);
-      };
+      setUndoOrRedo(true);
     }
   };
 
@@ -179,7 +160,7 @@ function Custom(): ReactElement {
         </div>
         <div className="flex flex-row m-auto mt-3 z-30">
           <Canvas
-            canvasRef={drawCanvasRef}
+            canvasRef={canvasRef}
             images={imgBase64s}
             backgroundImage="/dummy/hoodie.png"
             width={500}
