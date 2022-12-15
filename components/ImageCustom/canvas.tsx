@@ -1,126 +1,141 @@
-import React, { useRef, useState, useCallback, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { CanvasState } from "../../pages/product/[id]/custom/custom";
+import ColorPencil from "@components/ImageCustom/_canvas";
+import Image from "next/image";
+import { Rnd } from "react-rnd";
+
+const initialPosition = {
+  y: 180,
+  x: 125,
+  height: 150,
+  width: 250,
+};
 
 interface CanvasProps {
+  canvasRef: React.RefObject<HTMLCanvasElement>;
   width: number;
   height: number;
-  pencilColor: string;
-  clear: boolean;
+  backgroundImage: string;
+  state: CanvasState;
+  images: string[];
 }
 
-interface Coordinate {
-  x: number;
-  y: number;
-}
-
-function ColorPencil({ width, height, pencilColor, clear }: CanvasProps) {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  const [mousePosition, setMousePosition] = useState<Coordinate | undefined>(
-    undefined
-  );
-  const [isPainting, setIsPainting] = useState(false);
-
-  const getCoordinates = (event: MouseEvent): Coordinate | undefined => {
-    if (!canvasRef.current) {
-      return;
-    }
-
-    const canvas: HTMLCanvasElement = canvasRef.current;
-    return {
-      x: event.pageX - canvas.offsetLeft,
-      y: event.pageY - canvas.offsetTop,
-    };
+type RndProps = {
+  position: {
+    x: number;
+    y: number;
   };
-
-  const drawLine = (
-    originalMousePosition: Coordinate,
-    newMousePosition: Coordinate
-  ) => {
-    if (!canvasRef.current) {
-      return;
-    }
-    const canvas: HTMLCanvasElement = canvasRef.current;
-    const context = canvas.getContext("2d");
-
-    if (context) {
-      context.strokeStyle = pencilColor;
-      context.lineJoin = "round";
-      context.lineWidth = 3;
-
-      context.beginPath();
-      context.moveTo(originalMousePosition.x, originalMousePosition.y);
-      context.lineTo(newMousePosition.x, newMousePosition.y);
-      context.closePath();
-
-      context.stroke();
-    }
+  size: {
+    width: number;
+    height: number;
   };
+};
 
-  const startPaint = useCallback((event: MouseEvent) => {
-    const coordinates = getCoordinates(event);
-    if (coordinates) {
-      setIsPainting(true);
-      setMousePosition(coordinates);
-    }
-  }, []);
-
-  const paint = useCallback(
-    (event: MouseEvent) => {
-      event.preventDefault();
-      event.stopPropagation();
-
-      if (isPainting) {
-        const newMousePosition = getCoordinates(event);
-        if (mousePosition && newMousePosition) {
-          drawLine(mousePosition, newMousePosition);
-          setMousePosition(newMousePosition);
-        }
-      }
-    },
-    [isPainting, mousePosition]
-  );
-
-  const exitPaint = useCallback(() => {
-    setIsPainting(false);
-  }, []);
-
-  const EraseDrawing = () => {
-    const context = canvasRef.current?.getContext("2d");
-    context?.clearRect(0, 0, width, height);
-  };
-  if (clear) {
-    EraseDrawing();
-  }
+const Canvas = ({
+  backgroundImage,
+  width,
+  height,
+  state,
+  images,
+  canvasRef,
+}: CanvasProps) => {
+  const [color, setColor] = useState<string>("black");
+  const [clear, setClear] = useState<boolean>(false);
+  const [rndProps, setRndProps] = useState<RndProps[]>([]);
 
   useEffect(() => {
-    if (!canvasRef.current) {
-      return;
-    }
-    const canvas: HTMLCanvasElement = canvasRef.current;
-
-    canvas.addEventListener("mousedown", startPaint);
-    canvas.addEventListener("mousemove", paint);
-    canvas.addEventListener("mouseup", exitPaint);
-    canvas.addEventListener("mouseleave", exitPaint);
-
-    return () => {
-      canvas.removeEventListener("mousedown", startPaint);
-      canvas.removeEventListener("mousemove", paint);
-      canvas.removeEventListener("mouseup", exitPaint);
-      canvas.removeEventListener("mouseleave", exitPaint);
-    };
-  }, [startPaint, paint, exitPaint]);
+    setRndProps((prev) => {
+      return [
+        ...prev,
+        {
+          position: {
+            x: initialPosition.x,
+            y: initialPosition.y,
+          },
+          size: {
+            width: initialPosition.width / 2,
+            height: initialPosition.height / 2,
+          },
+        },
+      ];
+    });
+  }, [images]);
 
   return (
-    <div className="App">
-      <canvas
-        ref={canvasRef}
-        height={height}
-        width={width}
-        className="canvas"
-      />
+    <div className={`relative w-[500px] h-[500px] -z-50`}>
+      <div
+        className={`absolute w-[500px] h-[500px] -z-50`}
+        style={{
+          backgroundImage: `url(${backgroundImage})`,
+        }}
+      >
+        <div
+          className="absolute flex justify-center border-2 border-main m-auto"
+          style={{
+            top: initialPosition.y,
+            left: initialPosition.x,
+            height: initialPosition.height,
+            width: initialPosition.width,
+          }}
+        />
+        <div className="absolute">
+          <ColorPencil
+            enable={state === CanvasState.DRAW}
+            canvasRef={canvasRef}
+            width={width}
+            height={height}
+            pencilColor={color}
+            clear={clear}
+          />
+        </div>
+        <div className="absolute">
+          {images.map((image, index) => {
+            return (
+              <Rnd
+                key={index}
+                size={rndProps[index].size}
+                position={rndProps[index].position}
+                onDragStop={(e, d) => {
+                  if (
+                    d.x > initialPosition.x + initialPosition.width ||
+                    d.y > initialPosition.y + initialPosition.height ||
+                    d.x < initialPosition.x ||
+                    d.y < initialPosition.y
+                  )
+                    return;
+                  setRndProps((prev) => {
+                    const newProps = [...prev];
+                    newProps[index].position = {
+                      x: d.x,
+                      y: d.y,
+                    };
+                    return newProps;
+                  });
+                }}
+                onResizeStop={(e, direction, ref, delta, position) => {
+                  setRndProps((prev) => {
+                    const newProps = [...prev];
+                    newProps[index].size = {
+                      width: Number(ref.style.width),
+                      height: Number(ref.style.height),
+                    };
+                    return newProps;
+                  });
+                }}
+              >
+                <Image
+                  className="relative"
+                  src={image}
+                  alt={`image-${index}`}
+                  layout="fill"
+                  draggable="false"
+                />
+              </Rnd>
+            );
+          })}
+        </div>
+      </div>
     </div>
   );
-}
-
-export default ColorPencil;
+};
+export default Canvas;
