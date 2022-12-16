@@ -1,9 +1,17 @@
 import { basketInterface } from "../../types/privacy";
 import Image from "next/image";
 import CloseIcon from "@icons/close";
-import { useState } from "react";
 import AmountButton from "@common/amountbutton";
 import CheckBox from "@icons/checkBox";
+import { useRecoilState, useRecoilValue } from "recoil";
+import {
+  basketCheckedList,
+  basketPurchase,
+  totalPrice,
+} from "../../recoil/totalamount";
+import { useEffect } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import client from "@lib/api";
 
 interface BasketListProps {
   basketList: basketInterface[];
@@ -20,25 +28,58 @@ interface ProductCount {
 }
 
 function BasketList({ basketList }: BasketListProps) {
-  const [counts, setCounts] = useState<number>(1);
-  const [amountPrice, setAmountPrice] = useState<number>(0);
+  const [basket, setBasket] = useRecoilState(basketPurchase);
+  const [checkList, setCheckList] = useRecoilState(basketCheckedList);
+  const price = useRecoilValue(totalPrice);
+  const queryClient = useQueryClient();
+  const deleteBasket = useMutation(
+    (id: number) => client.delete(`accounts/baskets/${id}`),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["basketList"]);
+      },
+      onError: (error) => {
+        console.log(error);
+      },
+    }
+  );
 
-  //선택 리스트 State
-  const [checkList, setCheckList] = useState<number[]>([]);
+  useEffect(() => {
+    if (basket.length === 0) {
+      setBasket(
+        basketList.map((item) => {
+          return {
+            product: item.product.id,
+            count: 1,
+            price: item.product.price,
+          };
+        })
+      );
+    }
+  }, [basketList]);
 
-  // 단일 선택 리스트
+  /* 구매 개수 핸들러 */
+  const handleCount = (count: number, id: number) => {
+    const newBasket = basket.map((basket) => {
+      if (basket.product === id) {
+        return { ...basket, count };
+      }
+      return basket;
+    });
+    setBasket(newBasket);
+  };
+
+  /* 단일 선택 리스트 */
   const handleSingleCheck = (checked: boolean, id: number) => {
     if (checked) {
       // 선택 시 배열에 추가
-      setCheckList((prev) => [...prev, id]);
+      setCheckList([...checkList, id]);
     } else {
-      // 단일 선택 해제 시 제외
       setCheckList(checkList.filter((item) => item !== id));
     }
   };
 
-  // 전체 선택 리스트
-
+  /* 전체 선택 리스트 */
   const handelAllCheck = (checked: boolean) => {
     if (checked) {
       setCheckList((prev) => basketList.map((res, index) => res.product.id));
@@ -109,7 +150,7 @@ function BasketList({ basketList }: BasketListProps) {
                     <div className="w-[120px] h-[120px] relative  ">
                       <Image
                         className="rounded-lg "
-                        src={`http://192.168.0.2${res.product.backdrop_image}`}
+                        src={res.product.backdrop_image}
                         layout="fill"
                         alt="productImage"
                       />
@@ -136,7 +177,7 @@ function BasketList({ basketList }: BasketListProps) {
                         <AmountButton
                           id={res.product.id}
                           price={res.product.price}
-                          setCounts={setCounts}
+                          handleCount={handleCount}
                         />
                       </div>
                     </div>
@@ -153,7 +194,7 @@ function BasketList({ basketList }: BasketListProps) {
           <div className="px-2 py-5 space-y-2">
             <div className="flex items-center text-sm justify-between">
               <p className="text-subContent ">주문금액</p>
-              <p>0 원</p>
+              <p>{price.orderPrice.toLocaleString()} 원</p>
             </div>
             <div className="flex justify-between text-sm items-center">
               <p className="text-subContent  ">배송비</p>
@@ -161,7 +202,7 @@ function BasketList({ basketList }: BasketListProps) {
             </div>
             <div className="flex justify-between items-center ">
               <p className="text-lg">합계 금액</p>
-              <p>3,000 원</p>
+              <p>{price.totalPrice.toLocaleString()} 원</p>
             </div>
           </div>
 
@@ -175,4 +216,5 @@ function BasketList({ basketList }: BasketListProps) {
     </div>
   );
 }
+
 export default BasketList;

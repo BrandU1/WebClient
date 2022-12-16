@@ -1,20 +1,18 @@
 import Image from "next/image";
-import { useState } from "react";
-import { useRecoilState } from "recoil";
-import { totalAmount } from "../../recoil/totalamount";
+import { useEffect, useState } from "react";
 
 interface AmountButtonProps {
   price: number;
-  setCounts: any;
+  handleCount: Function;
   id: number;
 }
 
-function AmountButton({ price, setCounts, id }: AmountButtonProps) {
+function AmountButton({ price, handleCount, id }: AmountButtonProps) {
   const [amount, setAmount] = useState<number>(1);
 
-  const [AmountPrice, setAmountPrice] = useRecoilState(totalAmount);
-
-  console.log(AmountPrice);
+  useEffect(() => {
+    handleCount(amount, id);
+  }, [amount]);
 
   return (
     <div className="flex items-center space-x-48 justify-between w-full">
@@ -24,7 +22,6 @@ function AmountButton({ price, setCounts, id }: AmountButtonProps) {
           onClick={() => {
             if (amount > 1) {
               setAmount((prev) => prev - 1);
-              setCounts(amount - 1);
             }
           }}
         >
@@ -35,7 +32,6 @@ function AmountButton({ price, setCounts, id }: AmountButtonProps) {
           className="plusBtn text-main mx-3"
           onClick={() => {
             setAmount(amount + 1);
-            setCounts(amount + 1);
           }}
         >
           <svg
