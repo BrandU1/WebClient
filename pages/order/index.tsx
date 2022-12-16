@@ -5,6 +5,7 @@ import { basketPurchase, totalPrice } from "../../recoil/totalamount";
 import { useEffect, useState } from "react";
 import useBranduQuery from "@hooks/useBranduQuery";
 import { getAddresses } from "@lib/fetches";
+import { router } from "next/client";
 
 export interface PriceBarPrint {
   id: number;
@@ -28,7 +29,7 @@ function OrderPage() {
     queryFn: () => getAddresses(),
   });
   const onClick = () => {
-    alert("결제하기");
+    router.push(`/order/pay`);
   };
 
   useEffect(() => {

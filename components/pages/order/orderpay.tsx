@@ -4,8 +4,40 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { loadTossPayments } from "@tosspayments/payment-sdk";
 import { PaymentMethodType } from "@tosspayments/payment__types/types/payment/PaymentRequest";
+import { useRecoilValue } from "recoil";
+import { basketPurchase } from "../../../recoil/totalamount";
+import client from "@lib/api";
 
 function OrderPay() {
+  const product = useRecoilValue(basketPurchase);
+
+  // console.log(product);
+
+  const price = product.map((res, index) => {
+    return res.price * res.count;
+  });
+  const amountPrice = price.reduce(function add(sum, currValue) {
+    return sum + currValue;
+  }, 0);
+  const totalPrice = amountPrice + 3000;
+
+  // const getOrderId = async () => {
+  //   const response = await client.post(`orders/toss/create/`, {
+  //     address: addressId,
+  //     products: product.map((purchase, idx) => ({
+  //       product: purchase.product.id,
+  //       count: purchase.count,
+  //     })),
+  //
+  //     price: parseInt(totalPrice.toString()) + 3000,
+  //     coupon: null,
+  //     used_point: 0,
+  //     method: selectMethod,
+  //     name: name,
+  //   });
+  //   return response.data.order_number;
+  // };
+
   const router = useRouter();
   const [couponOpen, setCouponOpen] = useState<boolean>(true);
   const [point, setPoint] = useState<number>(0);
@@ -27,9 +59,10 @@ function OrderPay() {
     // const orderId = await getOrderId();
     const tossPayments = await getTossPayments();
     await tossPayments.requestPayment(selectMethod, {
-      amount: 10000,
+      amount: totalPrice,
       orderId: "testKey",
-      orderName: "Test Product",
+      orderName:
+        product[0].product.name + " 외  " + (product.length - 1) + " 건 ",
       customerName: "박재현",
       useCardPoint: true,
       successUrl: "http://localhost:3000/order/success",
@@ -199,15 +232,20 @@ function OrderPay() {
             <p className="text-base text-black">합계 금액</p>
           </div>
           <div className="flex flex-col space-y-2 text-sm items-end px-5 mt-2">
-            <p>33,000원</p>
-            <p>33,000원</p>
+            {/*<p>{amount[0]?.price.toLocaleString()} 원</p>*/}
+            <p>{amountPrice.toLocaleString()} 원</p>
+            <p>3,000 원</p>
+
+            {/*<p>{amount[1]?.price.toLocaleString()} 원</p>*/}
             {router.route == "/order/1/pay" && (
               <>
                 <p>-1,000원</p>
                 <p>0원</p>
               </>
             )}
-            <p className="text-base font-bold">33,000원</p>
+            <p className="text-base font-bold">
+              {totalPrice.toLocaleString()} 원
+            </p>
           </div>
         </div>
         {router.route == "/order/1" ? (

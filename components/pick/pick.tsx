@@ -22,6 +22,17 @@ function PickList({ picks }: PickList) {
     }
   );
 
+  const mutationDelete = useMutation(
+    (id: number) => client.delete(`accounts/wishes/${id}`),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["pickList"]);
+      },
+    }
+  );
+
+  console.log(picks);
+
   return (
     <div className="max-w-4xl m-auto ">
       <div>
@@ -36,7 +47,7 @@ function PickList({ picks }: PickList) {
                 <div className="relative w-24 h-24">
                   <Image
                     className="rounded-lg"
-                    src={`http://192.168.0.2${res.product.backdrop_image}`}
+                    src={`${res.product.backdrop_image}`}
                     layout="fill"
                     alt="product"
                   />
@@ -57,7 +68,12 @@ function PickList({ picks }: PickList) {
               </div>
 
               <div className=" flex-row items-center space-y-14 align-middle ml-52">
-                <div className="ml-2">
+                <div
+                  onClick={() => {
+                    mutationDelete.mutate(res.product.id);
+                  }}
+                  className="ml-2"
+                >
                   <CloseIcon />
                 </div>
 
