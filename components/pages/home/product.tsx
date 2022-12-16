@@ -66,7 +66,7 @@ function Product({ title, subTitle, products }: ProductProps) {
                 <div className="h-60 relative">
                   <Image
                     className="rounded-2xl"
-                    src={`http://192.168.0.2${item.backdrop_image}`}
+                    src={`${item.backdrop_image}`}
                     alt="list"
                     layout="fill"
                   />

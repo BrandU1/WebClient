@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import type { ReactElement } from "react";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Badge from "@atoms/badge";
 import Pick from "@common/pick";
 import Image from "next/image";
@@ -13,6 +13,7 @@ import PencilButton from "@icons/pencil-button";
 import TextButton from "@icons/text-button";
 import ImageButton from "@icons/image-button";
 import useImage from "@hooks/useImage";
+import ImageSelect from "@components/pages/custom/imageselect";
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
   canvasAction,
@@ -23,6 +24,7 @@ import {
   canvasText,
   canvasUndoOrRedo,
 } from "../../../../recoil/canvas";
+import client from "@lib/api";
 
 export enum CanvasState {
   DRAG = "DRAG",
@@ -30,11 +32,42 @@ export enum CanvasState {
   IMAGE = "IMAGE",
 }
 
+export interface Product {
+  id: number;
+  tags: Tags[];
+  images: any[];
+  options: [];
+  is_wish: boolean;
+  is_basket: boolean;
+  name: string;
+  backdrop_image: string;
+  price: number;
+  brand: number;
+  category: number;
+  view_count: number;
+}
+export interface Tags {
+  id: number;
+  name: string;
+}
+export interface CustomProps {
+  basketList: Product;
+}
+
 function Custom(): ReactElement {
-  const router = useRouter();
-  const { id } = router.query;
+  const [customData, setCustomData] = useState<CustomProps>();
+
+  const goBasket = (id: any) => {
+    client.post(`accounts/baskets/${id}`).then((res) => res.data);
+  };
+
+  useEffect(() => {
+    setCustomData(JSON.parse(localStorage.getItem("recoil-persist") ?? ""));
+  }, []);
+
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [canvasState, setCanvasState] = useState<CanvasState>(CanvasState.DRAW);
+  const [selectOpen, setSelectOpen] = useState<boolean>(false);
   const [step, setStep] = useRecoilState(canvasHistoryIndex);
   const [undoOrRedo, setUndoOrRedo] = useRecoilState(canvasUndoOrRedo);
   const historiesLength = useRecoilValue(canvasHistoriesLength);
@@ -43,6 +76,16 @@ function Custom(): ReactElement {
   const [action, setAction] = useRecoilState(canvasAction);
   const [actionSelected, setActionSelected] =
     useRecoilState(canvasActionSelected);
+
+  const imgSelectEl = useRef<HTMLDivElement>(null);
+  const handleSelectModal = (e: any) => {
+    if (!imgSelectEl.current?.contains(e.target)) {
+      handleSelectClose();
+    }
+  };
+  const handleSelectClose = () => {
+    setSelectOpen(false);
+  };
 
   const undo = () => {
     if (step > 0) {
@@ -99,7 +142,7 @@ function Custom(): ReactElement {
   };
 
   const createText = () => {
-    setText((prev) => [...prev, "asdfasdfasdf"]);
+    setText((prev) => [...prev, "text"]);
   };
 
   return (
@@ -136,8 +179,11 @@ function Custom(): ReactElement {
               className="hidden border rounded-xl bg-main w-[218px] h-[45px] text-white font-bold tet-sm flex justify-center items-center"
             />
             <Image
+              onClick={() => {
+                setSelectOpen(true);
+              }}
               src={"/custom/figureBtn.svg"}
-              alt={"figureBtn"}
+              alt={"imageBtn"}
               width={18}
               height={18}
             />
@@ -221,7 +267,7 @@ function Custom(): ReactElement {
           <Canvas
             canvasRef={canvasRef}
             images={images}
-            backgroundImage="/dummy/hoodie.png"
+            backgroundImage={`${customData?.basketList?.backdrop_image}`}
             width={500}
             height={500}
             state={canvasState}
@@ -229,7 +275,9 @@ function Custom(): ReactElement {
           <div className="rightSide flex  flex-col mt-5 ml-5">
             <div className="flex flex-row justify-between">
               <div className="flex flex-col">
-                <span className="productName text-base">후드티</span>
+                <span className="productName text-base">
+                  {customData?.basketList?.name}
+                </span>
                 <span className="productHashtag text-[10px] text-subContent">
                   #후드티 #브랜뉴 #데일리 #남친룩
                 </span>
@@ -240,8 +288,7 @@ function Custom(): ReactElement {
             <div className="price ">
               <div className="flex justify-end">
                 <span className="font-bold text-lg">
-                  {/*{data?.price.toLocaleString()}*/}
-                  8,000
+                  {customData?.basketList?.price.toLocaleString()}
                 </span>
                 <span className="text=sm ml-1">원</span>
               </div>
@@ -249,7 +296,7 @@ function Custom(): ReactElement {
                 <span className="text-xs mr-[9px]">(시즌 특가)</span>
                 <span className="font-bold text-lg">
                   {/*{data?.price.toLocaleString()}*/}
-                  7,000
+                  {(customData?.basketList?.price! - 4000).toLocaleString()}
                 </span>
                 <span className="text=sm ml-1">원</span>
               </div>
@@ -312,13 +359,30 @@ function Custom(): ReactElement {
                 bg_width={45}
                 li_color={"white"}
               />
-              <button className="w-64 h-11 bg-main rounded-xl ml-[10px] flex flex-row justify-center items-center">
+              <button
+                onClick={() => {
+                  goBasket(customData?.basketList.id);
+                }}
+                className="w-64 h-11 bg-main rounded-xl ml-[10px] flex flex-row justify-center items-center"
+              >
                 <span className="text-white font-bold text-sm">구매하기</span>
               </button>
             </div>
           </div>
         </div>
       </div>
+      {selectOpen && (
+        <div
+          onClick={handleSelectModal}
+          className="fixed top-0 left-0 z-50 w-full h-full bg-black bg-opacity-40"
+        >
+          <div className="mt-[70px] flex justify-center">
+            <div ref={imgSelectEl}>
+              <ImageSelect />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

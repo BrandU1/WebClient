@@ -1,30 +1,38 @@
 import { atom } from "recoil";
+import { Tags } from "../types/privacy";
+import { recoilPersist } from "recoil-persist";
 
-interface BasketProps {
-  amount: number;
-  is_purchase: boolean;
-  product: {
-    backdrop_image: string;
-    id: number;
-    is_wish: boolean;
-    name: string;
-    price: number;
-  };
+interface customProps {
+  id: number;
+  tags: Tags[];
+  images: any[];
+  options: [];
+  is_wish: boolean;
+  is_basket: boolean;
+  name: string;
+  backdrop_image: string;
+  price: number;
+  brand: number;
+  category: number;
+  view_count: number;
 }
+const { persistAtom } = recoilPersist();
 
-export const basketRecoil = atom<BasketProps[]>({
+export const customRecoil = atom<customProps>({
   key: "basketList",
-  default: [
-    {
-      amount: 0,
-      is_purchase: false,
-      product: {
-        backdrop_image: "",
-        id: 0,
-        is_wish: false,
-        name: "",
-        price: 0,
-      },
-    },
-  ],
+  default: {
+    id: 0,
+    tags: [],
+    images: [],
+    options: [],
+    is_wish: false,
+    is_basket: false,
+    name: "",
+    backdrop_image: "",
+    price: 0,
+    brand: 0,
+    category: 0,
+    view_count: 0,
+  },
+  effects_UNSTABLE: [persistAtom],
 });
