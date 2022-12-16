@@ -4,6 +4,8 @@ import CloseIcon from "@icons/close";
 import { useState } from "react";
 import AmountButton from "@common/amountbutton";
 import CheckBox from "@icons/checkBox";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import client from "@lib/api";
 
 interface BasketListProps {
   basketList: basketInterface[];
@@ -46,6 +48,19 @@ function BasketList({ basketList }: BasketListProps) {
       setCheckList([]);
     }
   };
+
+  //장바구니 삭제 기능
+
+  const queryClient = useQueryClient();
+
+  const mutationDelete = useMutation(
+    (id: number) => client.delete(`accounts/baskets/${id}`),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["basketList"]);
+      },
+    }
+  );
 
   return (
     <div className="max-w-4xl m-auto flex space-x-10 ">
@@ -128,7 +143,11 @@ function BasketList({ basketList }: BasketListProps) {
                             </p>
                           </div>
                         </div>
-                        <div>
+                        <div
+                          onClick={() => {
+                            mutationDelete.mutate(res?.product.id);
+                          }}
+                        >
                           <CloseIcon />
                         </div>
                       </div>
