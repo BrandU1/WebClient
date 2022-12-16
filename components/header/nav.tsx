@@ -1,4 +1,3 @@
-import Input from "@common/input";
 import SearchIcon from "@icons/search";
 import HeartIcon from "@icons/heart";
 import BasketIcon from "@icons/basket";
@@ -180,8 +179,32 @@ function Nav() {
           <Link href="/">
             <BranduIcon width={100} height={22} />
           </Link>
-          <p>스토어</p>
-          <p>커뮤니티</p>
+          {path.includes("/store") ? (
+            <Link href={"/store"}>
+              <div className={`text-main font-bold`}>
+                <p>스토어</p>
+              </div>
+            </Link>
+          ) : (
+            <Link href={"/store"}>
+              <div>
+                <p>스토어</p>
+              </div>
+            </Link>
+          )}
+          {path.includes("/community") ? (
+            <Link href={"/community"}>
+              <div className={`text-main font-bold`}>
+                <p>커뮤니티</p>
+              </div>
+            </Link>
+          ) : (
+            <Link href={"/community"}>
+              <div>
+                <p>커뮤니티</p>
+              </div>
+            </Link>
+          )}
           <div ref={inputEl}>
             <div
               onClick={() => setFocused(!focused)}
