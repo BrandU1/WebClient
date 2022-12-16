@@ -1,13 +1,13 @@
 import { useRouter } from "next/router";
 import { PriceBarPrint } from "../../../pages/order";
+import { ReactNode } from "react";
 
 interface PriceBarProps {
-  printList?: PriceBarPrint[];
-  disabled?: boolean;
-  onClick?: () => void;
+  printList: PriceBarPrint[];
+  children: ReactNode;
 }
 
-function PriceBar({ printList, disabled, onClick }: PriceBarProps) {
+function PriceBar({ printList, children }: PriceBarProps) {
   const router = useRouter();
 
   return (
@@ -30,13 +30,7 @@ function PriceBar({ printList, disabled, onClick }: PriceBarProps) {
           );
         })}
       </div>
-      <button
-        className="w-56 h-11 bg-main rounded-xl text-white font-bold text-base flex justify-center items-center m-auto mb-2 disabled:opacity-50"
-        disabled={disabled}
-        onClick={onClick}
-      >
-        결제하기
-      </button>
+      {children}
     </div>
   );
 }

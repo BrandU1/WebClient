@@ -29,6 +29,18 @@ export const basketCheckedList = atom<number[]>({
   default: [],
 });
 
+export const purchaseProducts = selector({
+  key: "purchaseProducts",
+  get: ({ get }) => {
+    const basketPurchaseList = get(basketPurchase);
+    const checkedList = get(basketCheckedList);
+    const purchaseProducts = basketPurchaseList.filter((item) =>
+      checkedList.includes(item.product.id)
+    );
+    return purchaseProducts;
+  },
+});
+
 export const totalPrice = selector<OrderPrice>({
   key: "totalPrice",
   get: ({ get }) => {

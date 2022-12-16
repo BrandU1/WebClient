@@ -5,7 +5,8 @@ import { basketPurchase, totalPrice } from "../../recoil/totalamount";
 import { useEffect, useState } from "react";
 import useBranduQuery from "@hooks/useBranduQuery";
 import { getAddresses } from "@lib/fetches";
-import { router } from "next/client";
+import { useRouter } from "next/router";
+import Link from "next/link";
 
 export interface PriceBarPrint {
   id: number;
@@ -19,6 +20,7 @@ function OrderPage() {
   const [priceBarPrint, setPriceBarPrint] = useState<PriceBarPrint[]>([]);
   const [baskets, _] = useRecoilState(basketPurchase);
   const [disabled, setDisabled] = useState<boolean>(true);
+  const router = useRouter();
 
   const {
     data: addresses,
@@ -28,8 +30,10 @@ function OrderPage() {
     queryKey: ["addresses"],
     queryFn: () => getAddresses(),
   });
-  const onClick = () => {
-    router.push(`/order/pay`);
+
+  /* 결제하기 버튼 처리 */
+  const onClick = async () => {
+    await router.push(`/order/pay`);
   };
 
   useEffect(() => {
@@ -64,11 +68,15 @@ function OrderPage() {
         />
       </div>
       <div className="price w-[30%]">
-        <PriceBar
-          printList={priceBarPrint}
-          disabled={disabled}
-          onClick={onClick}
-        />
+        <PriceBar printList={priceBarPrint}>
+          {/* TODO: 이 UI 사용하는 버튼 모두 컴퍼넌트화 */}
+          <button
+            className="w-56 h-11 bg-main rounded-xl text-white font-bold text-base flex justify-center items-center m-auto mb-2 disabled:opacity-50"
+            disabled={disabled}
+          >
+            <Link href="/order/pay">결제하기</Link>
+          </button>
+        </PriceBar>
       </div>
     </div>
   );

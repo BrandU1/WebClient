@@ -5,8 +5,8 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/dist/client/router";
 import client from "@lib/api";
 import { useQuery } from "@tanstack/react-query";
-import { ProductInfoInterface } from "../../../types/product";
 import { BranduBaseResponse, Product } from "../../../types/privacy";
+import { GetStaticPaths } from "next";
 
 function ProductDetail() {
   const router = useRouter();
@@ -35,4 +35,21 @@ function ProductDetail() {
     </div>
   );
 }
+
+export const getStaticPaths: GetStaticPaths<{ slug: string }> = async () => {
+  return {
+    paths: [], //indicates that no page needs be created at build time
+    fallback: "blocking", //indicates the type of fallback
+  };
+};
+
+export const getStaticProps = async (context: any) => {
+  const id = context.params.id;
+  return {
+    props: {
+      id,
+    },
+  };
+};
+
 export default ProductDetail;

@@ -1,6 +1,6 @@
 import ModalFrame from "@common/modalframe";
 import { useForm } from "react-hook-form";
-import CheckBtn from "@icons/checkBtn";
+import CheckBtn from "@common/check-button";
 import { useRef, useState } from "react";
 import client from "@lib/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -9,6 +9,7 @@ import DaumPostcode from "react-daum-postcode";
 interface addressAddProps {
   handleClose: () => void;
 }
+
 interface AddressForm {
   name: string;
   recipient: string;
@@ -20,6 +21,7 @@ interface AddressForm {
   zip_code: string;
   address: string;
 }
+
 function AddressAdd({ handleClose }: addressAddProps) {
   const { register, handleSubmit, watch, setValue } = useForm<AddressForm>({});
 

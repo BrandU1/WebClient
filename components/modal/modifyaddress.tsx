@@ -1,6 +1,6 @@
 import ModalFrame from "@common/modalframe";
 import { useForm } from "react-hook-form";
-import CheckBtn from "@icons/checkBtn";
+import CheckBtn from "@common/check-button";
 import { useRef, useState } from "react";
 import client from "@lib/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -10,6 +10,7 @@ interface addressModifyProps {
   handleClose: () => void;
   infoAddress: AddressForm;
 }
+
 interface AddressForm {
   id: number;
   name: string;
@@ -22,6 +23,7 @@ interface AddressForm {
   zip_code: string;
   address: string;
 }
+
 function ModifyAddress({ handleClose, infoAddress }: addressModifyProps) {
   const { register, handleSubmit, setValue } = useForm<AddressForm>({
     defaultValues: {

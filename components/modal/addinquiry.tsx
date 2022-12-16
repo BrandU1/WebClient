@@ -1,10 +1,8 @@
 import ModalFrame from "@common/modalframe";
 import { useForm } from "react-hook-form";
-import CheckBtn from "@icons/checkBtn";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import client from "@lib/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import DaumPostcode from "react-daum-postcode";
 
 interface closeProps {
   handleClose: () => void;

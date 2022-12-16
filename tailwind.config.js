@@ -24,6 +24,7 @@ module.exports = {
         subContent: "#767676",
         red: "#E44A38",
         yellow: "#ECAF49",
+        sub: "#0CABA833",
       },
     },
   },
