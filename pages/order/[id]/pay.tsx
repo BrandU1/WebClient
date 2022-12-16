@@ -8,9 +8,6 @@ function PayPage() {
         <p className="font-bold text-xl my-5">주문 및 결제</p>
         <OrderPay />
       </div>
-      <div className="price">
-        <PriceBar />
-      </div>
     </div>
   );
 }

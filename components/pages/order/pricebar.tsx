@@ -3,7 +3,6 @@ import Link from "next/link";
 
 function PriceBar() {
   const router = useRouter();
-  console.log(router.route);
 
   return (
     <div className="border border-main rounded-xl flex flex-col w-64 h-80 sticky top-40">
