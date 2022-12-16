@@ -82,14 +82,6 @@ const Canvas = ({
           saveHistory();
         }
       });
-      fabricRef.current.setBackgroundImage(
-        backgroundImage,
-        fabricRef.current.renderAll.bind(fabricRef.current),
-        {
-          width: width,
-          height: height,
-        }
-      );
       fabricRef.current.add(baseLine);
       return fabricRef.current;
     };
@@ -104,6 +96,17 @@ const Canvas = ({
       disposeFabric();
     };
   }, []);
+
+  useEffect(() => {
+    fabricRef.current.setBackgroundImage(
+      backgroundImage,
+      fabricRef.current.renderAll.bind(fabricRef.current),
+      {
+        width,
+        height,
+      }
+    );
+  }, [backgroundImage]);
 
   /* Action 처리 */
   useEffect(() => {

@@ -145,6 +145,8 @@ function Custom(): ReactElement {
     setText((prev) => [...prev, "text"]);
   };
 
+  console.log(customData?.basketList?.backdrop_image);
+
   return (
     <div>
       <div className="flex flex-col">
@@ -322,28 +324,28 @@ function Custom(): ReactElement {
                 </button>
               </div>
             </div>
-            <div className="amount flex flex-col mt-[10px]">
-              <span className="text-xs">수량</span>
-              <div className="mt-[10px] border border-main w-fit h-fit rounded-xl flex items-center py-[5px]">
-                <button className="minusBtn text-main px-3 py-2 cursor-focus">
-                  {/*<Image*/}
-                  {/*  src={"/logo/minus.svg"}*/}
-                  {/*  alt={"minus"}*/}
-                  {/*  width={16}*/}
-                  {/*  height={16}*/}
-                  {/*/>*/}
-                </button>
-                <span></span>
-                <button className="plusBtn text-main mx-3">
-                  {/*<Image*/}
-                  {/*  src={"/logo/plus.svg"}*/}
-                  {/*  alt={"plus"}*/}
-                  {/*  width={16}*/}
-                  {/*  height={16}*/}
-                  {/*/>*/}
-                </button>
-              </div>
-            </div>
+            {/*<div className="amount flex flex-col mt-[10px]">*/}
+            {/*  <span className="text-xs">수량</span>*/}
+            {/*  <div className="mt-[10px] border border-main w-fit h-fit rounded-xl flex items-center py-[5px]">*/}
+            {/*    <button className="minusBtn text-main px-3 py-2 cursor-focus">*/}
+            {/*      <Image*/}
+            {/*        src={"/logo/minus.svg"}*/}
+            {/*        alt={"minus"}*/}
+            {/*        width={16}*/}
+            {/*        height={16}*/}
+            {/*      />*/}
+            {/*    </button>*/}
+            {/*    <span></span>*/}
+            {/*    <button className="plusBtn text-main mx-3">*/}
+            {/*      <Image*/}
+            {/*        src={"/logo/plus.svg"}*/}
+            {/*        alt={"plus"}*/}
+            {/*        width={16}*/}
+            {/*        height={16}*/}
+            {/*      />*/}
+            {/*    </button>*/}
+            {/*  </div>*/}
+            {/*</div>*/}
             <div className="flex flex-row mt-5 space-x-[10px] items-center">
               <Pick
                 li_height={24}

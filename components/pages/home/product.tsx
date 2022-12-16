@@ -20,6 +20,7 @@ function Product({ title, subTitle, products }: ProductProps) {
       setToken(localStorage.getItem("access_token"));
     }
   });
+  // console.log(products);
 
   const queryClient = useQueryClient();
 

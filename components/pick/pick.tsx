@@ -14,7 +14,7 @@ function PickList({ picks }: PickList) {
 
   const mutation = useMutation(
     (id: number) =>
-      client.post(`/accounts/baskets/${id}/add`).then((res) => res.data),
+      client.post(`/accounts/baskets/${id}`).then((res) => res.data),
     {
       onSuccess: () => {
         queryClient.invalidateQueries(["basketList"]);
