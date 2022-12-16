@@ -6,18 +6,21 @@ import Accordion from "@common/accordion";
 interface OrderListProps {
   baskets: BasketPurchase[];
   addresses: AddressInterface[];
-  setDisabled: Dispatch<SetStateAction<boolean>>;
+  address: AddressInterface | null;
+  setAddress: Dispatch<SetStateAction<AddressInterface | null>>;
 }
 
-function OrderList({ baskets, addresses, setDisabled }: OrderListProps) {
+function OrderList({
+  baskets,
+  addresses,
+  address,
+  setAddress,
+}: OrderListProps) {
   const [selectedNumber, setSelectedNumber] = useState<number>(-1);
-  const [selectedAddress, setSelectedAddress] =
-    useState<AddressInterface | null>(null);
 
   useEffect(() => {
     if (selectedNumber > -1) {
-      setSelectedAddress(addresses[selectedNumber]);
-      setDisabled(false);
+      setAddress(addresses[selectedNumber]);
     }
   }, [selectedNumber]);
 
@@ -88,12 +91,12 @@ function OrderList({ baskets, addresses, setDisabled }: OrderListProps) {
             <span>주소</span>
           </div>
           <div className="flex flex-col space-y-[10px] text-sm justify-start mt-[10px]">
-            {selectedAddress && (
+            {address && (
               <>
-                <span>{selectedAddress?.recipient}</span>
-                <span>{selectedAddress?.phone_number}</span>
-                <span>{`[${selectedAddress?.zip_code}] ${selectedAddress?.road_name_address}`}</span>
-                <span>{selectedAddress?.detail_address}</span>
+                <span>{address.recipient}</span>
+                <span>{address.phone_number}</span>
+                <span>{`[${address.zip_code}] ${address.road_name_address}`}</span>
+                <span>{address.detail_address}</span>
               </>
             )}
           </div>

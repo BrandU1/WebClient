@@ -37,7 +37,12 @@ function Category({ ref }: CategoryProps) {
         <p>API 연동 중입니다. 새로고침 후에도 문제가 발생 시 문의바랍니다.</p>
       </div>
     );
+  
   }
+
+  console.log(data);
+
+  return <div></div>
 
   return (
     <div className="flex justify-center">

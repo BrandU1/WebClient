@@ -1,4 +1,5 @@
 import { atom, selector } from "recoil";
+import { recoilPersist } from "recoil-persist";
 
 export interface SimpleProduct {
   backdrop_image: string;
@@ -19,14 +20,26 @@ interface OrderPrice {
   totalPrice: number;
 }
 
+// const { persistAtom } = recoilPersist();
+// const sessionStorage =
+//   typeof window !== "undefined" ? window.sessionStorage : undefined;
+// const { persistAtom } = recoilPersist({
+//   key: "purchase",
+//   storage: sessionStorage,
+// });
+
+const { persistAtom } = recoilPersist();
+
 export const basketPurchase = atom<BasketPurchase[]>({
   key: "basketPurchase",
   default: [],
+  effects_UNSTABLE: [persistAtom],
 });
 
 export const basketCheckedList = atom<number[]>({
   key: "basketCheckedList",
   default: [],
+  effects_UNSTABLE: [persistAtom],
 });
 
 export const purchaseProducts = selector({

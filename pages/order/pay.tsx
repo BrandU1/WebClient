@@ -1,7 +1,6 @@
 import Accordion from "@common/accordion";
 import CheckButton from "@common/check-button";
 import { useRecoilValue } from "recoil";
-import { purchaseProducts, totalPrice } from "../../recoil/totalamount";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { PaymentMethodType } from "@tosspayments/payment__types/types/payment/PaymentRequest";
@@ -16,6 +15,7 @@ import Pricebar from "@components/pages/order/pricebar";
 import { PriceBarPrint } from "./index";
 import { useMutation } from "@tanstack/react-query";
 import client from "@lib/api";
+import { newOrder } from "../../recoil/order";
 
 interface PaymentForm {
   point: number;
@@ -54,7 +54,10 @@ const PAYMENT_METHODS = [
 export interface OrderCreate {
   name: string;
   address: number;
-  products: number[];
+  products: {
+    product: number;
+    count: number;
+  }[];
   price: number;
   coupon?: number;
   used_point?: number;
@@ -63,19 +66,29 @@ export interface OrderCreate {
 
 function PayPage() {
   const router = useRouter();
-  const products = useRecoilValue(purchaseProducts);
-  const price = useRecoilValue(totalPrice);
+  const orderData = useRecoilValue(newOrder);
+  /* TODO: 유저만의 포인트를 가지고올 수 있도록 Recoil 처리 */
   const [userPoint, setUserPoint] = useState<number>(1000);
   const [priceBarPrint, setPriceBarPrint] = useState<PriceBarPrint[]>([]);
-  const { register, handleSubmit, setValue, watch } = useForm<PaymentForm>({
-    defaultValues: {
-      point: 0,
-      method: "카드",
-      isChecked: false,
-    },
-  });
+  const { register, handleSubmit, setValue, watch, reset } =
+    useForm<PaymentForm>({
+      defaultValues: {
+        point: 0,
+        method: "카드",
+        isChecked: false,
+      },
+    });
   const createOrder = useMutation({
-    mutationFn: (data: OrderCreate) => client.post("/orders", data),
+    mutationFn: (data: OrderCreate) => client.post("/orders/toss", data),
+    onSuccess: async (response) => {
+      await requestTossPayment(response.data.results.order_number);
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+    onSettled: () => {
+      reset();
+    },
   });
 
   /* 포인트 전액 사용 */
@@ -89,7 +102,7 @@ function PayPage() {
       {
         id: 1,
         title: "주문 금액",
-        price: price.orderPrice,
+        price: orderData.orderPrice,
       },
       {
         id: 2,
@@ -111,29 +124,22 @@ function PayPage() {
       {
         id: 5,
         title: "합계 금액",
-        price: price.totalPrice - watch("point"),
+        price: orderData.orderPrice + 3000 - watch("point"),
         isBold: true,
       },
     ]);
-  }, [price]);
+  }, [orderData]);
 
-  const getOrderId = async () => {
-    const response = await client.post(`orders/toss/create/`, {
-      address: addressId,
-      products: products.map((purchase, idx) => ({
-        product: purchase.product.id,
-        count: purchase.count,
-      })),
-      price: parseInt(totalPrice.toString()) + 3000,
-      coupon: null,
-      used_point: 0,
-      method: selectMethod,
-      name: name,
+  const onValid = async (data: PaymentForm) => {
+    createOrder.mutate({
+      name: orderData.name,
+      address: orderData.address,
+      products: orderData.products,
+      price: orderData.orderPrice + 3000 - data.point,
+      used_point: data.point,
+      method: data.method,
     });
-    return response.data.order_number;
   };
-
-  const onValid = async (data: PaymentForm) => {};
 
   const onError = (error: any) => {
     console.log(error);
@@ -143,17 +149,15 @@ function PayPage() {
     return await loadTossPayments("test_ck_YPBal2vxj81eD2A7q7w85RQgOAND");
   }
 
-  const tossPay = async () => {
-    // const orderId = await getOrderId();
+  const requestTossPayment = async (orderNumber: string) => {
     const tossPayments = await getTossPayments();
-    await tossPayments.requestPayment("카드", {
-      amount: 0,
-      orderId: "testKey",
-      orderName:
-        product[0].product.name + " 외  " + (product.length - 1) + " 건 ",
+    await tossPayments.requestPayment(watch("method"), {
+      amount: orderData.orderPrice + 3000 - watch("point"),
+      orderId: orderNumber,
+      orderName: orderData.name,
       customerName: "박재현",
       useCardPoint: true,
-      successUrl: "http://localhost:3000/order/success",
+      successUrl: "http://localhost:3000/order/waiting",
       failUrl: "http://localhost:3000/order/orderfail",
     });
   };
