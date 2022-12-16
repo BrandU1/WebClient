@@ -16,6 +16,7 @@
     "@mui/icons-material": "^5.10.15",
     "@mui/material": "^5.10.15",
     "@tanstack/react-query": "^4.18.0",
+    "@tosspayments/payment-sdk": "^1.2.3",
     "@types/dom-to-image": "^2.6.4",
     "@types/fabric": "^4.5.14",
     "@types/file-saver": "^2.0.5",
@@ -56,6 +57,7 @@
     "react-slick": "^0.29.0",
     "react-undo-redo": "^2.0.1",
     "recoil": "^0.7.6",
+    "recoil-persist": "^4.2.0",
     "slick-carousel": "^1.8.1",
     "tailwind-scrollbar-hide": "^1.1.7",
     "typescript": "4.9.3"

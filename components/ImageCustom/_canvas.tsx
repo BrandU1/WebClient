@@ -105,7 +105,7 @@ function ColorPencil({
   }
 
   useEffect(() => {
-    if (!canvasRef.current) {
+    if (!canvasRef?.current) {
       return;
     }
     const canvas: HTMLCanvasElement = canvasRef.current;

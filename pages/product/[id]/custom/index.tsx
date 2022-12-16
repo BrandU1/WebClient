@@ -1,30 +1,81 @@
-import Image from "next/image";
-import Pencil from "@icons/pencil";
-import Draggable from "react-draggable";
-import AutosizeInput from "react-input-autosize";
-import ColorPencil from "@components/ImageCustom/_canvas";
+import { useRouter } from "next/router";
+import type { ReactElement } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Badge from "@atoms/badge";
 import Pick from "@common/pick";
+import Image from "next/image";
 import Basket from "@common/basket";
+import Canvas from "@components/ImageCustom/canvas";
+import BackButton from "@icons/back-button";
+import ForwardButton from "@icons/forward-button";
+import MoveButton from "@icons/move-button";
+import PencilButton from "@icons/pencil-button";
+import TextButton from "@icons/text-button";
+import ImageButton from "@icons/image-button";
+import useImage from "@hooks/useImage";
 import ImageSelect from "@components/pages/custom/imageselect";
-import { useRouter } from "next/router";
-import { useRef, useState } from "react";
-import domtoimage from "dom-to-image";
-import { saveAs } from "file-saver";
-import useImage from "../../../../hooks/useImage";
+import { useRecoilState, useRecoilValue } from "recoil";
+import {
+  canvasAction,
+  canvasActionSelected,
+  CanvasActionType,
+  canvasHistoriesLength,
+  canvasHistoryIndex,
+  canvasText,
+  canvasUndoOrRedo,
+} from "../../../../recoil/canvas";
+import client from "@lib/api";
 
-function CustomPage() {
-  const router = useRouter();
-  const [amount, setAmount] = useState<number>(Number(router.query.amount));
+export enum CanvasState {
+  DRAG = "DRAG",
+  DRAW = "DRAW",
+  IMAGE = "IMAGE",
+}
+
+export interface Product {
+  id: number;
+  tags: Tags[];
+  images: any[];
+  options: [];
+  is_wish: boolean;
+  is_basket: boolean;
+  name: string;
+  backdrop_image: string;
+  price: number;
+  brand: number;
+  category: number;
+  view_count: number;
+}
+export interface Tags {
+  id: number;
+  name: string;
+}
+export interface CustomProps {
+  basketList: Product;
+}
+
+function Custom(): ReactElement {
+  const [customData, setCustomData] = useState<CustomProps>();
+
+  const goBasket = (id: any) => {
+    client.post(`accounts/baskets/${id}`).then((res) => res.data);
+  };
+
+  useEffect(() => {
+    setCustomData(JSON.parse(localStorage.getItem("recoil-persist") ?? ""));
+  }, []);
+
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [canvasState, setCanvasState] = useState<CanvasState>(CanvasState.DRAW);
   const [selectOpen, setSelectOpen] = useState<boolean>(false);
-  const [color, setColor] = useState<string>("black");
-  const [open, setOpen] = useState<boolean>(false);
-  const [pencil, setPencil] = useState<boolean>(false);
-
-  const [clear, setClear] = useState<boolean>(false);
-
-  // 드래그 박스 ref
-  const { image, imgBase64, handleChangeFile } = useImage();
+  const [step, setStep] = useRecoilState(canvasHistoryIndex);
+  const [undoOrRedo, setUndoOrRedo] = useRecoilState(canvasUndoOrRedo);
+  const historiesLength = useRecoilValue(canvasHistoriesLength);
+  const [text, setText] = useRecoilState(canvasText);
+  const { size, images, imgBase64s, handleChangeFile } = useImage();
+  const [action, setAction] = useRecoilState(canvasAction);
+  const [actionSelected, setActionSelected] =
+    useRecoilState(canvasActionSelected);
 
   const imgSelectEl = useRef<HTMLDivElement>(null);
   const handleSelectModal = (e: any) => {
@@ -36,155 +87,145 @@ function CustomPage() {
     setSelectOpen(false);
   };
 
-  const onDownloadBtn = () => {
-    domtoimage.toBlob(document.querySelector(".custom")!).then((blob) => {
-      saveAs(blob, "custom.png");
-    });
+  const undo = () => {
+    if (step > 0) {
+      setStep((prev) => prev - 1);
+      setUndoOrRedo(true);
+    }
   };
 
-  const [text, setText] = useState<string>("Text");
-  const [openText, setOpenText] = useState<boolean>(false);
+  const redo = () => {
+    if (step < historiesLength - 1) {
+      setStep((prev) => prev + 1);
+      setUndoOrRedo(true);
+    }
+  };
+
+  const moveDown = () => {
+    setActionSelected(true);
+    setAction(CanvasActionType.MOVE_DOWN);
+  };
+
+  const moveUp = () => {
+    setActionSelected(true);
+    setAction(CanvasActionType.MOVE_UP);
+  };
+
+  const moveLeft = () => {
+    setActionSelected(true);
+    setAction(CanvasActionType.MOVE_LEFT);
+  };
+
+  const moveRight = () => {
+    setActionSelected(true);
+    setAction(CanvasActionType.MOVE_RIGHT);
+  };
+
+  const moveHorizontalCenter = () => {
+    setActionSelected(true);
+    setAction(CanvasActionType.MOVE_HORIZONTAL_CENTER);
+  };
+
+  const moveVerticalCenter = () => {
+    setActionSelected(true);
+    setAction(CanvasActionType.MOVE_VERTICAL_CENTER);
+  };
+
+  const moveForward = () => {
+    setActionSelected(true);
+    setAction(CanvasActionType.MOVE_FORWARD);
+  };
+
+  const moveBackward = () => {
+    setActionSelected(true);
+    setAction(CanvasActionType.MOVE_BACKWARD);
+  };
+
+  const createText = () => {
+    setText((prev) => [...prev, "text"]);
+  };
 
   return (
     <div>
       <div className="flex flex-col">
         <div className="customItemList flex flex-row justify-center border-b border-gray w-full mt-4 pb-4">
           <div className="DrawTool  flex flex-row space-x-[18px]">
-            <Image
-              src={"/custom/backBtn.svg"}
-              alt={"backBtn"}
-              width={16}
-              height={16}
-            />
-            <Image
-              src={"/custom/forwardBtn.svg"}
-              alt={"forwardBtn"}
-              width={16}
-              height={16}
-            />
-            <Image
-              src={"/custom/moveBtn.svg"}
-              alt={"moveBtn"}
-              width={20}
-              height={20}
-            />
-            <div
-              onClick={() => {
-                setOpen(!open);
-              }}
-            >
-              <Pencil color={color} stroke={color} />
-              <div
-                className={`${
-                  open ? "block" : "hidden"
-                } flex space-x-4 absolute justify-between`}
-              >
-                <p
-                  onClick={() => {
-                    setColor("red");
-                    setPencil(true);
-                    setClear(false);
-                  }}
-                >
-                  red
-                </p>
-                <p
-                  onClick={() => {
-                    setColor("blue");
-                    setPencil(true);
-                    setClear(false);
-                  }}
-                >
-                  blue
-                </p>
-                <p
-                  onClick={() => {
-                    setColor("yellow");
-                    setPencil(true);
-                    setClear(false);
-                  }}
-                >
-                  yellow
-                </p>
-                <p
-                  onClick={() => {
-                    setClear(true);
-                  }}
-                >
-                  Erase
-                </p>
-              </div>
+            <div onClick={undo}>
+              <BackButton />
+            </div>
+            <div onClick={redo}>
+              <ForwardButton />
+            </div>
+            <div onClick={() => setCanvasState(CanvasState.DRAG)}>
+              <MoveButton />
+            </div>
+            <div onClick={() => setCanvasState(CanvasState.DRAW)}>
+              <PencilButton />
+            </div>
+            <div onClick={createText}>
+              <TextButton />
             </div>
 
-            <Image
-              src={"/custom/inkBtn.svg"}
-              alt={"inkBtn"}
-              width={19}
-              height={19}
-            />
-            <Image
-              onClick={() => {
-                setOpenText(true);
-              }}
-              src={"/custom/textBtn.svg"}
-              alt={"textBtn"}
-              width={16}
-              height={16}
-            />
-
             <label htmlFor="removeBg">
-              <Image
-                src={"/custom/imageBtn.svg"}
-                alt={"imageBtn"}
-                width={18}
-                height={18}
-              />
+              <ImageButton />
             </label>
             <input
-              onChange={handleChangeFile}
+              onClick={(event) => {
+                setCanvasState(CanvasState.IMAGE);
+                handleChangeFile(event);
+              }}
               type="file"
               id="removeBg"
               className="hidden border rounded-xl bg-main w-[218px] h-[45px] text-white font-bold tet-sm flex justify-center items-center"
             />
             <Image
+              onClick={() => {
+                setSelectOpen(true);
+              }}
               src={"/custom/figureBtn.svg"}
-              alt={"figureBtn"}
+              alt={"imageBtn"}
               width={18}
               height={18}
             />
           </div>
           <div className="sortTool flex flex-row ml-[56px] space-x-4">
             <Image
+              onClick={moveDown}
               src={"/custom/bottomLine.svg"}
               alt={"bottomLine"}
               width={18}
               height={18}
             />
             <Image
+              onClick={moveLeft}
               src={"/custom/leftLine.svg"}
               alt={"leftLine"}
               width={18}
               height={18}
             />
             <Image
+              onClick={moveRight}
               src={"/custom/rightLine.svg"}
               alt={"rightLine"}
               width={18}
               height={18}
             />
             <Image
+              onClick={moveUp}
               src={"/custom/topLine.svg"}
               alt={"topLine"}
               width={18}
               height={18}
             />
             <Image
+              onClick={moveHorizontalCenter}
               src={"/custom/centerLine.svg"}
               alt={"centerLine"}
               width={16}
               height={18}
             />
             <Image
+              onClick={moveVerticalCenter}
               src={"/custom/middleLine.svg"}
               alt={"middleLine"}
               width={18}
@@ -222,51 +263,21 @@ function CustomPage() {
             />
           </div>
         </div>
-        <div className="flex flex-row m-auto mt-3  z-30   ">
-          <div className="custom bg-[url('/dummy/hoodie.png')] w-[510px] h-[400px] bg-center bg-contain bg-no-repeat">
-            <Draggable defaultPosition={{ x: 0, y: 0 }}>
-              <div
-                className={`w-[100px] h-[100px] bg-contain bg-no-repeat ${
-                  imgBase64 === "/dummy/white.png" ? "hidden" : "block"
-                }`}
-              >
-                <Image
-                  src={imgBase64}
-                  alt={"Img Uploaded"}
-                  width={350}
-                  height={350}
-                  draggable={false}
-                />
-              </div>
-            </Draggable>
-            <div className={`${openText ? "inline " : "hidden"}`}>
-              <Draggable>
-                <AutosizeInput
-                  inputStyle={{
-                    backgroundColor: "transparent",
-                    outline: "none",
-                  }}
-                  className="inline-flex  hover:border-[1px] hover:border-main text-center bg-opacity-10 focus:outline-none text-main text-2xl cursor-grabbing "
-                  onChange={(e: any) => {
-                    setText(e.target.value);
-                  }}
-                  value={text}
-                />
-              </Draggable>
-            </div>
-            <div className={`${pencil ? "block" : "hidden"}`}>
-              <ColorPencil
-                width={510}
-                height={300}
-                pencilColor={color}
-                clear={clear}
-              />
-            </div>
-          </div>
-          <div className="rightSide flex flex-col mt-5 ml-5">
+        <div className="flex flex-row m-auto mt-3 z-30">
+          <Canvas
+            canvasRef={canvasRef}
+            images={images}
+            backgroundImage={`${customData?.basketList?.backdrop_image}`}
+            width={500}
+            height={500}
+            state={canvasState}
+          />
+          <div className="rightSide flex  flex-col mt-5 ml-5">
             <div className="flex flex-row justify-between">
               <div className="flex flex-col">
-                <span className="productName text-base">후드티</span>
+                <span className="productName text-base">
+                  {customData?.basketList?.name}
+                </span>
                 <span className="productHashtag text-[10px] text-subContent">
                   #후드티 #브랜뉴 #데일리 #남친룩
                 </span>
@@ -277,8 +288,7 @@ function CustomPage() {
             <div className="price ">
               <div className="flex justify-end">
                 <span className="font-bold text-lg">
-                  {/*{data?.price.toLocaleString()}*/}
-                  8,000
+                  {customData?.basketList?.price.toLocaleString()}
                 </span>
                 <span className="text=sm ml-1">원</span>
               </div>
@@ -286,7 +296,7 @@ function CustomPage() {
                 <span className="text-xs mr-[9px]">(시즌 특가)</span>
                 <span className="font-bold text-lg">
                   {/*{data?.price.toLocaleString()}*/}
-                  7,000
+                  {(customData?.basketList?.price! - 4000).toLocaleString()}
                 </span>
                 <span className="text=sm ml-1">원</span>
               </div>
@@ -315,36 +325,22 @@ function CustomPage() {
             <div className="amount flex flex-col mt-[10px]">
               <span className="text-xs">수량</span>
               <div className="mt-[10px] border border-main w-fit h-fit rounded-xl flex items-center py-[5px]">
-                <button
-                  className="minusBtn text-main px-3 py-2 cursor-focus"
-                  onClick={() => {
-                    {
-                      if (amount > 1) {
-                        setAmount((prev) => prev - 1);
-                      }
-                    }
-                  }}
-                >
-                  <Image
-                    src={"/logo/minus.svg"}
-                    alt={"minus"}
-                    width={16}
-                    height={16}
-                  />
+                <button className="minusBtn text-main px-3 py-2 cursor-focus">
+                  {/*<Image*/}
+                  {/*  src={"/logo/minus.svg"}*/}
+                  {/*  alt={"minus"}*/}
+                  {/*  width={16}*/}
+                  {/*  height={16}*/}
+                  {/*/>*/}
                 </button>
-                <span>{String(amount).padStart(2, "0")}</span>
-                <button
-                  className="plusBtn text-main mx-3"
-                  onClick={() => {
-                    setAmount(amount + 1);
-                  }}
-                >
-                  <Image
-                    src={"/logo/plus.svg"}
-                    alt={"plus"}
-                    width={16}
-                    height={16}
-                  />
+                <span></span>
+                <button className="plusBtn text-main mx-3">
+                  {/*<Image*/}
+                  {/*  src={"/logo/plus.svg"}*/}
+                  {/*  alt={"plus"}*/}
+                  {/*  width={16}*/}
+                  {/*  height={16}*/}
+                  {/*/>*/}
                 </button>
               </div>
             </div>
@@ -364,29 +360,31 @@ function CustomPage() {
                 li_color={"white"}
               />
               <button
+                onClick={() => {
+                  goBasket(customData?.basketList.id);
+                }}
                 className="w-64 h-11 bg-main rounded-xl ml-[10px] flex flex-row justify-center items-center"
-                onClick={onDownloadBtn}
               >
                 <span className="text-white font-bold text-sm">구매하기</span>
               </button>
             </div>
           </div>
         </div>
-        {selectOpen && (
-          <div
-            onClick={handleSelectModal}
-            className="fixed top-0 left-0 z-50 w-full h-full bg-black bg-opacity-40"
-          >
-            <div className="mt-[70px] flex justify-center">
-              <div ref={imgSelectEl}>
-                <ImageSelect />
-              </div>
+      </div>
+      {selectOpen && (
+        <div
+          onClick={handleSelectModal}
+          className="fixed top-0 left-0 z-50 w-full h-full bg-black bg-opacity-40"
+        >
+          <div className="mt-[70px] flex justify-center">
+            <div ref={imgSelectEl}>
+              <ImageSelect />
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }
 
-export default CustomPage;
+export default Custom;
