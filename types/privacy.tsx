@@ -1,3 +1,5 @@
+import { SimpleProduct } from "../recoil/totalamount";
+
 export interface pickInterface {
   id: number;
   is_basket: boolean;
@@ -13,13 +15,7 @@ export interface pickInterface {
 export interface basketInterface {
   amount: number;
   is_purchase: boolean;
-  product: {
-    backdrop_image: string;
-    id: number;
-    is_wish: boolean;
-    name: string;
-    price: number;
-  };
+  product: SimpleProduct;
 }
 
 export interface AddressInterface {
@@ -45,6 +41,7 @@ export interface UserInterface {
   social_link?: string;
   platforms: Platform[];
 }
+
 export interface Platform {
   created: string;
   platform: string;
@@ -85,6 +82,7 @@ export interface Product {
   category: number;
   view_count: number;
 }
+
 export interface Tags {
   id: number;
   name: string;
@@ -105,6 +103,7 @@ export interface SearchBase {
   previous: string;
   results: SearchResult[];
 }
+
 export interface SearchResult {
   id: number;
   name: string;
@@ -116,4 +115,5 @@ export interface SearchResult {
 export interface BranduBaseResponse<T> {
   success: boolean;
   results: T;
+  error?: T;
 }

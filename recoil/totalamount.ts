@@ -1,18 +1,15 @@
 import { atom, selector } from "recoil";
 
-interface Product {
+export interface SimpleProduct {
+  backdrop_image: string;
   id: number;
-  amount: number;
+  is_wish: boolean;
+  name: string;
   price: number;
 }
 
-interface WishList {
-  count: number;
-  products: Product[];
-}
-
-interface BasketPurchase {
-  product: number;
+export interface BasketPurchase {
+  product: SimpleProduct;
   count: number;
   price: number;
 }
@@ -38,7 +35,7 @@ export const totalPrice = selector<OrderPrice>({
     const purchaseList = get(basketPurchase);
     const checkedList = get(basketCheckedList);
     const price = purchaseList
-      .filter((basket) => checkedList.includes(basket.product))
+      .filter((basket) => checkedList.includes(basket.product.id))
       .reduce((acc, cur) => acc + cur.price * cur.count, 0);
     return {
       orderPrice: price,

@@ -9,9 +9,12 @@ import {
   basketPurchase,
   totalPrice,
 } from "../../recoil/totalamount";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import client from "@lib/api";
+import { useRouter } from "next/router";
+import Pricebar from "@components/pages/order/pricebar";
+import { PriceBarPrint } from "../../pages/order";
 
 interface BasketListProps {
   basketList: basketInterface[];
@@ -28,40 +31,82 @@ interface ProductCount {
 }
 
 function BasketList({ basketList }: BasketListProps) {
+  const router = useRouter();
   const [basket, setBasket] = useRecoilState(basketPurchase);
   const [checkList, setCheckList] = useRecoilState(basketCheckedList);
   const price = useRecoilValue(totalPrice);
   const queryClient = useQueryClient();
-  const deleteBasket = useMutation(
-    (id: number) => client.delete(`accounts/baskets/${id}`),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(["basketList"]);
+  const deleteBasket = useMutation({
+    mutationFn: (id: number) => client.delete(`accounts/baskets/${id}`),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries(["basketList"]);
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+    onSettled: () => {},
+  });
+
+  const [priceBarPrint, setPriceBarPrint] = useState<PriceBarPrint[]>([]);
+
+  useEffect(() => {
+    setPriceBarPrint([
+      {
+        id: 1,
+        title: "주문 금액",
+        price: price.orderPrice,
       },
-      onError: (error) => {
-        console.log(error);
+      {
+        id: 2,
+        title: "배송비",
+        price: 3000,
       },
-    }
-  );
+      {
+        id: 3,
+        title: "합계 금액",
+        price: price.totalPrice,
+        isBold: true,
+      },
+    ]);
+  }, [price]);
 
   useEffect(() => {
     if (basket.length === 0) {
+      setBasketList(basketList);
+    } else {
+      setBasketList(basketList, false);
+    }
+  }, [basketList]);
+
+  const setBasketList = (
+    baskets: basketInterface[],
+    isInit: boolean = true
+  ) => {
+    if (isInit) {
       setBasket(
         basketList.map((item) => {
           return {
-            product: item.product.id,
+            product: item.product,
             count: 1,
             price: item.product.price,
           };
         })
       );
+    } else {
+      setBasket(
+        basket.filter((item) =>
+          baskets
+            .map((prevBasket) => prevBasket.product.id)
+            .includes(item.product.id)
+        )
+      );
     }
-  }, [basketList]);
+  };
 
   /* 구매 개수 핸들러 */
   const handleCount = (count: number, id: number) => {
     const newBasket = basket.map((basket) => {
-      if (basket.product === id) {
+      if (basket.product.id === id) {
         return { ...basket, count };
       }
       return basket;
@@ -89,7 +134,7 @@ function BasketList({ basketList }: BasketListProps) {
   };
 
   return (
-    <div className="max-w-4xl m-auto flex space-x-10 ">
+    <div className="max-w-4xl m-auto flex flex-row space-x-10">
       <div className="rightSection w-[70%]">
         <h1 className="text-xl font-bold py-5">장바구니</h1>
         <div className="border-b-[1px] border-[black]" />
@@ -169,7 +214,9 @@ function BasketList({ basketList }: BasketListProps) {
                             </p>
                           </div>
                         </div>
-                        <div>
+                        <div
+                          onClick={() => deleteBasket.mutate(res.product.id)}
+                        >
                           <CloseIcon />
                         </div>
                       </div>
@@ -189,29 +236,15 @@ function BasketList({ basketList }: BasketListProps) {
         </div>
       </div>
       <div className="leftSection w-[30%] ">
-        <div className="text-white py-5">cartList</div>
-        <div className=" border-[1px] border-main rounded-lg h-80 relative ">
-          <div className="px-2 py-5 space-y-2">
-            <div className="flex items-center text-sm justify-between">
-              <p className="text-subContent ">주문금액</p>
-              <p>{price.orderPrice.toLocaleString()} 원</p>
-            </div>
-            <div className="flex justify-between text-sm items-center">
-              <p className="text-subContent  ">배송비</p>
-              <p>3,000 원</p>
-            </div>
-            <div className="flex justify-between items-center ">
-              <p className="text-lg">합계 금액</p>
-              <p>{price.totalPrice.toLocaleString()} 원</p>
-            </div>
-          </div>
-
-          <div className="px-2 w-full absolute  bottom-2 ">
-            <button className="w-full bg-main rounded-lg text-white p-3">
-              구매하기
-            </button>
-          </div>
-        </div>
+        <Pricebar
+          printList={priceBarPrint}
+          disabled={checkList.length === 0}
+          onClick={async () =>
+            await router.push({
+              pathname: "/order",
+            })
+          }
+        />
       </div>
     </div>
   );
