@@ -5,6 +5,7 @@ import HeartIcon from "@icons/heart";
 import { useEffect, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import client from "@lib/api";
+import PickButton from "@components/pick/pickbutton";
 
 interface storeProps {
   store: HotDeal[];
@@ -71,23 +72,24 @@ function Store({ store }: storeProps) {
               </Link>
 
               <div className={`${token ? "block" : "hidden"} `}>
-                <div
-                  onClick={() => {
-                    if (item.is_wish) {
-                      deletePick.mutate(item.id);
-                    } else mutation.mutate(item.id);
-                  }}
-                  className={`${
-                    item.is_wish ? "bg-main " : "bg-[#DFDFE0]"
-                  } pickBtn absolute bottom-[80px] right-[10px] w-8 h-8 rounded-xl bg-[#DFDFE0] flex justify-center items-center`}
-                >
-                  <HeartIcon
-                    color={`${item.is_wish ? "#fff" : "#DFDFE0"}`}
-                    width={20}
-                    height={17}
-                    border="#fff"
-                  />
-                </div>
+                {/*<div*/}
+                {/*  onClick={() => {*/}
+                {/*    if (item.is_wish) {*/}
+                {/*      deletePick.mutate(item.id);*/}
+                {/*    } else mutation.mutate(item.id);*/}
+                {/*  }}*/}
+                {/*  className={`${*/}
+                {/*    item.is_wish ? "bg-main " : "bg-[#DFDFE0]"*/}
+                {/*  } pickBtn absolute bottom-[80px] right-[10px] w-8 h-8 rounded-xl bg-[#DFDFE0] flex justify-center items-center`}*/}
+                {/*>*/}
+                {/*  <HeartIcon*/}
+                {/*    color={`${item.is_wish ? "#fff" : "#DFDFE0"}`}*/}
+                {/*    width={20}*/}
+                {/*    height={17}*/}
+                {/*    border="#fff"*/}
+                {/*  />*/}
+                {/*</div>*/}
+                <PickButton id={item.id} />
               </div>
             </div>
           );
