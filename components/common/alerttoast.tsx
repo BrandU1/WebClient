@@ -18,11 +18,7 @@ function AlertToast({ text, path }: AlertProps) {
         <button
           className="text-sm py-[6px] px-[11px] bg-main text-white rounded-xl ml-[27px] mr-[26px]"
           onClick={() => {
-            path == "pick"
-              ? router.push("/pick")
-              : path == "basket"
-              ? router.push("/basket")
-              : router.push(`/scrap`);
+            router.push(`/${path}`);
           }}
         >
           이동하기

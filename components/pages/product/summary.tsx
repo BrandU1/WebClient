@@ -192,6 +192,7 @@ function Summary({ productInfo }: ProductProps) {
               bg_width={45}
               li_color={"white"}
             />
+
             <Basket
               li_height={22}
               li_width={22}

@@ -18,7 +18,6 @@ function Search({ searchResult }: SearchProps) {
       setToken(localStorage.getItem("access_token"));
     }
   });
-
   const queryClient = useQueryClient();
 
   const mutation = useMutation(

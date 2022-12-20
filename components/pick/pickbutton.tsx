@@ -6,16 +6,11 @@ import { BranduBaseResponse, HotDeal } from "../../types/privacy";
 
 interface pickProp {
   id: number;
+  wish: boolean;
+  li_width: number;
+  li_height: number;
 }
-function PickButton({ id }: pickProp) {
-  const getHotDeal = () => {
-    return client.get(`products/contents/hot-deal`).then((res) => res.data);
-  };
-  const { data, isLoading } = useQuery<BranduBaseResponse<HotDeal[]>>(
-    ["hotDeal"],
-    getHotDeal
-  );
-
+function PickButton({ id, wish, li_width, li_height }: pickProp) {
   const queryClient = useQueryClient();
   // pick 추가
   const mutation = useMutation(
@@ -41,26 +36,21 @@ function PickButton({ id }: pickProp) {
   return (
     <div
       onClick={() => {
-        // @ts-ignore
-        if (data[id]?.is_wish) {
-          // @ts-ignore
-          deletePick.mutate(data[id]?.id);
+        if (wish == true) {
+          deletePick.mutate(id);
         } else {
-          // @ts-ignore
-          mutation.mutate(data[id].id);
-          AlertToast({ text: "찜한 상품", path: "pick" });
+          mutation.mutate(id);
+          return <AlertToast text={"찜한 상품"} path={"pick"} />;
         }
       }}
       className={`${
-        // @ts-ignore
-        data[id].is_wish ? "bg-main " : "bg-[#DFDFE0]"
-      } pickBtn absolute bottom-[80px] right-[10px] w-8 h-8 rounded-xl bg-[#DFDFE0] flex justify-center items-center`}
+        wish ? "bg-main" : "bg-[#DFDFE0]"
+      } pickBtn absolute bottom-[80px] right-[10px] w-8 h-8 rounded-xl flex justify-center items-center`}
     >
       <HeartIcon
-        // @ts-ignore
-        color={`${data[id].is_wish ? "#fff" : "#DFDFE0"}`}
-        width={20}
-        height={17}
+        color={`${wish ? "#0CABA8" : "#DFDFE0"}`}
+        width={li_width}
+        height={li_height}
         border="#fff"
       />
     </div>
