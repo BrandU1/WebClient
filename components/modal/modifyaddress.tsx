@@ -164,7 +164,7 @@ function ModifyAddress({ handleClose, infoAddress }: addressModifyProps) {
               </div>
               <div className="flex flex-row">
                 <CheckBtn
-                  color={`${infoAddress?.is_main ? "main" : "gray"}`}
+                  // color={`${infoAddress?.is_main ? "main" : "gray"}`}
                   width={20}
                   height={20}
                 />

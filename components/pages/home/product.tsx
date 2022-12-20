@@ -81,27 +81,12 @@ function Product({ title, subTitle, products }: ProductProps) {
               </Link>
 
               <div className={`${token ? "block" : "hidden"} `}>
-                {/*<div*/}
-                {/*  onClick={() => {*/}
-                {/*    if (item.is_wish) {*/}
-                {/*      deletePick.mutate(item.id);*/}
-                {/*    } else {*/}
-                {/*      mutation.mutate(item.id);*/}
-                {/*      AlertToast({ text: "찜한 상품", path: "pick" });*/}
-                {/*    }*/}
-                {/*  }}*/}
-                {/*  className={`${*/}
-                {/*    item.is_wish ? "bg-main " : "bg-[#DFDFE0]"*/}
-                {/*  } pickBtn absolute bottom-[80px] right-[10px] w-8 h-8 rounded-xl bg-[#DFDFE0] flex justify-center items-center`}*/}
-                {/*>*/}
-                {/*  <HeartIcon*/}
-                {/*    color={`${item.is_wish ? "#ffffff" : "#DFDFE0"}`}*/}
-                {/*    width={20}*/}
-                {/*    height={17}*/}
-                {/*    border="#fff"*/}
-                {/*  />*/}
-                {/*</div>*/}
-                <PickButton id={item.id} />
+                <PickButton
+                  id={item.id}
+                  wish={item.is_wish}
+                  li_width={20}
+                  li_height={17}
+                />
               </div>
             </div>
           );

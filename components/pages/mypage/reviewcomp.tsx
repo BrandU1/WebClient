@@ -5,8 +5,10 @@ import {
   WritableReviewInterface,
   WrittenReviewInterface,
 } from "../../../types/review";
+import ReviewModal from "@components/modal/reviewmodal";
 
 function ReviewComp() {
+  //작성가능 or 작성한 리뷰
   const [reviewTab, setReviewTab] = useState<number>(0);
   const getWrittenReview = () => {
     return client.get(`accounts/reviews`).then((res) => res.data);
@@ -24,6 +26,12 @@ function ReviewComp() {
   if (writtenData || writableData) {
     return <div></div>;
   }
+
+  //리뷰모달
+  const [reviewOpen, setReviewOpen] = useState<boolean>(false);
+  const handleReviewClose = () => {
+    setReviewOpen(false);
+  };
 
   return (
     <div className="pl-5 flex flex-col flex-1">
@@ -78,20 +86,20 @@ function ReviewComp() {
         {/*              // setModifyOpen(true);*/}
         {/*              // setModalIndex(list.id);*/}
         {/*            }}*/}
-        {/*            className="text-sm bg-white text-Main-deepblue border border-Main-deepblue rounded-lg py-2 px-5"*/}
+        {/*            className="text-sm bg-white text-main border border-main rounded-lg py-2 px-5"*/}
         {/*          >*/}
         {/*            리뷰수정*/}
         {/*          </button>*/}
         {/*        ) : (*/}
-        {/*          <button*/}
-        {/*            onClick={() => {*/}
-        {/*              // setReviewOpen(true);*/}
-        {/*              // setModalIndex(list.id);*/}
-        {/*            }}*/}
-        {/*            className="text-sm text-white bg-Main-deepblue rounded-lg py-2 px-5"*/}
-        {/*          >*/}
-        {/*            리뷰쓰기*/}
-        {/*          </button>*/}
+        <button
+          onClick={() => {
+            setReviewOpen(true);
+            // setModalIndex(list.id);
+          }}
+          className="text-sm text-white bg-main rounded-lg py-2 px-5"
+        >
+          리뷰쓰기
+        </button>
         {/*        )}*/}
         {/*      </div>*/}
         {/*    </div>*/}
@@ -143,7 +151,7 @@ function ReviewComp() {
         {/*              // setModifyOpen(true);*/}
         {/*              // setModalIndex(list.id);*/}
         {/*            }}*/}
-        {/*            className="text-sm bg-white text-Main-deepblue border border-Main-deepblue rounded-lg py-2 px-5"*/}
+        {/*            className="text-sm bg-white text-main border border-main rounded-lg py-2 px-5"*/}
         {/*          >*/}
         {/*            리뷰수정*/}
         {/*          </button>*/}
@@ -153,7 +161,7 @@ function ReviewComp() {
         {/*              // setReviewOpen(true);*/}
         {/*              // setModalIndex(list.id);*/}
         {/*            }}*/}
-        {/*            className="text-sm text-white bg-Main-deepblue rounded-lg py-2 px-5"*/}
+        {/*            className="text-sm text-white bg-main rounded-lg py-2 px-5"*/}
         {/*          >*/}
         {/*            리뷰수정*/}
         {/*          </button>*/}
@@ -163,6 +171,9 @@ function ReviewComp() {
         {/*  );*/}
         {/*})}*/}
       </div>
+      {reviewOpen && (
+        <ReviewModal title={"리뷰쓰기"} onClose={handleReviewClose} />
+      )}
     </div>
   );
 }

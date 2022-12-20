@@ -4,15 +4,22 @@ import Input from "@common/input";
 import SearchIcon from "@icons/search";
 import Link from "next/link";
 import OrderCancel from "@components/modal/ordercancel";
+import Refund from "@components/modal/refund";
 
 function PayInfo() {
   const [focused, setFocused] = useState<boolean>(false);
   const [period, setPeriod] = useState<number>(0);
 
   const [search, setSearch] = useState<string>("");
+  //주문취소 모달
   const [cancelModal, setCancelModal] = useState<boolean>(false);
   const cancelClose = () => {
     setCancelModal(false);
+  };
+  //교환/환불 모달
+  const [refundModal, setRefundModal] = useState<boolean>(false);
+  const refundClose = () => {
+    setRefundModal(false);
   };
 
   return (
@@ -101,11 +108,15 @@ function PayInfo() {
                 >
                   주문취소
                 </button>
-                <button className="w-24 h-9 bg-white text-main text-sm border border-main rounded-xl flex justify-center items-center">
+                <button
+                  className="w-24 h-9 bg-white text-main text-sm border border-main rounded-xl flex justify-center items-center"
+                  onClick={() => setRefundModal(true)}
+                >
                   교환/환불
                 </button>
               </div>
               {cancelModal && <OrderCancel onClose={cancelClose} />}
+              {refundModal && <Refund onClose={refundClose} />}
             </div>
           );
         })}
