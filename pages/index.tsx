@@ -1,47 +1,91 @@
-import Nav from "@components/header/nav";
-import SubMenu from "@components/header/Submenu";
 import Carousel from "@components/pages/home/carousel";
 import Product from "@components/pages/home/product";
-import Summary from "@components/pages/product/summary";
-import DetailMenu from "@components/pages/product/detailmenu";
-import Detail from "@components/pages/product/detail";
 import client from "@lib/api";
 import useAuth from "../hooks/useAuth";
-import { useQuery } from "@tanstack/react-query";
-import { ProductInterface } from "../types/product";
-import { BranduBaseResponse, HotDeal } from "../types/privacy";
+import { dehydrate, QueryClient } from "@tanstack/react-query";
+import { HotDeal } from "../types/privacy";
+import { GetServerSideProps } from "next";
+import useBranduQuery from "@hooks/useBranduQuery";
 
-export default function Home() {
+export interface EventBanner {
+  id: number;
+  title: string;
+  backdrop_image: string;
+  link: string;
+}
+
+const getCarousel = async () => {
+  const response = await client.get("events/carousel");
+  return response.data;
+};
+
+const getBanner = async () => {
+  const response = await client.get("events/banner");
+  return response.data;
+};
+
+const getHotDeal = async () => {
+  const response = await client.get("products/contents/hot-deal");
+  return response.data;
+};
+
+function Home() {
   const isAuthenticated = useAuth();
 
-  // const getAddresses = () => {
-  //   if (!isAuthenticated) return null;
-  //   return client
-  //     .get(`accounts/addresses`)
-  //     .then((res) => console.log(res.data));
-  // };
-  // getAddresses();
+  const {data: carouselData, isLoading: carouselLoading} = useBranduQuery<
+      EventBanner[]
+  >({
+    queryKey: ["carousel"],
+    queryFn: getCarousel,
+  });
 
-  const getHotDeal = () => {
-    return client.get(`products/contents/hot-deal`).then((res) => res.data);
-  };
-  const { data, isLoading } = useQuery<BranduBaseResponse<HotDeal[]>>(
-    ["hotDeal"],
-    getHotDeal
+  const {data: bannerData, isLoading: bannerLoading} = useBranduQuery<
+      EventBanner[]
+  >({
+    queryKey: ["banner"],
+    queryFn: getBanner,
+  });
+
+  const {data: hotDealData, isLoading} = useBranduQuery<HotDeal[]>(
+      {
+        queryKey: ["hotDeal"],
+        queryFn: getHotDeal
+      }
   );
+
+  if (!carouselData || !bannerData) {
+    return <div></div>;
+  }
 
   return (
-    <div className="main max-w-4xl m-auto">
-      <div className="carousel">
-        <Carousel />
+      <div className="main max-w-4xl m-auto">
+        <div className="carousel">
+          <Carousel
+              carouselData={carouselData?.results}
+              bannerData={bannerData?.results}
+          />
+        </div>
+        <div className="productList">
+          <Product
+              products={hotDealData?.results}
+              title="브랜뉴 오늘의 핫딜"
+              subTitle="오늘 하루만 싸게파는 초특가 상품"
+          />
+        </div>
       </div>
-      <div className="productList">
-        <Product
-          products={data?.results!}
-          title="브랜뉴 오늘의 핫딜"
-          subTitle="오늘 하루만 싸게파는 초특가 상품"
-        />
-      </div>
-    </div>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const queryClient = new QueryClient();
+  await queryClient.prefetchQuery(["banner"], getBanner);
+  await queryClient.prefetchQuery(["carousel"], getCarousel);
+
+  return {
+    props: {
+      dehydratedState: dehydrate(queryClient),
+    },
+  };
+};
+
+export default Home;
