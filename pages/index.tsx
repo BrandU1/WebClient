@@ -6,6 +6,7 @@ import { dehydrate, QueryClient } from "@tanstack/react-query";
 import { HotDeal } from "../types/privacy";
 import { GetServerSideProps } from "next";
 import useBranduQuery from "@hooks/useBranduQuery";
+import LoadingProgress from "@common/loading-progress";
 
 export interface EventBanner {
   id: number;
@@ -32,47 +33,46 @@ const getHotDeal = async () => {
 function Home() {
   const isAuthenticated = useAuth();
 
-  const {data: carouselData, isLoading: carouselLoading} = useBranduQuery<
-      EventBanner[]
+  const { data: carouselData, isLoading: carouselLoading } = useBranduQuery<
+    EventBanner[]
   >({
     queryKey: ["carousel"],
     queryFn: getCarousel,
   });
 
-  const {data: bannerData, isLoading: bannerLoading} = useBranduQuery<
-      EventBanner[]
+  const { data: bannerData, isLoading: bannerLoading } = useBranduQuery<
+    EventBanner[]
   >({
     queryKey: ["banner"],
     queryFn: getBanner,
   });
 
-  const {data: hotDealData, isLoading} = useBranduQuery<HotDeal[]>(
-      {
-        queryKey: ["hotDeal"],
-        queryFn: getHotDeal
-      }
-  );
+  const { data: hotDealData, isLoading } = useBranduQuery<HotDeal[]>({
+    queryKey: ["hotDeal"],
+    queryFn: getHotDeal,
+  });
 
   if (!carouselData || !bannerData) {
-    return <div></div>;
+    return <LoadingProgress />;
   }
 
   return (
-      <div className="main max-w-4xl m-auto">
-        <div className="carousel">
-          <Carousel
-              carouselData={carouselData?.results}
-              bannerData={bannerData?.results}
-          />
-        </div>
-        <div className="productList">
-          <Product
-              products={hotDealData?.results}
-              title="브랜뉴 오늘의 핫딜"
-              subTitle="오늘 하루만 싸게파는 초특가 상품"
-          />
-        </div>
+    <div className="main max-w-4xl m-auto">
+      <div className="carousel">
+        <Carousel
+          carouselData={carouselData?.results}
+          bannerData={bannerData?.results}
+        />
       </div>
+      <div className="productList">
+        {/* 프로덕트 다시 컴퍼넌트화 시키기 */}
+        <Product
+          products={hotDealData?.results}
+          title="브랜뉴 오늘의 핫딜"
+          subTitle="오늘 하루만 싸게파는 초특가 상품"
+        />
+      </div>
+    </div>
   );
 }
 

@@ -10,7 +10,7 @@ const SearchBox = ({}: SearchBoxProps) => {
     <div className="flex flex-col relative">
       <label
         htmlFor="search-box"
-        className="w-80 border-[1px] border-main rounded-xl flex flex-row group"
+        className="w-80 border-[1px] border-main rounded-xl flex flex-row group focus:outline-none"
       >
         <input
           id="search-box"
