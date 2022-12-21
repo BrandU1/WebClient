@@ -251,7 +251,7 @@ function ProductDetail({ id }: ProductDetailProps) {
         </div>
       </div>
       <DetailMenu />
-      <Detail />
+      <Detail productId={data?.results.id!} />
     </div>
   );
 }

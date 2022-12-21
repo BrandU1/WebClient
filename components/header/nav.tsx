@@ -51,6 +51,7 @@ function Nav() {
     }
   });
 
+  console.log(token);
   const openModal = () => {
     setModalOpen(true);
     setOpen(true);

@@ -1,6 +1,9 @@
-import { Inquiry } from "../../../types/privacy";
+import { BranduBaseResponse, Inquiry } from "../../../types/privacy";
 import { useState } from "react";
 import Addinquiry from "@components/modal/addinquiry";
+import client from "@lib/api";
+import { useQuery } from "@tanstack/react-query";
+import { FaqInterface, MainInfoInterface } from "../../../types/service";
 
 interface ServiceProps {
   inquiries: Inquiry[];
@@ -12,6 +15,24 @@ function Service({ inquiries }: ServiceProps) {
   const handleInquiryClose = () => {
     setInquiry(false);
   };
+
+  const getMainInfo = () => {
+    return client.get("services/main_infos").then((res) => res.data);
+  };
+  const { data: mainInfoData, isLoading: mainInfoIsLoading } = useQuery<
+    BranduBaseResponse<MainInfoInterface[]>
+  >(["inquiry"], getMainInfo);
+
+  const getFaq = () => {
+    return client.get("services/faqs").then((res) => res.data);
+  };
+  const { data: faqData, isLoading: faqIsLoading } = useQuery<
+    BranduBaseResponse<FaqInterface[]>
+  >(["inquiry"], getFaq);
+
+  if (mainInfoIsLoading || faqIsLoading) {
+    return <div>로딩 중입니다.</div>;
+  }
 
   return (
     <div className=" m-auto ">
@@ -26,22 +47,20 @@ function Service({ inquiries }: ServiceProps) {
             <p className="text-xs text-notice">전체보기</p>
           </div>
           <div className="text-sm py-3 space-y-2 text-subContent">
-            <p>브랜뉴 이용 안내</p>
-            <p>배송 / 환불 관련 안내</p>
-            <p>상품 판매등록 안내</p>
-            <p>커스터마이징 안내</p>
+            {mainInfoData?.results?.map((info, index) => {
+              return <p key={index}>{info.title}</p>;
+            })}
           </div>
         </div>
         <div className="right">
           <div className="flex justify-between items-center">
-            <h3 className="text-base">서비스 주요 안내</h3>
+            <h3 className="text-base">자주 묻는 질문</h3>
             <p className="text-xs text-notice">전체보기</p>
           </div>
           <div className="text-sm py-3 space-y-2 text-subContent">
-            <p>모바일에서도 커스터마이징을 할 수 있나요?</p>
-            <p>주문 후 취소시 수수료가 부과되나요?</p>
-            <p>결제 영수증은 어떻게 확인하나요?</p>
-            <p>박재현은 천재인가요?</p>
+            {faqData?.results?.map((faq, index) => {
+              return <p key={index}>{faq.title}</p>;
+            })}
           </div>
         </div>
       </div>
