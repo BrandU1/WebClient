@@ -85,8 +85,8 @@ function ProfileComp({ profile }: ProfileForm) {
               <Image
                 className="rounded-xl"
                 src={`http://192.168.0.2/${profile.backdrop_image}`}
-                height={105}
-                width={100}
+                height={200}
+                width={674}
                 decoding="async"
                 alt={"profile"}
               />
@@ -95,8 +95,8 @@ function ProfileComp({ profile }: ProfileForm) {
               (!backBase64 ? (
                 <>
                   <svg
-                    width="42"
-                    height="46"
+                    width="674"
+                    height="200"
                     viewBox="0 0 42 46"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
@@ -114,8 +114,8 @@ function ProfileComp({ profile }: ProfileForm) {
                 <Image
                   className="rounded-xl"
                   src={backBase64}
-                  height={105}
-                  width={100}
+                  height={200}
+                  width={674}
                   decoding="async"
                   alt={"profile"}
                 />

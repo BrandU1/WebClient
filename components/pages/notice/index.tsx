@@ -1,25 +1,40 @@
+import client from "@lib/api";
+import { useQuery } from "@tanstack/react-query";
+import { BranduBaseResponse } from "../../../types/privacy";
+import { NoticeInterface } from "../../../types/service";
+import { dividerClasses } from "@mui/material";
+
 function Notice() {
+  const getNotice = () => {
+    return client.get(`services/notices`).then((res) => res.data);
+  };
+
+  const { data, isLoading } = useQuery<BranduBaseResponse<NoticeInterface[]>>(
+    ["notice"],
+    getNotice
+  );
+
+  if (isLoading) {
+    return <div>데이터를 불러오는 중입니다</div>;
+  }
+
   return (
     <div className=" m-auto ">
       <div>
         <h2 className="py-5 font-bold text-xl">공지사항</h2>
-        <div className="border-[1px] border-black" />
+        <div className="border-b-[1px] border-black" />
       </div>
       <div className="contents">
-        {[1, 2, 3, 4, 5].map((res, idx) => {
+        {data?.results?.map((notice, index) => {
           return (
-            <>
-              <div
-                key={idx}
-                className="flex items-center justify-between px-2 py-4"
-              >
-                <h3 className="text-base">
-                  [공지] 브랜뉴 이용약관 계정 안내 (7.18 ~ )
-                </h3>
-                <p className="text-xs">2022/07/15</p>
-              </div>
+            <div
+              key={index}
+              className="flex items-center justify-between px-2 py-4"
+            >
+              <h2 className="text-base">{notice.title}</h2>
+              <p className="text-xs">{notice.created}</p>
               <div className="border-[1px] border-[#EDEDED]" />
-            </>
+            </div>
           );
         })}
       </div>

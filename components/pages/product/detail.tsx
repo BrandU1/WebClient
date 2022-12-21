@@ -5,8 +5,16 @@ import ProductReview from "./productreview";
 import Star from "@common/star";
 import ModalFrame from "@common/modalframe";
 import * as React from "react";
+import client from "@lib/api";
+import { useQuery } from "@tanstack/react-query";
+import { productReviewInterface } from "../../../types/review";
+import { BranduBaseResponse } from "../../../types/privacy";
 
-function Detail() {
+interface DetailProps {
+  productId: number;
+}
+
+function Detail({ productId }: DetailProps) {
   const [infoShow, setInfoShow] = useState<boolean>(false);
   const contentSpace = useRef(null);
   const [reviewShow, setReviewShow] = useState<boolean>(false); //리뷰 리스트 펼치기
@@ -22,7 +30,21 @@ function Detail() {
     setReviewDetailOpen(false);
   };
 
-  const data = [1, 2, 3, 4, 5, 6]; //리뷰 개수
+  const getProductReviews = () => {
+    return client.get(`/product/${productId}/reviews`).then((res) => res.data);
+  };
+
+  const { data, isLoading } = useQuery<
+    BranduBaseResponse<productReviewInterface[]>
+  >(["productReview"], getProductReviews);
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center">
+        <p>API 연동 중입니다. 새로고침 후에도 문제가 발생 시 문의바랍니다.</p>
+      </div>
+    );
+  }
 
   return (
     <div className=" m-auto flex flex-col justify-center items-center mt-7">
@@ -40,7 +62,7 @@ function Detail() {
             }
           >
             <Image
-              src={"/dummy/mouse.png"}
+              src={"/logo/bag.png"}
               width={780}
               height={2000}
               alt={"infoImg"}
@@ -136,8 +158,8 @@ function Detail() {
           <span className="text-xl">(5)</span>
         </div>
         <div className="flex flex-col mt-[35px]">
-          {data?.length <= 3 || reviewShow
-            ? data?.map((review, idx) => {
+          {data?.results?.length! <= 3 || reviewShow
+            ? data?.results.map((review, idx) => {
                 return (
                   <div
                     key={idx}
@@ -146,7 +168,7 @@ function Detail() {
                       // getModalId(idx);
                     }}
                   >
-                    <ProductReview />
+                    <ProductReview elements={review} />
                   </div>
                 );
               })
@@ -159,8 +181,7 @@ function Detail() {
                       // getModalId(idx);
                     }}
                   >
-                    {/*<ProductReview element={data?.results[preview]} />*/}
-                    <ProductReview />
+                    <ProductReview elements={preview} />
                   </div>
                 );
               })}
@@ -193,7 +214,7 @@ function Detail() {
                     </div>
                   </div>
                   <span className="content text-xs text-subContent mt-2">
-                    {/*{element?.description}*/}
+                    {data?.results.length}
                     더워요
                   </span>
                   <div className="reviewImg flex flex-row overflow-x-scroll space-x-5 mt-5">
@@ -210,8 +231,8 @@ function Detail() {
             />
           ) : null}
         </div>
-        {data?.length > 0 ? (
-          data?.length > 3 ? (
+        {data?.results?.length! > 0 ? (
+          data?.results?.length! > 3 ? (
             <div>
               <div
                 className={`openBtn absolute inset-x-80 -bottom-1 ${
@@ -286,7 +307,37 @@ function Detail() {
       >
         <span className="flex justify-center font-bold text-xl">배송/환불</span>
         <div className="m-auto w-[780px] h-[1000px] bg-[#D9D9D9] mt-[10px]">
-          <div className="justify-center items-center">배송환불안내</div>
+          {/*<div className="justify-center items-center">배송환불안내</div>*/}
+          <p>
+            주의사항 배경이 투명한 PNG의 경우, CMYK 색상모드로 웹용(Save for
+            Web) 저장해 주세요. 배경이 꽉 찬 JPG의 경우, RGB 색상모드로 저장해
+            주세요. 이미지 크기는 최소 2500~3500px / 해상도는 150dpi 이상으로
+            제작해 주세요. 상품마다 이미지 크기가 다르므로, 해당 상품의 이미지
+            가이드를 확인해 주세요. 작은 원본 이미지를 사이즈 규격에 맞게 임의로
+            크게 확대할 경우 인쇄 시 화질이 깨질 수 있습니다. 상품 실측 사이즈를
+            반드시 확인해 주세요. 인쇄를 원하시는 위치가 있을 시 [상품 제작
+            요청사항]에 남겨주시거나, 1:1 상담 또는
+            고객센터(ceo@themealways.com)로 메일 주세요. 모니터, 핸드폰에 따라
+            실제 인쇄 색상과 다르게 보일 수 있습니다. 교환/환불 불가 사항 마플의
+            모든 상품은 고객 주문에 따라 개별 제작되는 방식으로 단순 변심을
+            포함, 아래의 경우에는 교환 / 환불이 불가합니다. - 디자인 시안 색상의
+            차이 프린팅 방식과 원단 재질에 따른 경우의 수가 다양하므로 인쇄 후
+            모니터, 혹은 종이 출력물과 색상 차이가 발생할 수 있습니다. - 인쇄
+            위치 및 크기의 차이 제품 재질에 따른 특성의 차이와 대부분의 인쇄가
+            수작업으로 이루어진다는 점에서 시안과 실제 상품의 인쇄 위치 및
+            크기의 오차가 발생할 수 있습니다. 인쇄 위치 및 크기를 별도로 [요청]
+            하지 않은 주문건에 대한 교환 또는 환불은 불가합니다. - 추가 주문 시
+            기존 상품 색상과의 컬러 차이 상품 컬러 및 사이즈는 제작 시기별,
+            생산시즌별로 원단 컬러와 사이즈 차이가 발생할 수 있습니다. - 화학
+            제품 사용으로 인한 손상 우레탄 전사(PU Heat Transfer) 인쇄 제품에
+            솔벤트와 같은 용해력이 있는 용매를 사용한 향수를 직접적으로 분사할
+            경우 인쇄 부분이 손상될 수 있으니 주의해 주세요. 교환/환불 기간
+            물품에 문제 되는 사항에 대해서는 수령 후 7일 이내 이메일
+            ceo@themealways.com 또는 고객센터로 연락주셔야 가능합니다. ★ 주문
+            완료 후 상품 및 이미지 변경을 원하실 경우 [제작준비중] 상태에서만
+            변경이 가능하며 [제작중]에는 변경 및 취소가 불가합니다. 변경을
+            원하시는 경우 1:1 상담 및 카톡 또는 고객센터를 통해 문의 바랍니다.
+          </p>
         </div>
       </div>
     </div>
