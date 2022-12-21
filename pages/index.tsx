@@ -1,4 +1,3 @@
-import Carousel from "@components/pages/home/carousel";
 import Product from "@components/pages/home/product";
 import client from "@lib/api";
 import useAuth from "../hooks/useAuth";
@@ -7,6 +6,8 @@ import { HotDeal } from "../types/privacy";
 import { GetServerSideProps } from "next";
 import useBranduQuery from "@hooks/useBranduQuery";
 import LoadingProgress from "@common/loading-progress";
+import Slider from "react-slick";
+import Image from "next/image";
 
 export interface EventBanner {
   id: number;
@@ -28,6 +29,17 @@ const getBanner = async () => {
 const getHotDeal = async () => {
   const response = await client.get("products/contents/hot-deal");
   return response.data;
+};
+
+const carouselSettings = {
+  dots: false,
+  infinite: true,
+  speed: 500,
+  slidesToShow: 1,
+  slidesToScroll: 1,
+  arrows: false,
+  autoplay: true,
+  centerMode: false,
 };
 
 function Home() {
@@ -58,11 +70,45 @@ function Home() {
 
   return (
     <div className="main max-w-4xl m-auto">
-      <div className="carousel">
-        <Carousel
-          carouselData={carouselData?.results}
-          bannerData={bannerData?.results}
-        />
+      {/* TODO: 캐러셀 높이 조절하기 */}
+      <div className="m-auto flex py-5 justify-between space-x-10 m-auto min-h-[500px]">
+        <div className="relative w-2/3 ">
+          <Slider {...carouselSettings}>
+            {carouselData?.results.map((item, index) => {
+              return (
+                <div key={index} className="w-full">
+                  <Image
+                    className="w-full border-[1px] border-subContent rounded-2xl"
+                    src={item.backdrop_image}
+                    alt="mouse"
+                    width={600}
+                    height={300}
+                  />
+
+                  <div className="relative z-20 bottom-8 float-right right-3 text-2xl">
+                    <p className="px-[9px] h-5 bg-[#000]  text-center rounded-xl text-sm font-bold text-white opacity-50 flex items-center">
+                      {index + 1} / {carouselData?.results.length}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
+          </Slider>
+        </div>
+        <div className="w-1/3 relative  border-[1px] border-subContent rounded-2xl">
+          {bannerData?.results.map((item, index) => {
+            return (
+              <div key={index} className="w-full">
+                <Image
+                  className="relative w-full rounded-2xl aspect-[300/500]"
+                  src={item.backdrop_image}
+                  alt="mouse"
+                  layout="fill"
+                />
+              </div>
+            );
+          })}
+        </div>
       </div>
       <div className="productList">
         {/* 프로덕트 다시 컴퍼넌트화 시키기 */}
