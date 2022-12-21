@@ -2,10 +2,11 @@ import * as React from "react";
 import Image from "next/image";
 import Star from "@common/star";
 
-function ProductReview() {
-  // const { element } = props; // 리뷰 데이터
-  // const [_, setDetailModalOpen] = useState<boolean>(false);
+interface ReviewProps {
+  elements: any;
+}
 
+function ProductReview({ elements }: ReviewProps) {
   return (
     <div
       className="w-[780px] h-[140px] rounded-lg bg-[#F6F6F6] flex justify-between mb-5"
@@ -33,8 +34,7 @@ function ProductReview() {
           </div>
         </div>
         <span className="content text-xs text-subContent mt-2">
-          {/*{element?.description}*/}
-          더워요
+          {elements?.comment}
         </span>
       </div>
       <div className="rightImg pt-5 pr-5 flex space-x-[10px] pl-[55px]">

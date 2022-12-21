@@ -16,3 +16,14 @@ export interface WritableReviewInterface {
   count: number;
   created: string;
 }
+
+export interface productReviewInterface {
+  id: number;
+  profile: number;
+  order_product: number;
+  product: string;
+  product_name: string;
+  created: string;
+  star: number;
+  comment: string;
+}

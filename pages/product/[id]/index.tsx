@@ -31,7 +31,7 @@ function ProductDetail() {
     <div>
       <Summary productInfo={data?.results!} />
       <DetailMenu />
-      <Detail />
+      <Detail productId={data?.results.id!} />
     </div>
   );
 }
