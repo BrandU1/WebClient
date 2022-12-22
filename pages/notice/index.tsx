@@ -1,4 +1,4 @@
-import Notice from "@components/pages/notice";
+import Notice from "@components/pages/service/noticecomp";
 
 function NoticePage() {
   return (

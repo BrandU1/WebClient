@@ -94,7 +94,12 @@ function Search({ searchResult }: SearchProps) {
                 {/*    border="#fff"*/}
                 {/*  />*/}
                 {/*</div>*/}
-                <PickButton id={item.id} />
+                <PickButton
+                  id={item.id}
+                  wish={item.is_wish}
+                  li_height={17}
+                  li_width={20}
+                />
               </div>
             </div>
           );
