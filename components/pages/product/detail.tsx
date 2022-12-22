@@ -4,6 +4,9 @@ import Image from "next/image";
 import Star from "@common/star";
 import { Review } from "../../../pages/product/[id]";
 import { getImageRatio } from "@lib/image";
+import client from "@lib/api";
+import ReviewList from "@components/pages/product/reviewlist";
+import { Link } from "react-scroll";
 
 interface DetailProps {
   mainImage: string[];
@@ -100,7 +103,6 @@ function ProductDetailBox({ mainImage, reviews }: DetailProps) {
       </div>
       {/* 제작 가이드 하단선 */}
       <div id="3" className="w-screen h-[1px] bg-gray" />
-      {/* TODO: 리뷰 조회 가능하게 수정 */}
       <div className="review flex flex-col justify-center items-center relative">
         <h2 className="flex font-bold text-xl pt-8">리뷰</h2>
         <div className="flex flex-row pt-6">
@@ -114,6 +116,67 @@ function ProductDetailBox({ mainImage, reviews }: DetailProps) {
           <span className="text-xl ml-3">0</span>
           <span className="text-xl">(0)</span>
         </div>
+        <div className="flex flex-col mt-[35px]">
+          {reviews?.length <= 2 || reviewShow
+            ? reviews?.map((review, idx) => {
+                return (
+                  <div
+                    key={idx}
+                    onClick={() => {
+                      setReviewDetailOpen(true);
+                    }}
+                  >
+                    <ReviewList review={review} />
+                  </div>
+                );
+              })
+            : [1, 2].map((preview, idx) => {
+                return (
+                  <div
+                    key={idx}
+                    onClick={() => {
+                      setReviewDetailOpen(true);
+                    }}
+                  >
+                    <ReviewList review={reviews[preview]} />
+                  </div>
+                );
+              })}
+        </div>
+        {reviews.length >= 2 && (
+          <div>
+            <div
+              className={`openbutton absolute inset-x-80 -bottom-1 ${
+                reviewShow ? "invisible" : " "
+              }`}
+            >
+              <button
+                className="w-36 h-11 bg-Main-deepblue appearance-none cursor-pointer flex flex-row items-center justify-center text-white rounded-lg"
+                onClick={() => setReviewShow(!reviewShow)}
+              >
+                <div className="flex flex-row justify-center items-center">
+                  <span className="mr-1 flex">더보기</span>
+                </div>
+              </button>
+            </div>
+            <div
+              className={`closebutton absolute inset-x-80 -bottom-1 ${
+                reviewShow ? " " : "invisible"
+              }`}
+            >
+              <Link to="3" offset={-150} spy={true}>
+                <button
+                  className="w-36 h-11 bg-Main-deepblue appearance-none cursor-pointer flex flex-row items-center justify-center text-white rounded-lg"
+                  onClick={() => setReviewShow(!reviewShow)}
+                >
+                  <div className="openbutton flex flex-row justify-center items-center">
+                    <span className="mr-1 flex">닫기</span>
+                  </div>
+                </button>
+              </Link>
+            </div>
+          </div>
+        )}
         {reviews.length === 0 && (
           <span className="my-5 font-bold text-main text-lg">
             아직 작성된 리뷰가 없습니다.

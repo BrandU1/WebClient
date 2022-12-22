@@ -117,3 +117,15 @@ export interface BranduBaseResponse<T> {
   results: T;
   error?: T;
 }
+
+interface Point {
+  point: number;
+  point_history: PointHistory[];
+}
+interface PointHistory {
+  id: number;
+  memo: string;
+  point: number;
+  is_use: boolean;
+  created: string;
+}

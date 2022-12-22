@@ -60,6 +60,12 @@ export interface Product {
 export interface Review {
   id: number;
   star: number;
+  profile: number;
+  order_product: number;
+  product: string;
+  product_name: string;
+  created: string;
+  comment: string;
 }
 
 interface ProductDetailProps {
@@ -125,7 +131,7 @@ function ProductDetail({ id }: ProductDetailProps) {
 
   const onClick = async () => {
     if (isAuthenticated) {
-      return await router.push(`/products/${id}/custom`);
+      return await router.push(`/product/${id}/custom`);
     } else {
       setIsLogin(true);
     }
@@ -175,8 +181,8 @@ function ProductDetail({ id }: ProductDetailProps) {
           <div className="w-96 h-96">
             <Image
               className="rounded-xl"
-              src={productResponse?.results.images[shownImage].image!}
-              alt={productResponse?.results.images[shownImage].image!}
+              src={productResponse?.results.images[shownImage]?.image!}
+              alt={productResponse?.results.images[shownImage]?.image!}
               layout="fill"
             />
           </div>

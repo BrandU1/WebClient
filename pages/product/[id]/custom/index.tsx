@@ -28,6 +28,7 @@ import { GetServerSideProps } from "next";
 import { dehydrate, QueryClient } from "@tanstack/react-query";
 import useBranduQuery from "@hooks/useBranduQuery";
 import { getProduct } from "../index";
+import CustomIcon from "@components/pages/product/customicon";
 
 export enum CanvasState {
   DRAG = "DRAG",
@@ -75,16 +76,13 @@ function ProductCustom({ id }: ProductCustomProps): ReactElement {
   };
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [canvasState, setCanvasState] = useState<CanvasState>(CanvasState.DRAW);
+
   const [selectOpen, setSelectOpen] = useState<boolean>(false);
-  const [step, setStep] = useRecoilState(canvasHistoryIndex);
-  const [undoOrRedo, setUndoOrRedo] = useRecoilState(canvasUndoOrRedo);
-  const historiesLength = useRecoilValue(canvasHistoriesLength);
-  const [text, setText] = useRecoilState(canvasText);
+  const handleSelectOpen = () => {
+    setSelectOpen(true);
+  };
+
   const { size, images, imgBase64s, handleChangeFile } = useImage();
-  const [action, setAction] = useRecoilState(canvasAction);
-  const [actionSelected, setActionSelected] =
-    useRecoilState(canvasActionSelected);
 
   const imgSelectEl = useRef<HTMLDivElement>(null);
   const handleSelectModal = (e: any) => {
@@ -96,183 +94,10 @@ function ProductCustom({ id }: ProductCustomProps): ReactElement {
     setSelectOpen(false);
   };
 
-  const undo = () => {
-    if (step > 0) {
-      setStep((prev) => prev - 1);
-      setUndoOrRedo(true);
-    }
-  };
-
-  const redo = () => {
-    if (step < historiesLength - 1) {
-      setStep((prev) => prev + 1);
-      setUndoOrRedo(true);
-    }
-  };
-
-  const moveDown = () => {
-    setActionSelected(true);
-    setAction(CanvasActionType.MOVE_DOWN);
-  };
-
-  const moveUp = () => {
-    setActionSelected(true);
-    setAction(CanvasActionType.MOVE_UP);
-  };
-
-  const moveLeft = () => {
-    setActionSelected(true);
-    setAction(CanvasActionType.MOVE_LEFT);
-  };
-
-  const moveRight = () => {
-    setActionSelected(true);
-    setAction(CanvasActionType.MOVE_RIGHT);
-  };
-
-  const moveHorizontalCenter = () => {
-    setActionSelected(true);
-    setAction(CanvasActionType.MOVE_HORIZONTAL_CENTER);
-  };
-
-  const moveVerticalCenter = () => {
-    setActionSelected(true);
-    setAction(CanvasActionType.MOVE_VERTICAL_CENTER);
-  };
-
-  const moveForward = () => {
-    setActionSelected(true);
-    setAction(CanvasActionType.MOVE_FORWARD);
-  };
-
-  const moveBackward = () => {
-    setActionSelected(true);
-    setAction(CanvasActionType.MOVE_BACKWARD);
-  };
-
-  const createText = () => {
-    setText((prev) => [...prev, "text"]);
-  };
-
   return (
     <>
       <div className="flex flex-col justify-center items-center">
-        <div className="flex flex-row justify-center my-4">
-          {/* TODO: 아이콘 이미지들 전부 컴퍼넌트화 */}
-          <div className="flex flex-row space-x-[18px]">
-            <div onClick={undo}>
-              <BackButton />
-            </div>
-            <div onClick={redo}>
-              <ForwardButton />
-            </div>
-            <div onClick={() => setCanvasState(CanvasState.DRAG)}>
-              <MoveButton />
-            </div>
-            <div onClick={() => setCanvasState(CanvasState.DRAW)}>
-              <PencilButton />
-            </div>
-            <div onClick={createText}>
-              <TextButton />
-            </div>
-
-            <label htmlFor="removeBg">
-              <ImageButton />
-            </label>
-            <input
-              onClick={(event) => {
-                setCanvasState(CanvasState.IMAGE);
-                handleChangeFile(event);
-              }}
-              type="file"
-              id="removeBg"
-              className="hidden border rounded-xl bg-main w-[218px] h-[45px] text-white font-bold tet-sm flex justify-center items-center"
-            />
-            <Image
-              onClick={() => {
-                setSelectOpen(true);
-              }}
-              src={"/custom/figureBtn.svg"}
-              alt={"imageBtn"}
-              width={18}
-              height={18}
-            />
-          </div>
-          <div className="sortTool flex flex-row ml-[56px] space-x-4">
-            <Image
-              onClick={moveDown}
-              src={"/custom/bottomLine.svg"}
-              alt={"bottomLine"}
-              width={18}
-              height={18}
-            />
-            <Image
-              onClick={moveLeft}
-              src={"/custom/leftLine.svg"}
-              alt={"leftLine"}
-              width={18}
-              height={18}
-            />
-            <Image
-              onClick={moveRight}
-              src={"/custom/rightLine.svg"}
-              alt={"rightLine"}
-              width={18}
-              height={18}
-            />
-            <Image
-              onClick={moveUp}
-              src={"/custom/topLine.svg"}
-              alt={"topLine"}
-              width={18}
-              height={18}
-            />
-            <Image
-              onClick={moveHorizontalCenter}
-              src={"/custom/centerLine.svg"}
-              alt={"centerLine"}
-              width={16}
-              height={18}
-            />
-            <Image
-              onClick={moveVerticalCenter}
-              src={"/custom/middleLine.svg"}
-              alt={"middleLine"}
-              width={18}
-              height={16}
-            />
-            <Image
-              src={"/custom/symmetryLR.svg"}
-              alt={"symmetryLR"}
-              width={20}
-              height={18}
-            />
-            <Image
-              src={"/custom/symmetryTB.svg"}
-              alt={"symmetryTB"}
-              width={18}
-              height={20}
-            />
-            <Image
-              src={"/custom/leftAlign.svg"}
-              alt={"leftAlign"}
-              width={18}
-              height={18}
-            />
-            <Image
-              src={"/custom/centerAlign.svg"}
-              alt={"centerAlign"}
-              width={18}
-              height={18}
-            />
-            <Image
-              src={"/custom/rightAlign.svg"}
-              alt={"rightAlign"}
-              width={18}
-              height={18}
-            />
-          </div>
-        </div>
+        <CustomIcon handleSelect={handleSelectOpen} />
         <div className="w-screen h-[1px] bg-gray" />
         <div className="flex flex-row m-auto mt-3 z-30">
           <Canvas
