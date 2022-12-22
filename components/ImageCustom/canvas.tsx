@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import { CanvasState } from "../../pages/product/[id]/custom/custom";
 import { fabric } from "fabric";
 import {
   canvasAction,
@@ -13,10 +12,10 @@ import {
 import { useRecoilState } from "recoil";
 
 const initialPosition = {
-  y: 180,
-  x: 125,
-  height: 150,
-  width: 250,
+  y: 230,
+  x: 160,
+  height: 200,
+  width: 180,
 };
 
 interface CanvasProps {
@@ -24,17 +23,11 @@ interface CanvasProps {
   width: number;
   height: number;
   backgroundImage: string;
-  state: CanvasState;
+  // state: CanvasState;
   images: string[];
 }
 
-const Canvas = ({
-  backgroundImage,
-  width,
-  height,
-  state,
-  images,
-}: CanvasProps) => {
+const Canvas = ({ backgroundImage, width, height, images }: CanvasProps) => {
   const [canvas, setCanvas] = useState<fabric.Canvas>();
   const [usedImages, setUsedImages] = useState<number[]>([]);
   const fabricRef = useRef<any>(null);
@@ -98,14 +91,11 @@ const Canvas = ({
   }, []);
 
   useEffect(() => {
-    fabricRef.current.setBackgroundImage(
-      backgroundImage,
-      fabricRef.current.renderAll.bind(fabricRef.current),
-      {
-        width,
-        height,
-      }
-    );
+    if (backgroundImage) {
+      canvas?.setBackgroundImage(backgroundImage, () => {
+        canvas?.renderAll();
+      });
+    }
   }, [backgroundImage]);
 
   /* Action 처리 */
@@ -169,6 +159,7 @@ const Canvas = ({
 
   /* 이미지 추가 */
   useEffect(() => {
+    console.log(backgroundImage);
     images.forEach((src, index) => {
       if (usedImages.includes(index)) {
         return;
@@ -180,7 +171,7 @@ const Canvas = ({
         canvas!.renderAll();
       });
     });
-  }, [images]);
+  }, [images, backgroundImage]);
 
   /* Undo 혹은 Redo 처리 */
   useEffect(() => {
@@ -226,7 +217,6 @@ const Canvas = ({
       height={500}
       ref={canvasRef}
       style={{
-        // backgroundImage: `url(${backgroundImage})`,
         backgroundRepeat: "no-repeat",
         backgroundPosition: "center",
         backgroundSize: "contain",

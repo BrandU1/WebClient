@@ -1,7 +1,6 @@
 import { HotDeal } from "../../../types/privacy";
 import Link from "next/link";
 import Image from "next/image";
-import HeartIcon from "@icons/heart";
 import { useEffect, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import client from "@lib/api";
@@ -60,7 +59,7 @@ function Store({ store }: storeProps) {
                 <div className="h-60 relative">
                   <Image
                     className="rounded-2xl"
-                    src={`http://192.168.0.2${item.backdrop_image}`}
+                    src={item.backdrop_image}
                     alt="list"
                     layout="fill"
                   />

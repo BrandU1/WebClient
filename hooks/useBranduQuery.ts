@@ -2,9 +2,9 @@ import { QueryClient, useQuery } from "@tanstack/react-query";
 import { QueryKey } from "@tanstack/query-core";
 import { BranduBaseResponse } from "../types/privacy";
 
-interface BranduQueryProps {
+interface BranduQueryProps<T> {
   queryKey: QueryKey;
-  queryFn: () => Promise<any>;
+  queryFn: () => Promise<BranduBaseResponse<T>>;
 }
 
 interface BranduQueryResult<T> {
@@ -17,7 +17,7 @@ interface BranduQueryResult<T> {
 function useBranduQuery<T>({
   queryKey,
   queryFn,
-}: BranduQueryProps): BranduQueryResult<T> {
+}: BranduQueryProps<T>): BranduQueryResult<T> {
   const queryClient = new QueryClient();
   const cachedData = queryClient.getQueryData<BranduBaseResponse<T>>(queryKey);
   if (cachedData) {

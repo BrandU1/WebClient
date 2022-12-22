@@ -6,7 +6,7 @@ import HamburgerIcon from "@icons/hamburger";
 import ProfileIcon from "@icons//profile";
 import BranduIcon from "@icons/brandu";
 import CloseIcon from "@icons/close";
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef, useState } from "react";
 import LoginModal from "@components/login";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -15,6 +15,8 @@ import GOTOMyPage from "@components/login/gomypage";
 import client from "@lib/api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { BranduBaseResponse, History } from "../../types/privacy";
+import { useRecoilState } from "recoil";
+import { isLoginModalOpen } from "../../recoil/base";
 
 function Nav() {
   const [focused, setFocused] = useState<boolean>(false);
@@ -42,7 +44,7 @@ function Nav() {
   const [input, setInput] = useState<string>("");
 
   // Login 관련
-  const [modalOpen, setModalOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useRecoilState(isLoginModalOpen);
 
   const [token, setToken] = useState<any>(null);
   useEffect(() => {
@@ -214,7 +216,7 @@ function Nav() {
               }`}
             >
               <input
-                className={`bg-transparent text-main w-full h-fit rounded-xl text-sm font-bold border-main  focus:outline-0 px-2`}
+                className={`bg-transparent text-main w-full h-fit rounded-xl text-sm font-bold border-main focus:outline-none px-2`}
                 onChange={(e: any) => {
                   setInput(e.target.value);
                 }}

@@ -1,6 +1,5 @@
-import { useRouter } from "next/router";
 import type { ReactElement } from "react";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import Badge from "@atoms/badge";
 import Pick from "@common/pick";
 import Image from "next/image";
@@ -25,6 +24,10 @@ import {
   canvasUndoOrRedo,
 } from "../../../../recoil/canvas";
 import client from "@lib/api";
+import { GetServerSideProps } from "next";
+import { dehydrate, QueryClient } from "@tanstack/react-query";
+import useBranduQuery from "@hooks/useBranduQuery";
+import { getProduct } from "../index";
 
 export enum CanvasState {
   DRAG = "DRAG",
@@ -46,24 +49,30 @@ export interface Product {
   category: number;
   view_count: number;
 }
+
 export interface Tags {
   id: number;
   name: string;
 }
+
 export interface CustomProps {
   basketList: Product;
 }
 
-function Custom(): ReactElement {
-  const [customData, setCustomData] = useState<CustomProps>();
+interface ProductCustomProps {
+  id: number;
+}
+
+function ProductCustom({ id }: ProductCustomProps): ReactElement {
+  const { data: productResponse, isLoading: productLoading } =
+    useBranduQuery<Product>({
+      queryKey: ["product", id],
+      queryFn: () => getProduct(id),
+    });
 
   const goBasket = (id: any) => {
     client.post(`accounts/baskets/${id}`).then((res) => res.data);
   };
-
-  useEffect(() => {
-    setCustomData(JSON.parse(localStorage.getItem("recoil-persist") ?? ""));
-  }, []);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [canvasState, setCanvasState] = useState<CanvasState>(CanvasState.DRAW);
@@ -145,13 +154,12 @@ function Custom(): ReactElement {
     setText((prev) => [...prev, "text"]);
   };
 
-  console.log(customData?.basketList?.backdrop_image);
-
   return (
-    <div>
-      <div className="flex flex-col">
-        <div className="customItemList flex flex-row justify-center border-b border-gray w-full mt-4 pb-4">
-          <div className="DrawTool  flex flex-row space-x-[18px]">
+    <>
+      <div className="flex flex-col justify-center items-center">
+        <div className="flex flex-row justify-center my-4">
+          {/* TODO: 아이콘 이미지들 전부 컴퍼넌트화 */}
+          <div className="flex flex-row space-x-[18px]">
             <div onClick={undo}>
               <BackButton />
             </div>
@@ -265,24 +273,30 @@ function Custom(): ReactElement {
             />
           </div>
         </div>
+        <div className="w-screen h-[1px] bg-gray" />
         <div className="flex flex-row m-auto mt-3 z-30">
           <Canvas
             canvasRef={canvasRef}
             images={images}
-            backgroundImage={`${customData?.basketList?.backdrop_image}`}
+            backgroundImage={`${productResponse?.results.backdrop_image}`}
             width={500}
             height={500}
-            state={canvasState}
           />
-          <div className="rightSide flex  flex-col mt-5 ml-5">
+          <div className="flex  flex-col m-5">
             <div className="flex flex-row justify-between">
               <div className="flex flex-col">
                 <span className="productName text-base">
-                  {customData?.basketList?.name}
+                  {productResponse?.results.name}
                 </span>
-                <span className="productHashtag text-[10px] text-subContent">
-                  #후드티 #브랜뉴 #데일리 #남친룩
-                </span>
+                <div className="flex flex-row my-1 space-x-1">
+                  {productResponse?.results.tags.map((tag, index) => {
+                    return (
+                      <span className="text-subContent text-xs cursor-pointer">
+                        #{tag.name}
+                      </span>
+                    );
+                  })}
+                </div>
               </div>
               <Badge color={"red"} />
             </div>
@@ -290,7 +304,7 @@ function Custom(): ReactElement {
             <div className="price ">
               <div className="flex justify-end">
                 <span className="font-bold text-lg">
-                  {customData?.basketList?.price.toLocaleString()}
+                  {productResponse?.results.price.toLocaleString()}
                 </span>
                 <span className="text=sm ml-1">원</span>
               </div>
@@ -298,11 +312,12 @@ function Custom(): ReactElement {
                 <span className="text-xs mr-[9px]">(시즌 특가)</span>
                 <span className="font-bold text-lg">
                   {/*{data?.price.toLocaleString()}*/}
-                  {(customData?.basketList?.price! - 4000).toLocaleString()}
+                  {(productResponse?.results.price! - 4000).toLocaleString()}
                 </span>
                 <span className="text=sm ml-1">원</span>
               </div>
             </div>
+            {/* 색상 및 사이즈 대신 커스터마이징 관련 프로세스로 처리 */}
             <div className="border border-t-0 w-[314px] my-[22px] border-gray" />
             <div className="color flex flex-col mb-[10px]">
               <span className="text-xs mb-[10px]">색상</span>
@@ -324,28 +339,6 @@ function Custom(): ReactElement {
                 </button>
               </div>
             </div>
-            {/*<div className="amount flex flex-col mt-[10px]">*/}
-            {/*  <span className="text-xs">수량</span>*/}
-            {/*  <div className="mt-[10px] border border-main w-fit h-fit rounded-xl flex items-center py-[5px]">*/}
-            {/*    <button className="minusBtn text-main px-3 py-2 cursor-focus">*/}
-            {/*      <Image*/}
-            {/*        src={"/logo/minus.svg"}*/}
-            {/*        alt={"minus"}*/}
-            {/*        width={16}*/}
-            {/*        height={16}*/}
-            {/*      />*/}
-            {/*    </button>*/}
-            {/*    <span></span>*/}
-            {/*    <button className="plusBtn text-main mx-3">*/}
-            {/*      <Image*/}
-            {/*        src={"/logo/plus.svg"}*/}
-            {/*        alt={"plus"}*/}
-            {/*        width={16}*/}
-            {/*        height={16}*/}
-            {/*      />*/}
-            {/*    </button>*/}
-            {/*  </div>*/}
-            {/*</div>*/}
             <div className="flex flex-row mt-5 space-x-[10px] items-center">
               <Pick
                 li_height={24}
@@ -363,7 +356,7 @@ function Custom(): ReactElement {
               />
               <button
                 onClick={() => {
-                  goBasket(customData?.basketList.id);
+                  goBasket(productResponse?.results.id);
                 }}
                 className="w-64 h-11 bg-main rounded-xl ml-[10px] flex flex-row justify-center items-center"
               >
@@ -385,8 +378,24 @@ function Custom(): ReactElement {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }
 
-export default Custom;
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { id } = context.query;
+  const queryClient = new QueryClient();
+
+  // await queryClient.prefetchQuery(["product", id], () =>
+  //   getProduct(Number(id))
+  // );
+
+  return {
+    props: {
+      dehydratedState: dehydrate(queryClient),
+      id: Number(id),
+    },
+  };
+};
+
+export default ProductCustom;

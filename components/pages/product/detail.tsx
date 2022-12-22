@@ -1,22 +1,17 @@
-import { useRef, useState } from "react";
-import { Link } from "react-scroll";
-import Image from "next/image";
-import ProductReview from "./productreview";
-import Star from "@common/star";
-import ModalFrame from "@common/modalframe";
 import * as React from "react";
-import client from "@lib/api";
-import { useQuery } from "@tanstack/react-query";
-import { productReviewInterface } from "../../../types/review";
-import { BranduBaseResponse } from "../../../types/privacy";
+import { useRef, useState } from "react";
+import Image from "next/image";
+import Star from "@common/star";
+import { Review } from "../../../pages/product/[id]";
+import { getImageRatio } from "@lib/image";
 
 interface DetailProps {
-  productId: number;
+  mainImage: string[];
+  reviews: Review[];
 }
 
-function Detail({ productId }: DetailProps) {
-  const [infoShow, setInfoShow] = useState<boolean>(false);
-  const contentSpace = useRef(null);
+function ProductDetailBox({ mainImage, reviews }: DetailProps) {
+  const [openImage, setOpenImage] = useState<boolean>(false);
   const [reviewShow, setReviewShow] = useState<boolean>(false); //리뷰 리스트 펼치기
   const [reviewDetailOpen, setReviewDetailOpen] = useState<boolean>(false); //리뷰 자세히보기
 
@@ -30,281 +25,104 @@ function Detail({ productId }: DetailProps) {
     setReviewDetailOpen(false);
   };
 
-  const getProductReviews = () => {
-    return client.get(`/product/${productId}/reviews`).then((res) => res.data);
-  };
-
-  const { data, isLoading } = useQuery<
-    BranduBaseResponse<productReviewInterface[]>
-  >(["productReview"], getProductReviews);
-
-  if (isLoading) {
-    return (
-      <div className="flex justify-center">
-        <p>API 연동 중입니다. 새로고침 후에도 문제가 발생 시 문의바랍니다.</p>
-      </div>
-    );
-  }
-
   return (
-    <div className=" m-auto flex flex-col justify-center items-center mt-7">
-      <div className="info flex flex-col justify-center items-center" id="1">
-        <span className="font-bold text-xl pt-7">상품정보</span>
-        <div
-          ref={contentSpace}
-          className="relative transition-max-height mt-2 ease-in-out scrollbar-hide"
-        >
+    <div className="flex flex-col justify-center items-center mt-7 space-y-10">
+      {/* 상품 정보 */}
+      <div className="flex flex-col justify-center items-center w-full" id="1">
+        <h2 className="font-bold text-3xl pt-5">상품정보</h2>
+        <div className="relative transition-max-height mt-2 ease-in-out scrollbar-hide w-full z-20">
           <div
             className={
-              infoShow
-                ? "overflow-scroll scrollbar-hide"
-                : "h-[1000px] overflow-hidden shadow-inner"
+              openImage
+                ? "overflow-scroll scrollbar-hide w-full"
+                : "h-[1000px] overflow-hidden shadow-inner w-full"
             }
           >
-            <Image
-              src={"/logo/bag.png"}
-              width={780}
-              height={2000}
-              alt={"infoImg"}
-            />
+            {mainImage.map((image, index) => {
+              return (
+                <div
+                  className="relative w-full"
+                  style={{
+                    aspectRatio: getImageRatio(image),
+                  }}
+                >
+                  <Image src={image} alt={image} layout="fill" />
+                </div>
+              );
+            })}
           </div>
-
-          <div
-            className={`openBtn absolute inset-x-80 -bottom-4 ${
-              infoShow ? "invisible" : " "
-            }`}
-          >
+          <div className="absolute -bottom-4 w-full flex justify-center">
             <button
               className="w-36 h-11 bg-main appearance-none cursor-pointer flex flex-row items-center justify-center text-white rounded-lg"
-              onClick={() => setInfoShow(!infoShow)}
+              onClick={() => {
+                setOpenImage((prev) => !prev);
+              }}
             >
-              <div className="openBtn flex flex-row justify-center items-center">
-                <span className="mr-1 flex">더보기</span>
-                <svg
-                  width="12"
-                  height="8"
-                  viewBox="0 0 12 8"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M1.5 1.75L6 6.25L10.5 1.75"
-                    stroke="white"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </div>
-            </button>
-          </div>
-          <div
-            className={`closeBtn absolute inset-x-80 -bottom-4 ${
-              infoShow ? " " : "invisible"
-            }`}
-          >
-            <Link to="1" offset={-150} spy={true}>
-              <button
-                className="w-36 h-11 bg-main appearance-none cursor-pointer flex flex-row items-center justify-center text-white rounded-lg"
-                onClick={() => setInfoShow(!infoShow)}
+              <span className="mr-1 flex">{openImage ? "닫기" : "더보기"}</span>
+              <svg
+                className={`transition-transform duration-300 ease-in-out ${
+                  !openImage && "rotate-180"
+                }`}
+                width="12"
+                height="6"
+                viewBox="0 0 12 6"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
               >
-                <div className="openBtn flex flex-row justify-center items-center">
-                  <span className="mr-1 flex">닫기</span>
-                  <svg
-                    width="12"
-                    height="6"
-                    viewBox="0 0 12 6"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M11 5.5L6 0.499999L0.999999 5.5"
-                      stroke="white"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </div>
-              </button>
-            </Link>
+                <path
+                  d="M11 5.5L6 0.499999L0.999999 5.5"
+                  stroke="white"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
           </div>
         </div>
       </div>
-      <div className="border-b border-gray w-screen pt-[30px] pb-[30px]" />
-      <div className="guide flex flex-col justify-center items-center" id="2">
-        <span className="font-bold text-xl pt-7">제작가이드</span>
+      {/* 상품 정보 하단 선 */}
+      <div id="2" className="w-screen h-[1px] bg-gray" />
+      {/* 제작 가이드 */}
+      <div className="flex flex-col justify-center items-center w-full">
+        <h2 className="flex font-bold text-xl pt-8">제작 가이드</h2>
         <span className="text-sm mt-2 mb-5">
           브랜뉴의 자체 서비스로 제작된 이미지가 아닌경우, 화면과 다르게 인쇄될
           수 있으며 이에대한 모든 책임은 제작자 본인에게 있습니다.
         </span>
         <Image
-          className="img w-[780px] h-[1000px] bg-gray"
-          src={"/dummy/mouse.png"}
-          width={780}
-          height={2000}
+          className=""
+          src={"/dummy/design-guide.png"}
+          width={1348}
+          height={798}
           alt={"infoImg"}
         />
       </div>
-      <div className="border-b border-gray w-screen pt-[30px] pb-[30px]" />
-      <div
-        className="review flex flex-col justify-center items-center relative"
-        id="3"
-      >
-        <span className="flex font-bold text-xl pt-[30px]">리뷰</span>
+      {/* 제작 가이드 하단선 */}
+      <div id="3" className="w-screen h-[1px] bg-gray" />
+      {/* TODO: 리뷰 조회 가능하게 수정 */}
+      <div className="review flex flex-col justify-center items-center relative">
+        <h2 className="flex font-bold text-xl pt-8">리뷰</h2>
         <div className="flex flex-row pt-6">
-          <Star size="large" count={2} />
-          <span className="text-xl ml-3">12</span>
-          <span className="text-xl">(5)</span>
+          <Star
+            size="large"
+            count={
+              reviews.map((review) => review.star).reduce((a, b) => a + b, 0) /
+              reviews.length
+            }
+          />
+          <span className="text-xl ml-3">0</span>
+          <span className="text-xl">(0)</span>
         </div>
-        <div className="flex flex-col mt-[35px]">
-          {data?.results?.length! <= 3 || reviewShow
-            ? data?.results.map((review, idx) => {
-                return (
-                  <div
-                    key={idx}
-                    onClick={() => {
-                      setReviewDetailOpen(true);
-                      // getModalId(idx);
-                    }}
-                  >
-                    <ProductReview elements={review} />
-                  </div>
-                );
-              })
-            : [1, 2, 3].map((preview, idx) => {
-                return (
-                  <div
-                    key={idx}
-                    onClick={() => {
-                      setReviewDetailOpen(true);
-                      // getModalId(idx);
-                    }}
-                  >
-                    <ProductReview elements={preview} />
-                  </div>
-                );
-              })}
-
-          {reviewDetailOpen ? ( //리뷰 자세히 보기
-            <ModalFrame
-              width={600}
-              height={500}
-              close={handleDetailClose}
-              blur={handleReviewDetail}
-              pageRef={reviewEl}
-              title={"리뷰상세"}
-              bgColor={"black"}
-              components={
-                <div className="flex flex-col mt-10 w-[600px] px-11">
-                  <div className="profile flex">
-                    <Image
-                      src={"/dummy/otter.png"} //element?.profile.profile_image
-                      width={40}
-                      height={40}
-                      className="profileImg w-10 h-10 mr-[5px] bg-white rounded-lg"
-                      alt={"profile"}
-                    />
-                    <div className="ml-[5px]">
-                      <span className="nickname text-xs">
-                        {/*{element?.profile.nickname}*/}
-                        닉네임
-                      </span>
-                      <Star size={"small"} count={3} />
-                    </div>
-                  </div>
-                  <span className="content text-xs text-subContent mt-2">
-                    {data?.results.length}
-                    더워요
-                  </span>
-                  <div className="reviewImg flex flex-row overflow-x-scroll space-x-5 mt-5">
-                    {[1, 2, 3, 4, 5].map((image, idx) => {
-                      return (
-                        <div>
-                          <div className="w-[150px] h-[150px] rounded-xl bg-[#D9D9D9]" />
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              }
-            />
-          ) : null}
-        </div>
-        {data?.results?.length! > 0 ? (
-          data?.results?.length! > 3 ? (
-            <div>
-              <div
-                className={`openBtn absolute inset-x-80 -bottom-1 ${
-                  reviewShow ? "invisible" : " "
-                }`}
-              >
-                <button
-                  className="w-36 h-11 bg-main appearance-none cursor-pointer flex flex-row items-center justify-center text-white rounded-lg"
-                  onClick={() => setReviewShow(!reviewShow)}
-                >
-                  <div className="flex flex-row justify-center items-center">
-                    <span className="mr-1 flex">더보기</span>
-                    <svg
-                      width="12"
-                      height="8"
-                      viewBox="0 0 12 8"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M1.5 1.75L6 6.25L10.5 1.75"
-                        stroke="white"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </div>
-                </button>
-              </div>
-              <div
-                className={`closeBtn absolute inset-x-80 -bottom-1 ${
-                  reviewShow ? " " : "invisible"
-                }`}
-              >
-                <Link to="3" offset={-150} spy={true}>
-                  <button
-                    className="w-36 h-11 bg-main appearance-none cursor-pointer flex flex-row items-center justify-center text-white rounded-lg"
-                    onClick={() => setReviewShow(!reviewShow)}
-                  >
-                    <div className="openBtn flex flex-row justify-center items-center">
-                      <span className="mr-1 flex">닫기</span>
-                      <svg
-                        width="12"
-                        height="6"
-                        viewBox="0 0 12 6"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M11 5.5L6 0.499999L0.999999 5.5"
-                          stroke="white"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </div>
-                  </button>
-                </Link>
-              </div>
-            </div>
-          ) : null
-        ) : (
-          <div> 작성된 리뷰가 없습니다 ㅜㅜ </div>
+        {reviews.length === 0 && (
+          <span className="my-5 font-bold text-main text-lg">
+            아직 작성된 리뷰가 없습니다.
+          </span>
         )}
       </div>
-      <div className="border-b border-gray w-screen pt-[30px] pb-[30px]" />
-      <div
-        className="delivery flex flex-col justify-center items-center mt-[30px]"
-        id="4"
-      >
+      <div id="4" className="border-b border-gray w-screen" />
+      {/* TODO: 배송 및 환불 페이지 수정 */}
+      <div className="delivery flex flex-col justify-center items-center">
         <span className="flex justify-center font-bold text-xl">배송/환불</span>
         <div className="m-auto w-[780px] h-[1000px] bg-[#D9D9D9] mt-[10px]">
           {/*<div className="justify-center items-center">배송환불안내</div>*/}
@@ -344,4 +162,4 @@ function Detail({ productId }: DetailProps) {
   );
 }
 
-export default Detail;
+export default ProductDetailBox;
