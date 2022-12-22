@@ -16,6 +16,7 @@ import { PriceBarPrint } from "./index";
 import { useMutation } from "@tanstack/react-query";
 import client from "@lib/api";
 import { newOrder } from "../../recoil/order";
+import CheckBox from "@icons/checkBox";
 
 interface PaymentForm {
   point: number;
@@ -162,6 +163,8 @@ function PayPage() {
     });
   };
 
+  const [coupon, setCoupon] = useState<number>();
+
   return (
     <div className=" m-auto flex flex-row space-x-5">
       <form
@@ -172,11 +175,19 @@ function PayPage() {
           <StandardHeader title="주문 및 결제" />
           {/* 쿠폰 처리 */}
           <Accordion title="쿠폰">
-            {/* TODO: 쿠폰 관련 설정(input 태그로 변경) */}
             {[0, 1, 2].map((basket, index) => {
               return (
                 <div className="flex flex-row" key={index}>
-                  <CheckButton width={20} height={20} />
+                  <div
+                    className={`${
+                      coupon == index ? "bg-main" : "bg-gray"
+                    } rounded-full w-5 h-5 flex justify-center items-center mr-3`}
+                    onClick={() => {
+                      setCoupon(index);
+                    }}
+                  >
+                    <CheckBox />
+                  </div>
                   <span className="ml-3 text-subContent ">
                     7월 여름 Hot 할인쿠폰
                   </span>
@@ -275,13 +286,7 @@ function PayPage() {
           </div>
         </div>
         <div className="w-[30%]">
-          <Pricebar printList={priceBarPrint}>
-            <input
-              type="submit"
-              className="w-56 h-11 bg-main rounded-xl text-white font-bold text-base flex justify-center items-center m-auto mb-2 disabled:opacity-50"
-              value="결제하기"
-            />
-          </Pricebar>
+          <Pricebar printList={priceBarPrint} disabled={true} />
         </div>
       </form>
     </div>

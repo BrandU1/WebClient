@@ -69,15 +69,7 @@ function OrderPage() {
         />
       </div>
       <div className="price w-[30%]">
-        <PriceBar printList={priceBarPrint}>
-          {/* TODO: 이 UI 사용하는 버튼 모두 컴퍼넌트화 */}
-          <button
-            className="w-56 h-11 bg-main rounded-xl text-white font-bold text-base flex justify-center items-center m-auto mb-2 disabled:opacity-50"
-            disabled={address === null}
-          >
-            <Link href="/order/pay">결제하기</Link>
-          </button>
-        </PriceBar>
+        <PriceBar printList={priceBarPrint} disabled={address === null} />
       </div>
     </div>
   );
