@@ -4,6 +4,7 @@ import Addinquiry from "@components/modal/addinquiry";
 import client from "@lib/api";
 import { useQuery } from "@tanstack/react-query";
 import { FaqInterface, MainInfoInterface } from "../../../types/service";
+import Link from "next/link";
 
 interface ServiceProps {
   inquiries: Inquiry[];
@@ -11,7 +12,6 @@ interface ServiceProps {
 
 function Service({ inquiries }: ServiceProps) {
   const [inquiry, setInquiry] = useState<boolean>(false);
-
   const handleInquiryClose = () => {
     setInquiry(false);
   };
@@ -21,14 +21,14 @@ function Service({ inquiries }: ServiceProps) {
   };
   const { data: mainInfoData, isLoading: mainInfoIsLoading } = useQuery<
     BranduBaseResponse<MainInfoInterface[]>
-  >(["inquiry"], getMainInfo);
+  >(["mainInfo"], getMainInfo);
 
   const getFaq = () => {
     return client.get("services/faqs").then((res) => res.data);
   };
   const { data: faqData, isLoading: faqIsLoading } = useQuery<
     BranduBaseResponse<FaqInterface[]>
-  >(["inquiry"], getFaq);
+  >(["faq"], getFaq);
 
   if (mainInfoIsLoading || faqIsLoading) {
     return <div>로딩 중입니다.</div>;
@@ -44,28 +44,67 @@ function Service({ inquiries }: ServiceProps) {
         <div className="left">
           <div className="flex justify-between items-center">
             <h3 className="text-base">서비스 주요 안내</h3>
-            <p className="text-xs text-notice">전체보기</p>
+            <Link href="/service/maininfo">
+              <p className="text-xs text-notice">전체보기</p>
+            </Link>
           </div>
-          <div className="text-sm py-3 space-y-2 text-subContent">
-            {mainInfoData?.results?.map((info, index) => {
-              return <p key={index}>{info.title}</p>;
-            })}
-          </div>
+          {mainInfoData?.results.length! <= 4 ? (
+            <div className="text-sm py-3 space-y-2 text-subContent">
+              {mainInfoData?.results?.map((info, index) => {
+                return <p key={index}>{info.title}</p>;
+              })}
+            </div>
+          ) : (
+            <div>
+              {[1, 2, 3, 4].map((preview, index) => {
+                return (
+                  <div className="text-sm py-3 space-y-2 text-subContent">
+                    {mainInfoData?.results?.map((info, index) => {
+                      return <p key={index}>{info.title}</p>;
+                    })}
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
         <div className="right">
           <div className="flex justify-between items-center">
             <h3 className="text-base">자주 묻는 질문</h3>
-            <p className="text-xs text-notice">전체보기</p>
+            <Link href="/service/faq">
+              <p className="text-xs text-notice">전체보기</p>
+            </Link>
           </div>
           <div className="text-sm py-3 space-y-2 text-subContent">
-            {faqData?.results?.map((faq, index) => {
-              return <p key={index}>{faq.title}</p>;
-            })}
+            {faqData?.results.length! <= 4 ? (
+              <div className="text-sm py-3 space-y-2 text-subContent">
+                {faqData?.results?.map((faq, index) => {
+                  return <p key={index}>{faq.title}</p>;
+                })}
+              </div>
+            ) : (
+              <div>
+                {[1, 2, 3, 4].map((preview, index) => {
+                  return (
+                    <div className="text-sm py-3 space-y-2 text-subContent">
+                      {faqData?.results?.map((faq, index) => {
+                        return <p key={index}>{faq.title}</p>;
+                      })}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
         </div>
       </div>
       <div className="py-3 border-b-[1px] border-[#EDEDED]">
-        <h1>1:1 문의내역</h1>
+        <div className="flex justify-between items-center">
+          <h3 className="text-base">1:1 문의내역</h3>
+          <Link href="/service/inquiry">
+            <p className="text-xs text-notice cursor-pointer">전체보기</p>
+          </Link>
+        </div>
         {inquiries?.map((list, index) => {
           return (
             <div key={index} className="flex">

@@ -1,4 +1,4 @@
-import Service from "@components/pages/service/indext";
+import Service from "@components/pages/service";
 import client from "@lib/api";
 import { useQuery } from "@tanstack/react-query";
 import { BranduBaseResponse, Inquiry } from "../../types/privacy";
