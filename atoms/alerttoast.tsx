@@ -6,30 +6,21 @@ import { clearInterval } from "timers";
 interface AlertProps {
   text: string;
   path: string;
-  stop: boolean;
+  start: boolean;
+  onClose: () => void;
 }
 
-function AlertToast({ text, path, stop }: AlertProps) {
+function AlertToast({ text, path, start, onClose }: AlertProps) {
   const router = useRouter();
-  const [isStop, setIsStop] = useState<boolean>(stop ?? true);
-  const [count, setCount] = useState<number>(0);
+  const [isStart, setIsStart] = useState<boolean>(start);
 
   useEffect(() => {
-    if (isStop == false) {
-      const timer = setInterval(() => {
-        setCount(count + 1);
-        console.log(count);
-        if (count == 5) {
-          clearInterval(timer);
-          setIsStop(true);
-        }
-      }, 1000);
-    }
-  }, [isStop]);
+    setIsStart(start);
+  }, [start, isStart]);
 
   return (
     <>
-      {count > 0 && (
+      {isStart && (
         <div className="h-[80px] bg-white rounded-xl absolute top-[62px] flex justify-center items-center shadow-md">
           <div className="flex flex-row">
             <span className="text-sm flex justify-center items-center pl-[30px]">
@@ -39,6 +30,7 @@ function AlertToast({ text, path, stop }: AlertProps) {
               className="text-sm py-[6px] px-[11px] bg-main text-white rounded-xl ml-[27px] mr-[26px]"
               onClick={() => {
                 router.push(`/${path}`);
+                onClose();
               }}
             >
               이동하기

@@ -176,6 +176,27 @@ function Nav() {
   //Pick, Bucket, ... 알림
   const [toast, setToast] = useRecoilState<ToastState>(ToastStateAtom);
 
+  //alert 5초
+  useEffect(() => {
+    if (toast.alert == true) {
+      const timer = setTimeout(() => {
+        const temp = { ...toast };
+        temp.alert = false;
+        setToast(temp);
+      }, 5000);
+      return () => {
+        clearTimeout(timer);
+      };
+    }
+  }, [toast.alert]);
+
+  //이동하기 후 alert 지우기
+  const timerOut = () => {
+    const temp = { ...toast };
+    temp.alert = false;
+    setToast(temp);
+  };
+
   return (
     <>
       <div
@@ -374,9 +395,16 @@ function Nav() {
         </div>
       </div>
       <div>
-        {/*{toast && (*/}
-        {/*  <AlertToast text={toast.type} path={toast.path} stop={false} />*/}
-        {/*)}*/}
+        {toast && (
+          <AlertToast
+            text={toast.type}
+            path={toast.path}
+            start={toast.alert}
+            onClose={() => {
+              timerOut();
+            }}
+          />
+        )}
       </div>
     </>
   );
