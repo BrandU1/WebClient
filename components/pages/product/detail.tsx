@@ -4,7 +4,6 @@ import Image from "next/image";
 import Star from "@common/star";
 import { Review } from "../../../pages/product/[id]";
 import { getImageRatio } from "@lib/image";
-import client from "@lib/api";
 import ReviewList from "@components/pages/product/reviewlist";
 import { Link } from "react-scroll";
 
@@ -31,7 +30,7 @@ function ProductDetailBox({ mainImage, reviews }: DetailProps) {
   return (
     <div className="flex flex-col justify-center items-center mt-7 space-y-10">
       {/* 상품 정보 */}
-      <div className="flex flex-col justify-center items-center w-full" id="1">
+      <div className="flex flex-col justify-center items-center w-full" id="0">
         <h2 className="font-bold text-3xl pt-5">상품정보</h2>
         <div className="relative transition-max-height mt-2 ease-in-out scrollbar-hide w-full z-20">
           <div
@@ -85,7 +84,7 @@ function ProductDetailBox({ mainImage, reviews }: DetailProps) {
         </div>
       </div>
       {/* 상품 정보 하단 선 */}
-      <div id="2" className="w-screen h-[1px] bg-gray" />
+      <div id="1" className="w-screen h-[1px] bg-gray" />
       {/* 제작 가이드 */}
       <div className="flex flex-col justify-center items-center w-full">
         <h2 className="flex font-bold text-xl pt-8">제작 가이드</h2>
@@ -102,7 +101,7 @@ function ProductDetailBox({ mainImage, reviews }: DetailProps) {
         />
       </div>
       {/* 제작 가이드 하단선 */}
-      <div id="3" className="w-screen h-[1px] bg-gray" />
+      <div id="2" className="w-screen h-[1px] bg-gray" />
       <div className="review flex flex-col justify-center items-center relative">
         <h2 className="flex font-bold text-xl pt-8">리뷰</h2>
         <div className="flex flex-row pt-6">
@@ -183,7 +182,7 @@ function ProductDetailBox({ mainImage, reviews }: DetailProps) {
           </span>
         )}
       </div>
-      <div id="4" className="border-b border-gray w-screen" />
+      <div id="3" className="border-b border-gray w-screen" />
       {/* TODO: 배송 및 환불 페이지 수정 */}
       <div className="delivery flex flex-col justify-center items-center">
         <span className="flex justify-center font-bold text-xl">배송/환불</span>

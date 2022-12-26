@@ -5,6 +5,7 @@ import HeartIcon from "@icons/heart";
 import { BranduBaseResponse, HotDeal } from "../../types/privacy";
 import { useRecoilState } from "recoil";
 import { ToastState, ToastStateAtom } from "../../recoil/toast";
+import { useEffect } from "react";
 
 interface pickProp {
   id: number;
