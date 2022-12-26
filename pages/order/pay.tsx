@@ -1,6 +1,6 @@
 import Accordion from "@common/accordion";
 import CheckButton from "@common/check-button";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { PaymentMethodType } from "@tosspayments/payment__types/types/payment/PaymentRequest";
@@ -68,6 +68,8 @@ export interface OrderCreate {
 function PayPage() {
   const router = useRouter();
   const orderData = useRecoilValue(newOrder);
+  // const [test, setTest] = useRecoilState(getUserData);
+  // console.log(test);
   /* TODO: 유저만의 포인트를 가지고올 수 있도록 Recoil 처리 */
   const [userPoint, setUserPoint] = useState<number>(1000);
   const [priceBarPrint, setPriceBarPrint] = useState<PriceBarPrint[]>([]);

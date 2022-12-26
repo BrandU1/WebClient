@@ -1,8 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import client from "@lib/api";
-import { AlertToast } from "@common/alerttoast";
+import { AlertToast } from "@atoms/alerttoast";
 import HeartIcon from "@icons/heart";
 import { BranduBaseResponse, HotDeal } from "../../types/privacy";
+import { useRecoilState } from "recoil";
+import { ToastState, ToastStateAtom } from "../../recoil/toast";
 
 interface pickProp {
   id: number;
@@ -19,6 +21,7 @@ function PickButton({ id, wish, li_width, li_height }: pickProp) {
     {
       onSuccess: () => {
         queryClient.invalidateQueries(["hotDeal"]);
+        handleAlertOpen("찜한 상품", true, "pick");
       },
     }
   );
@@ -32,6 +35,14 @@ function PickButton({ id, wish, li_width, li_height }: pickProp) {
       },
     }
   );
+  const [toast, setToast] = useRecoilState<ToastState>(ToastStateAtom);
+  const handleAlertOpen = (type: string, alert: boolean, path: string) => {
+    const temp = { ...toast };
+    temp.type = type;
+    temp.alert = alert;
+    temp.path = path;
+    setToast(temp);
+  };
 
   return (
     <div
@@ -40,7 +51,6 @@ function PickButton({ id, wish, li_width, li_height }: pickProp) {
           deletePick.mutate(id);
         } else {
           mutation.mutate(id);
-          return <AlertToast text={"찜한 상품"} path={"pick"} />;
         }
       }}
       className={`${

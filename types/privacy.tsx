@@ -118,11 +118,11 @@ export interface BranduBaseResponse<T> {
   error?: T;
 }
 
-interface Point {
+export interface Point {
   point: number;
   point_history: PointHistory[];
 }
-interface PointHistory {
+export interface PointHistory {
   id: number;
   memo: string;
   point: number;

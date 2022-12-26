@@ -1,13 +1,32 @@
 import * as React from "react";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 interface AlertProps {
   text: string;
   path: string;
+  start: boolean;
 }
 
-function AlertToast({ text, path }: AlertProps) {
+function AlertToast({ text, path, start }: AlertProps) {
   const router = useRouter();
+  const [isStop, setIsStop] = useState<boolean>(true);
+
+  // useEffect(() => {
+  //   const timer = setInterval(() => {
+  //     setCount(count + 1);
+  //   }, 1000);
+  //   clearInterval(timer);
+  // }, [text]);
+
+  useEffect(() => {
+    setIsStop(start);
+    const timer = setInterval(() => {
+      if (isStop) {
+        clearInterval(timer);
+      }
+    }, 5000);
+  }, [start]);
 
   return (
     <div className="h-[80px] bg-white rounded-xl absolute top-[62px] flex justify-center items-center shadow-md">

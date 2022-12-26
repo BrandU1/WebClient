@@ -17,6 +17,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { BranduBaseResponse, History } from "../../types/privacy";
 import { useRecoilState } from "recoil";
 import { isLoginModalOpen } from "../../recoil/base";
+import { ToastState, ToastStateAtom } from "../../recoil/toast";
+import { AlertToast } from "@atoms/alerttoast";
 
 function Nav() {
   const [focused, setFocused] = useState<boolean>(false);
@@ -172,6 +174,9 @@ function Nav() {
       },
     }
   );
+
+  //Pick, Bucket, ... 알림
+  const [toast, setToast] = useRecoilState<ToastState>(ToastStateAtom);
 
   return (
     <>
@@ -368,6 +373,11 @@ function Nav() {
         >
           <Category ref={outside} />
         </div>
+      </div>
+      <div>
+        {toast && (
+          <AlertToast text={toast.type} path={toast.path} start={true} />
+        )}
       </div>
     </>
   );
