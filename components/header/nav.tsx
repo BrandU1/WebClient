@@ -370,13 +370,13 @@ function Nav() {
             category ? "block " : "hidden"
           }`}
         >
-          <Category ref={outside} />
+          <Category onClose={normalClose} />
         </div>
       </div>
       <div>
-        {toast && (
-          <AlertToast text={toast.type} path={toast.path} start={true} />
-        )}
+        {/*{toast && (*/}
+        {/*  <AlertToast text={toast.type} path={toast.path} stop={false} />*/}
+        {/*)}*/}
       </div>
     </>
   );
