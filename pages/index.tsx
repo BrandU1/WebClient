@@ -77,7 +77,7 @@ function Home() {
               return (
                 <div key={index} className="w-full">
                   <Image
-                    className="w-full border border-subContent rounded-2xl h-[300px]"
+                    className="w-full border border-subContent rounded-2xl"
                     src={item.backdrop_image}
                     alt={item.title}
                     width={600}
@@ -94,7 +94,7 @@ function Home() {
             })}
           </Slider>
         </div>
-        <div className="w-1/3 relative  border-[1px] border-subContent rounded-2xl h-[300px]">
+        <div className="w-1/3 relative  border-[1px] border-subContent rounded-2xl">
           {bannerData?.results.map((item, index) => {
             return (
               <div key={index} className="w-full">

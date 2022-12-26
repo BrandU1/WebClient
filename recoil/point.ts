@@ -1,28 +1,36 @@
-import { atom, selector } from "recoil";
-import { Point } from "../types/privacy";
-import { recoilPersist } from "recoil-persist";
-
-const { persistAtom } = recoilPersist();
-
-interface PointRecoilState {
-  point: number;
-  point_history: PointHistory[];
-}
-interface PointHistory {
-  id: number;
-  memo: string;
-  point: number;
-  is_use: boolean;
-  created: string;
-}
-
-export const getuserPoint = atom<Point | null>({
-  key: "getUserPoint",
-  default: null,
-  effects_UNSTABLE: [persistAtom],
-});
-
-// export const userPoint = selector<PointRecoilState>({
-//   key: "userPointState",
-//     get: () => {};
+// import { atom, selector } from "recoil";
+// import { recoilPersist } from "recoil-persist";
+// import client from "@lib/api";
+// import { useQuery } from "@tanstack/react-query";
+//
+// interface userRecoilState {
+//   point: number;
+// }
+//
+// const { persistAtom } = recoilPersist();
+//
+// export const userPointState = atom({
+//   key: "pointState",
+//   default: { point: 0 },
+//   effects_UNSTABLE: [persistAtom],
 // });
+//
+// function getData() {
+//   const response = () => {
+//     return client.get("accounts/point").then((res) => res.data);
+//   };
+//   const { data } = useQuery(["userData", "point"], response);
+//   return data;
+// }
+//
+// export const getUserData = selector({
+//   key: "userdata/get",
+//   get: async ({ get }) => {
+//     const { data } = get(await getData());
+//     return data.point;
+//   },
+//   set: ({ set }, newValue) => {
+//     set(userPointState, newValue);
+//   },
+// });
+// @ts-ignore

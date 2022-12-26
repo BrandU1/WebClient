@@ -1,16 +1,24 @@
 import Image from "next/image";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import client from "@lib/api";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "@common/loading";
 import { BranduBaseResponse, Categories } from "../../types/privacy";
 
 interface CategoryProps {
-  ref: React.ForwardedRef<HTMLDivElement>;
+  // ref: React.ForwardedRef<HTMLDivElement>;
+  onClose: () => void;
 }
 
-function Category({ ref }: CategoryProps) {
+function Category({ onClose }: CategoryProps) {
   const [id, setIndex] = useState(1);
+
+  const categoryEl = useRef<HTMLDivElement>(null);
+  const handleCategory = (e: any) => {
+    if (!categoryEl.current?.contains(e.target)) {
+      onClose();
+    }
+  };
 
   const getCategories = () => {
     return client.get("/products/categories").then((res) => res.data);
@@ -20,7 +28,6 @@ function Category({ ref }: CategoryProps) {
     ["category"],
     getCategories
   );
-
   if (isLoading) {
     return (
       <div className="flex justify-center">
@@ -30,7 +37,7 @@ function Category({ ref }: CategoryProps) {
   }
 
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center" onClick={handleCategory}>
       <div className=" pt-5 pb-40  w-[700px] ">
         {data?.results.map((item, idx) => {
           return (

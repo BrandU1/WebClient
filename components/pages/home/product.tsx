@@ -6,7 +6,6 @@ import Link from "next/link";
 import client from "@lib/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { HotDeal } from "../../../types/privacy";
-import { AlertToast } from "@common/alerttoast";
 import PickButton from "@components/pick/pickbutton";
 
 interface ProductProps {
