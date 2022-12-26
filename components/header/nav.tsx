@@ -20,7 +20,6 @@ import { isLoginModalOpen } from "../../recoil/base";
 
 function Nav() {
   const [focused, setFocused] = useState<boolean>(false);
-  const showSearch = () => setFocused(true);
   const closeSearch = () => setFocused(false);
 
   // inputBar blur
@@ -53,7 +52,6 @@ function Nav() {
     }
   });
 
-  console.log(token);
   const openModal = () => {
     setModalOpen(true);
     setOpen(true);
@@ -244,6 +242,7 @@ function Nav() {
                 </div>
                 <div className="recently px-5  text-sm text-notice border-b-[1px] border-gray w-[95%] m-auto">
                   {data?.results.map((item, index) => {
+                    console.log(item.id);
                     return (
                       <div className="flex items-center justify-between">
                         <div key={index}>
