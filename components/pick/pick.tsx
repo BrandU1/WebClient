@@ -77,21 +77,21 @@ function PickList({ picks }: PickList) {
                   <CloseIcon />
                 </div>
 
-                <div
-                  onClick={() => {
-                    mutation.mutate(res.product.id);
-                  }}
-                  className={`${
-                    res.is_basket === true ? "bg-[#0CABA8]" : "bg-[#D9D9D9]"
-                  } bg-gray rounded-lg flex justify-center items-center w-7 h-7 mt-3`}
-                >
-                  <BasketIcon
-                    color={`${res.is_basket === true ? "#fff" : "none"}`}
-                    width={18}
-                    height={18}
-                    stroke={`${res.is_basket === true ? "none" : "#fff"}`}
-                  />
-                </div>
+                {/*<div*/}
+                {/*  onClick={() => {*/}
+                {/*    mutation.mutate(res.product.id);*/}
+                {/*  }}*/}
+                {/*  className={`${*/}
+                {/*    res.is_basket === true ? "bg-[#0CABA8]" : "bg-[#D9D9D9]"*/}
+                {/*  } bg-gray rounded-lg flex justify-center items-center w-7 h-7 mt-3`}*/}
+                {/*>*/}
+                {/*  <BasketIcon*/}
+                {/*    color={`${res.is_basket === true ? "#fff" : "none"}`}*/}
+                {/*    width={18}*/}
+                {/*    height={18}*/}
+                {/*    stroke={`${res.is_basket === true ? "none" : "#fff"}`}*/}
+                {/*  />*/}
+                {/*</div>*/}
               </div>
 
               {/*<div className="bg-gray w-7 h-7 rounded-lg flex justify-center items-center  ">*/}
