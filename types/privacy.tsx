@@ -129,3 +129,13 @@ export interface PointHistory {
   is_use: boolean;
   created: string;
 }
+export interface Categories {
+  id: number;
+  name: string;
+  sub_categories: SubCategories[];
+}
+export interface SubCategories {
+  id: number;
+  name: string;
+  backdrop_image: string;
+}

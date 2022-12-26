@@ -1,7 +1,6 @@
 import { SearchResult } from "../../../types/privacy";
 import Link from "next/link";
 import Image from "next/image";
-import HeartIcon from "@icons/heart";
 import { useEffect, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import client from "@lib/api";
