@@ -29,8 +29,6 @@ function Category({ ref }: CategoryProps) {
     );
   }
 
-  return <div></div>;
-
   return (
     <div className="flex justify-center">
       <div className=" pt-5 pb-40  w-[700px] ">
