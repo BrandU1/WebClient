@@ -90,7 +90,7 @@ function Edit() {
 
   return (
     <div className="pt-10">
-      <div className="tip h-auto border-[2px] border-main  mb-10  ">
+      <div className="tip h-auto border-[2px] border-main  mb-10 rounded-xl ">
         {/*<div>*/}
         {/*  <h1 className="font-bold">*/}
         {/*    글쓰기 가이드*/}
