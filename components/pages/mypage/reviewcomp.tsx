@@ -9,7 +9,7 @@ import ReviewModal from "@components/modal/reviewmodal";
 import { BranduBaseResponse } from "../../../types/privacy";
 
 function ReviewComp() {
-  //작성가능 or 작성한 리뷰
+  //작성한 리뷰
   const [reviewTab, setReviewTab] = useState<number>(0);
   const getWrittenReview = () => {
     return client.get(`accounts/reviews`).then((res) => res.data);
@@ -17,6 +17,7 @@ function ReviewComp() {
   const { data: writtenData, isLoading: writtenIsLoading } = useQuery<
     BranduBaseResponse<WrittenReviewInterface[]>
   >(["myWrittenReview"], getWrittenReview);
+  // 작성가능한 리뷰
   const getWritableReview = () => {
     return client.get(`accounts/reviews/writable`).then((res) => res.data);
   };

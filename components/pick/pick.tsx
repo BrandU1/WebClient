@@ -34,10 +34,10 @@ function PickList({ picks }: PickList) {
   console.log(picks);
 
   return (
-    <div className="max-w-4xl m-auto ">
+    <div className="max-w-4xl m-auto">
       <div>
         <h2 className="py-5 font-bold text-xl">찜한상품</h2>
-        <div className="border-[1px] border-black" />
+        <div className="border-b-[1px] border-black" />
       </div>
       <div className="pickList grid grid-cols-2 gap-x-7 m-auto">
         {picks?.map((res, idx) => {

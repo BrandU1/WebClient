@@ -111,7 +111,6 @@ function Home() {
         </div>
       </div>
       <div className="productList">
-        {/* 프로덕트 다시 컴퍼넌트화 시키기 */}
         <Product
           products={hotDealData?.results!}
           title="브랜뉴 오늘의 핫딜"
