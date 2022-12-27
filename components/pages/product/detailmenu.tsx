@@ -26,7 +26,6 @@ function ProductNavigationBar() {
     };
 
     window.addEventListener("scroll", presentScroll);
-    return window.removeEventListener("scroll", presentScroll);
   }, [scrollPosition, window]);
 
   return (
