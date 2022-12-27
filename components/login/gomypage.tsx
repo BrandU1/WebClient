@@ -10,9 +10,14 @@ function GOTOMyPage() {
               <p>주문/배송</p>
             </Link>
           </div>
-          <div className="py-3 hover:bg-[#CEEEEE] rounded-b-lg">
+          <div className="py-3 hover:bg-[#CEEEEE]">
             <Link href={"/mypage/profile"}>
               <p>마이페이지</p>
+            </Link>
+          </div>
+          <div className="py-3 hover:bg-[#CEEEEE] rounded-b-lg">
+            <Link href={"/community/edit"}>
+              <p>글쓰기</p>
             </Link>
           </div>
           {/*<div className="py-3">*/}
