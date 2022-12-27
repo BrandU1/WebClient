@@ -1,11 +1,12 @@
 import * as React from "react";
 import { useRef, useState } from "react";
 import Image from "next/image";
-import Star from "@common/star";
+import Star from "@common/stars";
 import { Review } from "../../../pages/product/[id]";
 import { getImageRatio } from "@lib/image";
 import ReviewList from "@components/pages/product/reviewlist";
 import { Link } from "react-scroll";
+import Stars from "@common/stars";
 
 interface DetailProps {
   mainImage: string[];
@@ -105,8 +106,9 @@ function ProductDetailBox({ mainImage, reviews }: DetailProps) {
       <div className="review flex flex-col justify-center items-center relative">
         <h2 className="flex font-bold text-xl pt-8">리뷰</h2>
         <div className="flex flex-row pt-6">
-          <Star
-            size="large"
+          <Stars
+            size={33}
+            clickable={false}
             count={
               reviews.map((review) => review.star).reduce((a, b) => a + b, 0) /
               reviews.length

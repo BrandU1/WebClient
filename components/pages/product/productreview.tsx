@@ -1,6 +1,7 @@
 import * as React from "react";
 import Image from "next/image";
-import Star from "@common/star";
+import Star from "@common/stars";
+import Stars from "@common/stars";
 
 interface ReviewProps {
   elements: any;
@@ -30,7 +31,7 @@ function ProductReview({ elements }: ReviewProps) {
               {/*{element?.profile.nickname}*/}
               닉네임
             </span>
-            <Star size={"small"} count={3} />
+            <Stars size={13} clickable={false} count={4} />
           </div>
         </div>
         <span className="content text-xs text-subContent mt-2">
