@@ -14,6 +14,7 @@ function TopInfo() {
     ["summary"],
     getSummary
   );
+  console.log(data);
 
   if (isLoading) {
     return <div></div>;

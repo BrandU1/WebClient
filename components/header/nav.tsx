@@ -203,7 +203,12 @@ function Nav() {
         className={`top-0 z-50 transition bg-white border-b-[1px] border-gray`}
       >
         <div className=" m-auto  max-w-4xl py-3 flex justify-between items-center min-w-fit relative">
-          <Link href="/">
+          <Link
+            href="/"
+            onClick={() => {
+              setInput("");
+            }}
+          >
             <BranduIcon width={100} height={22} />
           </Link>
           {path.includes("/store") ? (
@@ -240,7 +245,7 @@ function Nav() {
               }`}
             >
               <input
-                className={`bg-transparent text-main w-full h-fit rounded-xl text-sm font-bold border-main focus:outline-none px-2`}
+                className={`text-main w-full h-fit rounded-xl text-sm font-bold border-main focus:outline-none px-2`}
                 onChange={(e: any) => {
                   setInput(e.target.value);
                 }}
@@ -254,7 +259,7 @@ function Nav() {
               </div>
             </div>
             {focused && (
-              <div className="dropdown bg-white border-[1px] border-main border-t-white rounded-b-xl py-3 absolute  w-[350px]">
+              <div className="dropdown bg-white border-[1px] border-main border-t-white rounded-b-xl py-3 absolute w-[350px]">
                 <div className="flex justify-between px-3 py-2">
                   <h3 className="text-sm">최근 검색어</h3>
                   <p
@@ -268,7 +273,6 @@ function Nav() {
                 </div>
                 <div className="recently px-5  text-sm text-notice border-b-[1px] border-gray w-[95%] m-auto">
                   {data?.results.map((item, index) => {
-                    console.log(item.id);
                     return (
                       <div className="flex items-center justify-between">
                         <div key={index}>

@@ -12,6 +12,7 @@ import { Product } from "../../../types/privacy";
 import { router } from "next/client";
 import { customRecoil } from "../../../recoil/basketlist";
 import { useRecoilState } from "recoil";
+import PickButton from "@components/pick/pickbutton";
 
 interface ProductProps {
   productInfo: Product;
@@ -185,22 +186,12 @@ function Summary({ productInfo }: ProductProps) {
         </div>
         <div className="flex flex-col mt-5">
           <div className="flex flex-row space-x-[10px]">
-            <Pick
-              li_height={24}
+            <PickButton
+              id={productInfo?.id}
+              wish={productInfo?.is_wish}
               li_width={24}
-              bg_height={45}
-              bg_width={45}
-              li_color={"white"}
+              li_height={24}
             />
-
-            <Basket
-              li_height={22}
-              li_width={22}
-              bg_height={45}
-              bg_width={45}
-              li_color={"white"}
-            />
-
             <Link href={`./${productInfo.id}/custom`}>
               <button className="w-64 h-11 bg-main rounded-xl flex flex-row justify-center items-center">
                 <span className="text-white font-bold text-sm">구매하기</span>

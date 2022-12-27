@@ -19,28 +19,6 @@ function Store({ store }: storeProps) {
     }
   });
 
-  const queryClient = useQueryClient();
-
-  const mutation = useMutation(
-    (id: number) =>
-      client.post(`/accounts/wishes/${id}`).then((res) => res.data),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(["hotDeal"]);
-      },
-    }
-  );
-
-  const deletePick = useMutation(
-    (id: number) =>
-      client.delete(`/accounts/wishes/${id}`).then((res) => res.data),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(["hotDeal"]);
-      },
-    }
-  );
-
   return (
     <div className="py-3">
       <div className="list grid grid-cols-5 gap-x-4">
@@ -70,24 +48,11 @@ function Store({ store }: storeProps) {
                 </div>
               </Link>
 
-              <div className={`${token ? "block" : "hidden"} `}>
-                {/*<div*/}
-                {/*  onClick={() => {*/}
-                {/*    if (item.is_wish) {*/}
-                {/*      deletePick.mutate(item.id);*/}
-                {/*    } else mutation.mutate(item.id);*/}
-                {/*  }}*/}
-                {/*  className={`${*/}
-                {/*    item.is_wish ? "bg-main " : "bg-[#DFDFE0]"*/}
-                {/*  } pickBtn absolute bottom-[80px] right-[10px] w-8 h-8 rounded-xl bg-[#DFDFE0] flex justify-center items-center`}*/}
-                {/*>*/}
-                {/*  <HeartIcon*/}
-                {/*    color={`${item.is_wish ? "#fff" : "#DFDFE0"}`}*/}
-                {/*    width={20}*/}
-                {/*    height={17}*/}
-                {/*    border="#fff"*/}
-                {/*  />*/}
-                {/*</div>*/}
+              <div
+                className={`${
+                  token ? "block" : "hidden"
+                } absolute bottom-[80px] right-[10px] w-8 h-8 `}
+              >
                 <PickButton
                   id={item.id}
                   wish={item.is_wish}

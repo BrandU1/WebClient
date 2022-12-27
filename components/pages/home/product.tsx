@@ -23,28 +23,6 @@ function Product({ title, subTitle, products }: ProductProps) {
   });
   // console.log(products);
 
-  const queryClient = useQueryClient();
-
-  const mutation = useMutation(
-    (id: number) =>
-      client.post(`/accounts/wishes/${id}`).then((res) => res.data),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(["hotDeal"]);
-      },
-    }
-  );
-
-  const deletePick = useMutation(
-    (id: number) =>
-      client.delete(`/accounts/wishes/${id}`).then((res) => res.data),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(["hotDeal"]);
-      },
-    }
-  );
-
   return (
     <div className=" m-auto px-5">
       <div className="flex justify-between text-xs">
@@ -79,7 +57,11 @@ function Product({ title, subTitle, products }: ProductProps) {
                 </div>
               </Link>
 
-              <div className={`${token ? "block" : "hidden"} `}>
+              <div
+                className={`${
+                  token ? "block" : "hidden"
+                } absolute bottom-[80px] right-[10px] w-8 h-8`}
+              >
                 <PickButton
                   id={item.id}
                   wish={item.is_wish}

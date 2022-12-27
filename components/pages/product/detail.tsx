@@ -150,7 +150,7 @@ function ProductDetailBox({ mainImage, reviews }: DetailProps) {
               }`}
             >
               <button
-                className="w-36 h-11 bg-Main-deepblue appearance-none cursor-pointer flex flex-row items-center justify-center text-white rounded-lg"
+                className="w-36 h-11 bg-main appearance-none cursor-pointer flex flex-row items-center justify-center text-white rounded-lg"
                 onClick={() => setReviewShow(!reviewShow)}
               >
                 <div className="flex flex-row justify-center items-center">
@@ -165,7 +165,7 @@ function ProductDetailBox({ mainImage, reviews }: DetailProps) {
             >
               <Link to="3" offset={-150} spy={true}>
                 <button
-                  className="w-36 h-11 bg-Main-deepblue appearance-none cursor-pointer flex flex-row items-center justify-center text-white rounded-lg"
+                  className="w-36 h-11 bg-main appearance-none cursor-pointer flex flex-row items-center justify-center text-white rounded-lg"
                   onClick={() => setReviewShow(!reviewShow)}
                 >
                   <div className="openbutton flex flex-row justify-center items-center">
