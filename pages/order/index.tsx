@@ -1,13 +1,13 @@
 import OrderList from "@components/pages/order/orderlist";
 import PriceBar from "@components/pages/order/pricebar";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { basketPurchase, totalPrice } from "../../recoil/totalamount";
+import { purchaseProducts, totalPrice } from "../../recoil/totalamount";
 import { useEffect, useState } from "react";
 import useBranduQuery from "@hooks/useBranduQuery";
 import { getAddresses } from "@lib/fetches";
 import { useRouter } from "next/router";
-import Link from "next/link";
 import { selectedAddress } from "../../recoil/order";
+import { AddressInterface } from "../../types/privacy";
 
 export interface PriceBarPrint {
   id: number;
@@ -19,7 +19,7 @@ export interface PriceBarPrint {
 function OrderPage() {
   const price = useRecoilValue(totalPrice);
   const [priceBarPrint, setPriceBarPrint] = useState<PriceBarPrint[]>([]);
-  const [baskets, _] = useRecoilState(basketPurchase);
+  const baskets = useRecoilValue(purchaseProducts);
   const router = useRouter();
   const [address, setAddress] = useRecoilState(selectedAddress);
 
@@ -27,7 +27,7 @@ function OrderPage() {
     data: addresses,
     isLoading,
     isError,
-  } = useBranduQuery({
+  } = useBranduQuery<AddressInterface[]>({
     queryKey: ["addresses"],
     queryFn: () => getAddresses(),
   });
@@ -63,7 +63,7 @@ function OrderPage() {
         <p className="font-bold text-xl my-5">주문 및 결제</p>
         <OrderList
           baskets={baskets}
-          addresses={addresses?.results}
+          addresses={addresses?.results!}
           address={address}
           setAddress={setAddress}
         />
