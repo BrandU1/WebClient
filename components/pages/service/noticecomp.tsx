@@ -2,7 +2,6 @@ import client from "@lib/api";
 import { useQuery } from "@tanstack/react-query";
 import { BranduBaseResponse } from "../../../types/privacy";
 import { NoticeInterface } from "../../../types/service";
-import { dividerClasses } from "@mui/material";
 
 function Notice() {
   const getNotice = () => {
