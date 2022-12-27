@@ -1,6 +1,6 @@
 import Image from "next/image";
 import HeartIcon from "@icons/heart";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ProductInterface } from "../../../types/product";
 import Link from "next/link";
 import client from "@lib/api";
@@ -27,7 +27,9 @@ function Product({ title, subTitle, products }: ProductProps) {
     <div className=" m-auto px-5">
       <div className="flex justify-between text-xs">
         <p className="subTitle text-base">{subTitle}</p>
-        <p className="allBtn text-xs text-gray cursor-pointer">전체보기</p>
+        <Link href="/store">
+          <p className="allBtn text-xs text-gray cursor-pointer">전체보기</p>
+        </Link>
       </div>
       <h2 className="title text-xl font-bold">{title}</h2>
       <div className="list grid grid-cols-5 gap-x-4">

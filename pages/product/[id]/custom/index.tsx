@@ -29,6 +29,7 @@ import { dehydrate, QueryClient } from "@tanstack/react-query";
 import useBranduQuery from "@hooks/useBranduQuery";
 import { getProduct } from "../index";
 import CustomIcon from "@components/pages/product/customicon";
+import PickButton from "@components/pick/pickbutton";
 
 export enum CanvasState {
   DRAG = "DRAG",
@@ -165,13 +166,14 @@ function ProductCustom({ id }: ProductCustomProps): ReactElement {
               </div>
             </div>
             <div className="flex flex-row mt-5 space-x-[10px] items-center">
-              <Pick
-                li_height={24}
-                li_width={24}
-                bg_height={45}
-                bg_width={45}
-                li_color={"white"}
-              />
+              <div className="w-11 h-11">
+                <PickButton
+                  id={productResponse?.results.id!}
+                  wish={productResponse?.results.is_wish!}
+                  li_width={24}
+                  li_height={24}
+                />
+              </div>
               <Basket
                 li_height={22}
                 li_width={22}
