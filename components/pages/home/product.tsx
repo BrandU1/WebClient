@@ -1,6 +1,6 @@
 import Image from "next/image";
 import HeartIcon from "@icons/heart";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ProductInterface } from "../../../types/product";
 import Link from "next/link";
 import client from "@lib/api";
@@ -23,33 +23,13 @@ function Product({ title, subTitle, products }: ProductProps) {
   });
   // console.log(products);
 
-  const queryClient = useQueryClient();
-
-  const mutation = useMutation(
-    (id: number) =>
-      client.post(`/accounts/wishes/${id}`).then((res) => res.data),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(["hotDeal"]);
-      },
-    }
-  );
-
-  const deletePick = useMutation(
-    (id: number) =>
-      client.delete(`/accounts/wishes/${id}`).then((res) => res.data),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(["hotDeal"]);
-      },
-    }
-  );
-
   return (
     <div className=" m-auto px-5">
       <div className="flex justify-between text-xs">
         <p className="subTitle text-base">{subTitle}</p>
-        <p className="allBtn text-xs text-gray cursor-pointer">전체보기</p>
+        <Link href="/store">
+          <p className="allBtn text-xs text-gray cursor-pointer">전체보기</p>
+        </Link>
       </div>
       <h2 className="title text-xl font-bold">{title}</h2>
       <div className="list grid grid-cols-5 gap-x-4">
@@ -79,7 +59,11 @@ function Product({ title, subTitle, products }: ProductProps) {
                 </div>
               </Link>
 
-              <div className={`${token ? "block" : "hidden"} `}>
+              <div
+                className={`${
+                  token ? "block" : "hidden"
+                } absolute bottom-[80px] right-[10px] w-8 h-8`}
+              >
                 <PickButton
                   id={item.id}
                   wish={item.is_wish}

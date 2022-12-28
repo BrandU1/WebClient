@@ -11,7 +11,7 @@ interface CategoryProps {
 }
 
 function Category({ onClose }: CategoryProps) {
-  const [id, setIndex] = useState(1);
+  const [id, setIndex] = useState(0);
 
   const categoryEl = useRef<HTMLDivElement>(null);
   const handleCategory = (e: any) => {
@@ -21,7 +21,7 @@ function Category({ onClose }: CategoryProps) {
   };
 
   const getCategories = () => {
-    return client.get("/products/categories").then((res) => res.data);
+    return client.get("products/categories").then((res) => res.data);
   };
 
   const { data, isLoading } = useQuery<BranduBaseResponse<Categories[]>>(
@@ -47,15 +47,24 @@ function Category({ onClose }: CategoryProps) {
             >
               {item.sub_categories.map((subItem, index) => {
                 return (
-                  <div key={index} className="text-center   pt-4 ">
+                  <div key={index} className="text-center pt-4 ">
                     <div className="h-[100px] w-[100px] bg-white flex justify-center items-center rounded-lg">
-                      <Image
-                        className="rounded-lg"
-                        src={subItem.backdrop_image}
-                        width={100}
-                        height={100}
-                        alt="product"
-                      />
+                      {subItem.backdrop_image != null ? (
+                        <Image
+                          className="rounded-lg"
+                          src={subItem.backdrop_image}
+                          width={100}
+                          height={100}
+                          alt="product"
+                        />
+                      ) : (
+                        <Image
+                          src={`https://via.placeholder.com/100x100?text=loading...`}
+                          alt={"subItem"}
+                          width={100}
+                          height={100}
+                        />
+                      )}
                     </div>
                     <p className="my-3 text-sm text-subContent">
                       {subItem.name}

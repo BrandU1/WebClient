@@ -1,8 +1,6 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import client from "@lib/api";
-import { AlertToast } from "@atoms/alerttoast";
 import HeartIcon from "@icons/heart";
-import { BranduBaseResponse, HotDeal } from "../../types/privacy";
 import { useRecoilState } from "recoil";
 import { ToastState, ToastStateAtom } from "../../recoil/toast";
 
@@ -17,7 +15,7 @@ function PickButton({ id, wish, li_width, li_height }: pickProp) {
   // pick 추가
   const mutation = useMutation(
     (id: number) =>
-      client.post(`/accounts/wishes/${id}`).then((res) => res.data),
+      client.post(`accounts/wishes/${id}`).then((res) => res.data),
     {
       onSuccess: () => {
         queryClient.invalidateQueries(["hotDeal"]);
@@ -28,7 +26,7 @@ function PickButton({ id, wish, li_width, li_height }: pickProp) {
   // pick 삭제
   const deletePick = useMutation(
     (id: number) =>
-      client.delete(`/accounts/wishes/${id}`).then((res) => res.data),
+      client.delete(`accounts/wishes/${id}`).then((res) => res.data),
     {
       onSuccess: () => {
         queryClient.invalidateQueries(["hotDeal"]);
@@ -55,7 +53,7 @@ function PickButton({ id, wish, li_width, li_height }: pickProp) {
       }}
       className={`${
         wish ? "bg-main" : "bg-[#DFDFE0]"
-      } pickBtn absolute bottom-[80px] right-[10px] w-8 h-8 rounded-xl flex justify-center items-center`}
+      } pickBtn w-full h-full rounded-xl flex justify-center items-center`}
     >
       <HeartIcon
         color={`${wish ? "#0CABA8" : "#DFDFE0"}`}
