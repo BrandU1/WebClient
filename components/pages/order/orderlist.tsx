@@ -16,10 +16,10 @@ function OrderList({
   address,
   setAddress,
 }: OrderListProps) {
-  const [selectedNumber, setSelectedNumber] = useState<number>(-1);
+  const [selectedNumber, setSelectedNumber] = useState<number>(0);
 
   useEffect(() => {
-    if (selectedNumber > -1) {
+    if (selectedNumber > 0) {
       setAddress(addresses[selectedNumber]);
     }
   }, [selectedNumber]);

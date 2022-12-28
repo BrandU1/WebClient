@@ -1,21 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import client from "@lib/api";
 import { useQuery } from "@tanstack/react-query";
-import { BranduBaseResponse } from "../../../types/privacy";
+import { BranduBaseResponse, FollowList } from "../../../types/privacy";
 
-interface FollowList {
-  follower: FollowingProfile[];
-  following: FollowingProfile[];
+interface FollowProp {
+  tab: number;
 }
-
-interface FollowingProfile {
-  id: number;
-  nickname: string;
-  social_link: string;
-}
-
-function FollowComp() {
+function FollowComp({ tab }: FollowProp) {
   const [followTab, setFollowTab] = useState<number>(0);
+
+  useEffect(() => {
+    setFollowTab(tab);
+  }, [tab]);
 
   const getFollow = () => {
     return client.get("accounts/follows").then((res) => res.data);
@@ -46,7 +42,7 @@ function FollowComp() {
         </button>
         <button
           onClick={() => setFollowTab(1)}
-          className={`w-full py-[10px] ${
+          className={`w-full py-[10px] font-bold ${
             followTab === 1 ? "bg-main text-white" : "text-main"
           }`}
         >

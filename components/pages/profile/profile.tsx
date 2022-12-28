@@ -1,7 +1,25 @@
 import Image from "next/image";
 import ScrapButton from "@common/scrapbutton";
+import client from "@lib/api";
+import { useQuery } from "@tanstack/react-query";
+import { BranduBaseResponse, FollowList } from "../../../types/privacy";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
 function Profile() {
+  const router = useRouter();
+  const getFollow = () => {
+    return client.get("accounts/follows").then((res) => res.data);
+  };
+  const { data, isLoading } = useQuery<BranduBaseResponse<FollowList>>(
+    ["follow"],
+    getFollow
+  );
+
+  if (isLoading) {
+    return <div></div>;
+  }
+
   return (
     <div className="flex flex-col max-w-4xl mt-5">
       <div className="profileInfo relative">
@@ -15,11 +33,36 @@ function Profile() {
           />
         </div>
         <div className="flex flex-row justify-end mt-6 text-sm items-center">
-          <p className="mr-0.5">팔로워</p>
-          <p className="font-bold">295</p>
+          <div
+            className="flex flex-row"
+            onClick={() => {
+              router.push({
+                pathname: "/profile/follow",
+                query: {
+                  tab: 0,
+                },
+              });
+            }}
+          >
+            <p className="mr-0.5">팔로워</p>
+            <p className="font-bold">{data?.results.follower.length}</p>
+          </div>
           <p className="mx-1">|</p>
-          <p className="mr-0.5">팔로잉</p>
-          <p className="font-bold">51</p>
+          <div
+            className="flex flex-row"
+            onClick={() => {
+              router.push({
+                pathname: "/profile/follow",
+                query: {
+                  tab: 1,
+                },
+              });
+            }}
+          >
+            <p className="mr-0.5">팔로잉</p>
+            <p className="font-bold">{data?.results.following.length}</p>
+          </div>
+
           <button className="bg-main text-white w-14 h-7 rounded-xl ml-2">
             팔로우
           </button>
