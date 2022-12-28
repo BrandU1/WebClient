@@ -17,6 +17,7 @@ import { useMutation } from "@tanstack/react-query";
 import client from "@lib/api";
 import { newOrder } from "../../recoil/order";
 import CheckBox from "@icons/checkBox";
+import { getUserInfo } from "../../recoil/point";
 
 interface PaymentForm {
   point: number;
@@ -68,10 +69,8 @@ export interface OrderCreate {
 function PayPage() {
   const router = useRouter();
   const orderData = useRecoilValue(newOrder);
-  // const [test, setTest] = useRecoilState(getUserData);
-  // console.log(test);
-  /* TODO: 유저만의 포인트를 가지고올 수 있도록 Recoil 처리 */
-  const [userPoint, setUserPoint] = useState<number>(1000);
+  const userPoint = useRecoilValue(getUserInfo);
+
   const [priceBarPrint, setPriceBarPrint] = useState<PriceBarPrint[]>([]);
   const { register, handleSubmit, setValue, watch, reset } =
     useForm<PaymentForm>({
@@ -96,8 +95,8 @@ function PayPage() {
 
   /* 포인트 전액 사용 */
   const useAllPoint = () => {
-    setValue("point", userPoint);
-    alert(watch("method"));
+    setValue("point", userPoint.point);
+    alert(watch("point") + " Point");
   };
 
   useEffect(() => {
@@ -207,7 +206,7 @@ function PayPage() {
                   autoComplete="off"
                   {...register("point", {
                     required: true,
-                    validate: (value) => value <= userPoint,
+                    validate: (value) => value <= userPoint.point,
                   })}
                 />
                 <button
@@ -222,7 +221,7 @@ function PayPage() {
                   사용가능한 포인트
                 </span>
                 <span className="text-main font-bold flex items-center">
-                  {userPoint.toLocaleString()} BP
+                  {userPoint.point.toLocaleString()} BP
                 </span>
               </div>
             </div>
@@ -278,7 +277,7 @@ function PayPage() {
 
             <p className="text-xs text-subContent flex flex-col space-y-5 mx-5 mt-2">
               개인정보 수집 이용 및 제 3자 제공 동의 <br />
-              <br /> 본인은 만 14세 이상이며, 주문 내용을 확인하였습니다. <br />{" "}
+              <br /> 본인은 만 14세 이상이며, 주문 내용을 확인하였습니다. <br />
               <br />
               (주)더미는 통신판매중개자로 거래 당사자가 아니므로, 판매자가
               등록한 상품정보 및 거래 등에 대해 책임을 지지 않습니다 (단,
@@ -288,7 +287,10 @@ function PayPage() {
           </div>
         </div>
         <div className="w-[30%]">
-          <Pricebar printList={priceBarPrint} disabled={true} />
+          <Pricebar
+            printList={priceBarPrint}
+            disabled={watch("isChecked") == false}
+          />
         </div>
       </form>
     </div>

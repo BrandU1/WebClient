@@ -14,5 +14,3 @@ export const ToastStateAtom = atom<ToastState>({
     alert: false,
   },
 });
-
-export default ToastStateAtom;

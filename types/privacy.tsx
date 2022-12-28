@@ -139,3 +139,14 @@ export interface SubCategories {
   name: string;
   backdrop_image: string;
 }
+
+export interface FollowList {
+  follower: FollowingProfile[];
+  following: FollowingProfile[];
+}
+
+export interface FollowingProfile {
+  id: number;
+  nickname: string;
+  social_link: string;
+}
