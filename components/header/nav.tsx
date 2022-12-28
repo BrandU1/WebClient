@@ -14,11 +14,12 @@ import Category from "@components/category";
 import GOTOMyPage from "@components/login/gomypage";
 import client from "@lib/api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { BranduBaseResponse, History } from "../../types/privacy";
+import { BranduBaseResponse, History, Ranking } from "../../types/privacy";
 import { useRecoilState } from "recoil";
 import { isLoginModalOpen } from "../../recoil/base";
 import { ToastState, ToastStateAtom } from "../../recoil/toast";
 import { AlertToast } from "@atoms/alerttoast";
+import { getHostname } from "next/dist/shared/lib/get-hostname";
 
 function Nav() {
   const [focused, setFocused] = useState<boolean>(false);
@@ -123,15 +124,21 @@ function Nav() {
   const handleMyPage = () => setOpen(false);
 
   // History API 연동
-
   const getHistory = () => {
     return client.get("search/history").then((res) => res.data);
   };
-
   const { data, isLoading } = useQuery<BranduBaseResponse<History[]>>(
     ["history"],
     getHistory
   );
+
+  // Ranking API 연동
+  const getRanking = () => {
+    return client.get("search/rank").then((res) => res.data);
+  };
+  const { data: rankingData, isLoading: rankLoading } = useQuery<
+    BranduBaseResponse<Ranking[]>
+  >(["rank"], getRanking);
 
   const onClicksSearch = () => {
     if (input !== "" && input.replace(/ /g, "") !== "") {
@@ -288,14 +295,14 @@ function Nav() {
                 <div className="topic">
                   <h3 className="p-3 text-sm">급상승 검색어</h3>
                   <div className="columns-2  m-auto">
-                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item, index) => {
+                    {rankingData?.results.map((item, index) => {
                       return (
                         <div key={index} className=" px-5 text-sm py-1 ">
                           <p>
                             <span className="text-main font-bold mx-4">
                               {index + 1}
                             </span>
-                            박재현 짱짱
+                            {item.search_word}
                           </p>
                           <div
                             className={`border-b-[1px] border-gray py-1 ${

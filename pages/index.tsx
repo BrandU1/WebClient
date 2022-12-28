@@ -7,7 +7,7 @@ import { GetServerSideProps } from "next";
 import useBranduQuery from "@hooks/useBranduQuery";
 import LoadingProgress from "@common/loading-progress";
 import Slider from "react-slick";
-import Image from "next/image";
+import ImgAtom from "@atoms/imgatom";
 
 export interface EventBanner {
   id: number;
@@ -76,13 +76,15 @@ function Home() {
             {carouselData?.results.map((item, index) => {
               return (
                 <div key={index} className="w-full">
-                  <Image
-                    className="w-full border border-subContent rounded-2xl"
-                    src={item.backdrop_image}
-                    alt={item.title}
-                    width={600}
-                    height={300}
-                  />
+                  <div className="w-full border border-subContent rounded-xl">
+                    <ImgAtom
+                      exist={item.backdrop_image}
+                      src={item.backdrop_image}
+                      width={600}
+                      height={300}
+                      alt={item.title}
+                    />
+                  </div>
 
                   <div className="relative z-20 bottom-8 float-right right-3 text-2xl">
                     <p className="px-[9px] h-5 bg-[#000] text-center rounded-xl text-sm font-bold text-white opacity-50 flex items-center">
@@ -98,13 +100,15 @@ function Home() {
           {bannerData?.results.map((item, index) => {
             return (
               <div key={index} className="w-full">
-                <Image
-                  className="relative w-full rounded-2xl aspect-[300/500] h-[300px]"
-                  src={item.backdrop_image}
-                  width={250}
-                  height={300}
-                  alt={item.title}
-                />
+                <div className="relative w-full justify-center  aspect-[300/500] h-[300px]">
+                  <ImgAtom
+                    exist={item.backdrop_image}
+                    src={item.backdrop_image}
+                    width={250}
+                    height={300}
+                    alt={item.title}
+                  />
+                </div>
               </div>
             );
           })}

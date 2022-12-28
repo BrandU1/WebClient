@@ -95,7 +95,7 @@ function PayPage() {
 
   /* 포인트 전액 사용 */
   const useAllPoint = () => {
-    setValue("point", userPoint.point);
+    setValue("point", userPoint);
     alert(watch("point") + " Point");
   };
 
@@ -206,7 +206,7 @@ function PayPage() {
                   autoComplete="off"
                   {...register("point", {
                     required: true,
-                    validate: (value) => value <= userPoint.point,
+                    validate: (value) => value <= userPoint,
                   })}
                 />
                 <button
@@ -221,7 +221,7 @@ function PayPage() {
                   사용가능한 포인트
                 </span>
                 <span className="text-main font-bold flex items-center">
-                  {userPoint.point.toLocaleString()} BP
+                  {userPoint.toLocaleString()} BP
                 </span>
               </div>
             </div>

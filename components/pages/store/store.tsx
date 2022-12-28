@@ -2,8 +2,6 @@ import { HotDeal } from "../../../types/privacy";
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import client from "@lib/api";
 import PickButton from "@components/pick/pickbutton";
 
 interface storeProps {

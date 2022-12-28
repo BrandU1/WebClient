@@ -1,10 +1,11 @@
 import { SearchResult } from "../../../types/privacy";
 import Link from "next/link";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import client from "@lib/api";
 import PickButton from "@components/pick/pickbutton";
+import ImgAtom from "@atoms/imgatom";
 
 interface SearchProps {
   searchResult: SearchResult[];
@@ -42,11 +43,12 @@ function Search({ searchResult }: SearchProps) {
                   as={`/product/${item.id}`}
                 >
                   <div className="h-60 relative">
-                    <Image
-                      className="rounded-2xl"
-                      src={`http://192.168.0.2${item.backdrop_image}`}
-                      alt="list"
-                      layout="fill"
+                    <ImgAtom
+                      exist={item.backdrop_image}
+                      src={item.backdrop_image}
+                      width={156}
+                      height={200}
+                      alt={"searchResult"}
                     />
                   </div>
                   <div className="mt-4">
@@ -57,12 +59,16 @@ function Search({ searchResult }: SearchProps) {
                   </div>
                 </Link>
 
-                <div className={`${token ? "block" : "hidden"} `}>
+                <div
+                  className={`${
+                    token ? "block" : "hidden"
+                  } absolute bottom-[80px] right-[10px] w-8 h-8`}
+                >
                   <PickButton
                     id={item.id}
                     wish={item.is_wish}
-                    li_height={17}
                     li_width={20}
+                    li_height={17}
                   />
                 </div>
               </div>

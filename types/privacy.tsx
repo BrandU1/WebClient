@@ -52,6 +52,10 @@ export interface History {
   search_word: string;
 }
 
+export interface Ranking {
+  search_word: string;
+}
+
 export interface HotDeal {
   backdrop_image: string;
   id: number;

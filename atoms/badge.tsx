@@ -1,4 +1,5 @@
 import Image from "next/image";
+import ImgAtom from "@atoms/imgatom";
 
 interface BadgeProps {
   color: string;
