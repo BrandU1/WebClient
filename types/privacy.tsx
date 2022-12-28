@@ -139,3 +139,10 @@ export interface SubCategories {
   name: string;
   backdrop_image: string;
 }
+export interface Community {
+  backdrop_image: string;
+  content: string;
+  id: number;
+  profile: number;
+  title: string;
+}

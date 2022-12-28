@@ -1,73 +1,152 @@
 import "react-quill/dist/quill.snow.css";
 import dynamic from "next/dynamic";
-import { useState } from "react";
-import ImageResize from "quill-image-resize-module";
+import { useMemo, useRef, useState } from "react";
+// import ImageResize from "quill-image-resize-module";
 import WriteAccordion from "@common/writeAccordion";
+import client from "@lib/api";
+import ReactQuill from "react-quill";
 
-const Quill = dynamic(() => import("react-quill"), {
-  ssr: false,
-  loading: () => <p>Loading...</p>,
-});
-
+const Quill = dynamic(
+  async () => {
+    const { default: RQ } = await import("react-quill");
+    // @ts-ignore
+    return function comp({ forwardedRef, ...props }) {
+      return <RQ ref={forwardedRef} {...props} />;
+    };
+  },
+  { ssr: false }
+);
 // Quill.register("modules/ImageResize", ImageResize);
 
 function Edit() {
-  const modules = {
-    toolbar: {
-      container: [
-        [{ header: [1, 2, 3, 4, 5, 6, false] }],
-        [{ font: [] }],
-        [{ align: [] }],
-        ["bold", "italic", "underline", "strike", "blockquote"],
-        [{ list: "ordered" }, { list: "bullet" }, "link"],
-        [
-          {
-            color: [
-              "#000000",
-              "#e60000",
-              "#ff9900",
-              "#ffff00",
-              "#008a00",
-              "#0066cc",
-              "#9933ff",
-              "#ffffff",
-              "#facccc",
-              "#ffebcc",
-              "#ffffcc",
-              "#cce8cc",
-              "#cce0f5",
-              "#ebd6ff",
-              "#bbbbbb",
-              "#f06666",
-              "#ffc266",
-              "#ffff66",
-              "#66b966",
-              "#66a3e0",
-              "#c285ff",
-              "#888888",
-              "#a10000",
-              "#b26b00",
-              "#b2b200",
-              "#006100",
-              "#0047b2",
-              "#6b24b2",
-              "#444444",
-              "#5c0000",
-              "#663d00",
-              "#666600",
-              "#003700",
-              "#002966",
-              "#3d1466",
-              "custom-color",
-            ],
-          },
-          { background: [] },
-        ],
-        ["image", "video"],
-        ["clean"],
-      ],
-    },
+  const quillRef = useRef<ReactQuill>();
+
+  const [text, setText] = useState<string>("");
+  const [backdropUrl, setBackdropUrl] = useState<string>("");
+
+  const handleText = (value: any) => {
+    setText(value);
+    console.log(text);
   };
+
+  const [title, setTitle] = useState<string>("");
+  const handleTitle = (e: any) => {
+    setTitle(e.target.value);
+  };
+
+  const submit = async () => {
+    // 이제 글 등록하기를 누르면 string을 서버로 보내야함.
+    client
+      .post("communities/posts", {
+        //제목 데이터
+        title: title,
+        //내용 데이터
+        content: text,
+        // backdrop_image: backdropUrl,
+      })
+      .then((res) => res.data);
+  };
+  const imageHandler = () => {
+    const input = document.createElement("input");
+    const formData = new FormData();
+    input.setAttribute("type", "file");
+    input.setAttribute("accept", "image/*");
+    input.click();
+
+    input.addEventListener("change", async () => {
+      const file = input.files;
+      if (file !== null) {
+        formData.append("image", file[0]);
+        try {
+          const result = await client
+            .post("communities/posts/images", formData)
+            .then((res) => res.data);
+          const imgUrl = result.results.image;
+          setBackdropUrl(imgUrl);
+          const editor = quillRef.current?.getEditor();
+          const range = editor?.getSelection();
+          editor?.insertEmbed(range.index, "image", imgUrl);
+          console.log("이미지 업로드 성공");
+          // const range = quillRef.current?.getEditor().getSelection()?.index;
+          //  if (range !== null && range !== undefined) {
+          //    let quill = quillRef.current?.getEditor();
+          //    quill?.setSelection(range, 1);
+          //    quill?.clipboard.dangerouslyPasteHTML(
+          //      range,
+          //      '<img src=${imgUrl} alt="이미지 태그 삽입"/>'
+          //    );
+          //  }
+          //  return { ...result, sucess: true };
+        } catch (e) {
+          console.log(e, "ErrorMessage");
+        }
+      }
+    });
+  };
+
+  const modules = useMemo(
+    () => ({
+      toolbar: {
+        container: [
+          [{ header: [1, 2, 3, 4, 5, 6, false] }],
+          [{ font: [] }],
+          [{ align: [] }],
+          ["bold", "italic", "underline", "strike", "blockquote"],
+          [{ list: "ordered" }, { list: "bullet" }, "link"],
+          [
+            {
+              color: [
+                "#000000",
+                "#e60000",
+                "#ff9900",
+                "#ffff00",
+                "#008a00",
+                "#0066cc",
+                "#9933ff",
+                "#ffffff",
+                "#facccc",
+                "#ffebcc",
+                "#ffffcc",
+                "#cce8cc",
+                "#cce0f5",
+                "#ebd6ff",
+                "#bbbbbb",
+                "#f06666",
+                "#ffc266",
+                "#ffff66",
+                "#66b966",
+                "#66a3e0",
+                "#c285ff",
+                "#888888",
+                "#a10000",
+                "#b26b00",
+                "#b2b200",
+                "#006100",
+                "#0047b2",
+                "#6b24b2",
+                "#444444",
+                "#5c0000",
+                "#663d00",
+                "#666600",
+                "#003700",
+                "#002966",
+                "#3d1466",
+                "custom-color",
+              ],
+            },
+            { background: [] },
+          ],
+          ["image", "video"],
+          ["clean"],
+        ],
+        handlers: {
+          image: imageHandler,
+        },
+      },
+    }),
+    []
+  );
+
   const formats = [
     "header",
     "font",
@@ -83,22 +162,11 @@ function Edit() {
     "image",
   ];
 
-  const [text, setText] = useState<string>("");
-  const handleText = (value: any) => {
-    setText(value);
-  };
-
+  // @ts-ignore
+  // @ts-ignore
   return (
     <div className="pt-10">
       <div className="tip h-auto border-[2px] border-main  mb-10 rounded-xl ">
-        {/*<div>*/}
-        {/*  <h1 className="font-bold">*/}
-        {/*    글쓰기 가이드*/}
-        {/*    <span className="text-xs px-4 font-normal">*/}
-        {/*      원할한 커뮤니티 작성을 위해 꼭 읽어주세요*/}
-        {/*    </span>*/}
-        {/*  </h1>*/}
-        {/*</div>*/}
         <WriteAccordion
           title="글쓰기 가이드"
           subTitle="원할한 글쓰기를 위해 꼭 읽어주세요"
@@ -120,9 +188,18 @@ function Edit() {
             </li>
           </>
         </WriteAccordion>
-        <div></div>
+      </div>
+      <div className="my-4">
+        <input
+          placeholder="제목을 입력해주세요"
+          className="w-full h-14 p-3 border-gray border-[1px] outline-0"
+          onChange={handleTitle}
+          value={title}
+        />
       </div>
       <Quill
+        // @ts-ignore
+        forwardedRef={quillRef}
         placeholder="내용을 입력해주세요"
         className="h-full"
         theme="snow"
@@ -131,6 +208,11 @@ function Edit() {
         value={text}
         onChange={handleText}
       />
+      <div onClick={submit} className="flex justify-center py-5">
+        <button className="p-3 border-main border-[2px] rounded-2xl">
+          글 등록하기
+        </button>
+      </div>
     </div>
   );
 }
