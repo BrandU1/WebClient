@@ -5,6 +5,7 @@ import { GetServerSideProps } from "next";
 import BranduLogo from "@icons/brandu-logo";
 import useBranduQuery from "@hooks/useBranduQuery";
 import Image from "next/image";
+import ImgAtom from "@atoms/imgatom";
 
 interface Bucket {
   id: number;
@@ -59,11 +60,12 @@ function Success() {
             <div key={index}>
               <div className="flex items-center my-2">
                 <div className="w-20 h-20 relative">
-                  <Image
-                    className=""
-                    src={`http://192.168.0.2/media/${product.backdrop_image}`}
+                  <ImgAtom
+                    exist={product.backdrop_image}
+                    src={product.backdrop_image}
+                    width={80}
+                    height={80}
                     alt={product.name}
-                    layout="fill"
                   />
                 </div>
                 <div className="ml-2">

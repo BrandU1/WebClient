@@ -4,6 +4,7 @@ import client from "@lib/api";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "@common/loading";
 import { BranduBaseResponse, Categories } from "../../types/privacy";
+import ImgAtom from "@atoms/imgatom";
 
 interface CategoryProps {
   // ref: React.ForwardedRef<HTMLDivElement>;
@@ -49,22 +50,13 @@ function Category({ onClose }: CategoryProps) {
                 return (
                   <div key={index} className="text-center pt-4 ">
                     <div className="h-[100px] w-[100px] bg-white flex justify-center items-center rounded-lg">
-                      {subItem.backdrop_image != null ? (
-                        <Image
-                          className="rounded-lg"
-                          src={subItem.backdrop_image}
-                          width={100}
-                          height={100}
-                          alt="product"
-                        />
-                      ) : (
-                        <Image
-                          src={`https://via.placeholder.com/100x100?text=loading...`}
-                          alt={"subItem"}
-                          width={100}
-                          height={100}
-                        />
-                      )}
+                      <ImgAtom
+                        exist={subItem.backdrop_image}
+                        src={subItem.backdrop_image}
+                        width={100}
+                        height={100}
+                        alt={"product"}
+                      />
                     </div>
                     <p className="my-3 text-sm text-subContent">
                       {subItem.name}

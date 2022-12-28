@@ -1,12 +1,8 @@
-import Image from "next/image";
-import HeartIcon from "@icons/heart";
 import React, { useEffect, useState } from "react";
-import { ProductInterface } from "../../../types/product";
 import Link from "next/link";
-import client from "@lib/api";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { HotDeal } from "../../../types/privacy";
 import PickButton from "@components/pick/pickbutton";
+import ImgAtom from "@atoms/imgatom";
 
 interface ProductProps {
   title: string;
@@ -46,11 +42,12 @@ function Product({ title, subTitle, products }: ProductProps) {
                 as={`/product/${item.id}`}
               >
                 <div className="h-60 relative">
-                  <Image
-                    className="rounded-2xl"
-                    src={`${item.backdrop_image}`}
-                    alt="list"
-                    layout="fill"
+                  <ImgAtom
+                    exist={item.backdrop_image}
+                    src={item.backdrop_image}
+                    width={156}
+                    height={200}
+                    alt={"list"}
                   />
                 </div>
                 <div className="mt-4">
