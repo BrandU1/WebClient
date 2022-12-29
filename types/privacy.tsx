@@ -154,3 +154,11 @@ export interface FollowingProfile {
   nickname: string;
   social_link: string;
 }
+
+export interface Community {
+  backdrop_image: string;
+  content: string;
+  id: number;
+  profile: number;
+  title: string;
+}

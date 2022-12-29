@@ -1,8 +1,15 @@
 import Image from "next/image";
 import { useState } from "react";
 import Share from "@atoms/share";
+import client from "@lib/api";
+import { useQuery } from "@tanstack/react-query";
+import { BranduBaseResponse, Community } from "../../../types/privacy";
 
-function Post() {
+interface Post {
+  data: Community;
+}
+
+function Post({ data }: Post) {
   const [text, setText] = useState<string>("");
   const onChange = (e: any) => {
     setText(e.target.value);
@@ -18,13 +25,8 @@ function Post() {
           className="rounded-2xl"
         />
         <div className="mt-2 flex justify-between px-2">
-          <h2 className="font-bold text-lg">
-            브랜뉴로 만들어가는 우리집 리뉴얼
-          </h2>
-          <Share
-            image={"/dummy/cat.png"}
-            name={"브랜뉴로 만들어가는 우리집 리뉴얼"}
-          />
+          <h2 className="font-bold text-lg">{data?.title}</h2>
+          <Share image={"/dummy/cat.png"} name={data?.title} />
         </div>
         <div className="flex flex-row items-center mt-5 px-2">
           <div className="w-9 h-9 bg-gray rounded-xl" />
@@ -35,33 +37,7 @@ function Post() {
         </div>
       </div>
       <div className="content mt-5 text-sm border-b border-gray pb-5 px-2">
-        <h2>
-          안녕하세요, 이번에는 브랜뉴에서 구입한 제품들로 저희 집 부엌을
-          꾸며보았습니다. 사진에서 보이시는 것들 중에 어떤게 친환경 제품인지
-          여러분들은 찾으셨나요? 다 꾸며놓고 보니 저도 구별이 잘 안될정도로 좋은
-          제품들이 많습니다.
-        </h2>
-        <div className="flex flex-row space-x-2 my-5">
-          <Image
-            src={"/dummy/panda.png"}
-            alt={"panda"}
-            width={260}
-            height={230}
-            className="rounded-xl"
-          />
-          <Image
-            src={"/dummy/panda.png"}
-            alt={"panda"}
-            width={330}
-            height={230}
-            className="rounded-xl"
-          />
-        </div>
-        <h2>
-          화장대 위치에는 우드 테이블을 사용해서 심플하면서 안정된 느낌을
-          주었고, 부엌에는 친환경 플라스틱으로 만들어진 블랙 색상의 전구로
-          포인트를 주었습니다.
-        </h2>
+        <div dangerouslySetInnerHTML={{ __html: data?.content }}></div>
       </div>
       <div className="reply mt-5">
         <div className="summary border-b border-gray pb-5 text-sm flex flex-row text-subContent">
