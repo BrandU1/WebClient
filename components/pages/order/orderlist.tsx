@@ -7,7 +7,7 @@ interface OrderListProps {
   baskets: BasketPurchase[];
   addresses: AddressInterface[];
   address: AddressInterface | null;
-  setAddress: Dispatch<SetStateAction<AddressInterface | null>>;
+  setAddress: any;
 }
 
 function OrderList({
@@ -20,7 +20,7 @@ function OrderList({
 
   useEffect(() => {
     if (selectedNumber > 0) {
-      setAddress(addresses[selectedNumber]);
+      setAddress(addresses[selectedNumber].id);
     }
   }, [selectedNumber]);
 
@@ -91,12 +91,12 @@ function OrderList({
             <span>주소</span>
           </div>
           <div className="flex flex-col space-y-[10px] text-sm justify-start mt-[10px]">
-            {address && (
+            {addresses && (
               <>
-                <span>{address.recipient}</span>
-                <span>{address.phone_number}</span>
-                <span>{`[${address.zip_code}] ${address.road_name_address}`}</span>
-                <span>{address.detail_address}</span>
+                <span>{addresses[selectedNumber].recipient}</span>
+                <span>{addresses[selectedNumber].phone_number}</span>
+                <span>{`[${addresses[selectedNumber].zip_code}] ${addresses[selectedNumber].road_name_address}`}</span>
+                <span>{addresses[selectedNumber].detail_address}</span>
               </>
             )}
           </div>

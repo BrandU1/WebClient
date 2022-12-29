@@ -21,23 +21,22 @@ export const selectedAddress = atom<AddressInterface | null>({
   effects_UNSTABLE: [persistAtom],
 });
 
-export const orderAddress = selector({
+export const orderAddress = selector<AddressInterface | null | undefined>({
   key: "orderAddress",
   get: ({ get }) => {
-    const address = get(selectedAddress);
-    return address;
+    return get(selectedAddress);
   },
 });
 
-export const newOrder = selector<OrderRecoilState>({
+export const newOrder = selector<OrderRecoilState | null | undefined>({
   key: "newOrderState",
   get: ({ get }) => {
     const address = get(orderAddress);
     const products = get(purchaseProducts);
     const price = products.reduce((acc, cur) => acc + cur.price, 0);
 
-    const order = {
-      name: `${products[0].product.name} 외 ${products.length - 1}개`,
+    return {
+      name: `${products[0]?.product.name} 외 ${products.length - 1}개`,
       address: address?.id || 0,
       products: products.map((product) => ({
         product: product.product.id,
@@ -45,6 +44,5 @@ export const newOrder = selector<OrderRecoilState>({
       })),
       orderPrice: price,
     };
-    return order;
   },
 });

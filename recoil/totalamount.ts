@@ -54,7 +54,7 @@ export const purchaseProducts = selector({
   },
 });
 
-export const totalPrice = selector<OrderPrice>({
+export const totalPrice = selector<OrderPrice | undefined>({
   key: "totalPrice",
   get: ({ get }) => {
     const purchaseList = get(basketPurchase);

@@ -53,7 +53,7 @@ function BasketList({ basketList }: BasketListProps) {
       {
         id: 1,
         title: "주문 금액",
-        price: price.orderPrice,
+        price: price?.orderPrice || 0,
       },
       {
         id: 2,
@@ -63,7 +63,7 @@ function BasketList({ basketList }: BasketListProps) {
       {
         id: 3,
         title: "합계 금액",
-        price: price.totalPrice,
+        price: price?.totalPrice || 0,
         isBold: true,
       },
     ]);
