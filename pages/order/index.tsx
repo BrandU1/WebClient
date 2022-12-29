@@ -20,7 +20,6 @@ function OrderPage() {
   const [priceBarPrint, setPriceBarPrint] = useState<PriceBarPrint[]>([]);
   const baskets = useRecoilValue(purchaseProducts);
   const [address, setAddress] = useRecoilState(selectedAddress);
-  console.log(address);
 
   const {
     data: addresses,
