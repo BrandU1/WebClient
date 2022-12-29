@@ -5,7 +5,6 @@ import { purchaseProducts, totalPrice } from "../../recoil/totalamount";
 import { useEffect, useState } from "react";
 import useBranduQuery from "@hooks/useBranduQuery";
 import { getAddresses } from "@lib/fetches";
-import { useRouter } from "next/router";
 import { selectedAddress } from "../../recoil/order";
 import { AddressInterface } from "../../types/privacy";
 
@@ -20,8 +19,9 @@ function OrderPage() {
   const price = useRecoilValue(totalPrice);
   const [priceBarPrint, setPriceBarPrint] = useState<PriceBarPrint[]>([]);
   const baskets = useRecoilValue(purchaseProducts);
-  const router = useRouter();
   const [address, setAddress] = useRecoilState(selectedAddress);
+
+  console.log(address);
 
   const {
     data: addresses,
@@ -41,7 +41,7 @@ function OrderPage() {
       {
         id: 1,
         title: "주문 금액",
-        price: price.orderPrice,
+        price: price?.orderPrice || 0,
       },
       {
         id: 2,
@@ -51,7 +51,7 @@ function OrderPage() {
       {
         id: 3,
         title: "합계 금액",
-        price: price.totalPrice,
+        price: price?.totalPrice || 0,
         isBold: true,
       },
     ]);
@@ -62,14 +62,14 @@ function OrderPage() {
       <div className="flex flex-col w-[70%]">
         <p className="font-bold text-xl my-5">주문 및 결제</p>
         <OrderList
-          baskets={baskets}
+          baskets={baskets!}
           addresses={addresses?.results!}
-          address={address}
+          address={address!}
           setAddress={setAddress}
         />
       </div>
       <div className="price w-[30%]">
-        <PriceBar printList={priceBarPrint} disabled={address === null} />
+        <PriceBar printList={priceBarPrint} disabled={addresses === null} />
       </div>
     </div>
   );

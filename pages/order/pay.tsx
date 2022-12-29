@@ -67,9 +67,10 @@ export interface OrderCreate {
 }
 
 function PayPage() {
-  const router = useRouter();
   const orderData = useRecoilValue(newOrder);
+
   const userPoint = useRecoilValue(getUserInfo);
+  console.log(orderData);
 
   const [priceBarPrint, setPriceBarPrint] = useState<PriceBarPrint[]>([]);
   const { register, handleSubmit, setValue, watch, reset } =
@@ -104,7 +105,7 @@ function PayPage() {
       {
         id: 1,
         title: "주문 금액",
-        price: orderData.orderPrice,
+        price: orderData?.orderPrice || 0,
       },
       {
         id: 2,
@@ -126,7 +127,7 @@ function PayPage() {
       {
         id: 5,
         title: "합계 금액",
-        price: orderData.orderPrice + 3000 - watch("point"),
+        price: (orderData?.orderPrice || 0) + 3000 - watch("point"),
         isBold: true,
       },
     ]);
@@ -134,12 +135,12 @@ function PayPage() {
 
   const onValid = async (data: PaymentForm) => {
     createOrder.mutate({
-      name: orderData.name,
-      address: orderData.address,
-      products: orderData.products,
-      price: orderData.orderPrice + 3000 - data.point,
-      used_point: data.point,
-      method: data.method,
+      name: orderData?.name || "",
+      address: orderData?.address || 0,
+      products: orderData?.products || [],
+      price: (orderData?.orderPrice || 0) + 3000 - data?.point,
+      used_point: data?.point,
+      method: data?.method,
     });
   };
 
@@ -154,9 +155,9 @@ function PayPage() {
   const requestTossPayment = async (orderNumber: string) => {
     const tossPayments = await getTossPayments();
     await tossPayments.requestPayment(watch("method"), {
-      amount: orderData.orderPrice + 3000 - watch("point"),
+      amount: (orderData?.orderPrice || 0) + 3000 - watch("point"),
       orderId: orderNumber,
-      orderName: orderData.name,
+      orderName: orderData?.name || "",
       customerName: "박재현",
       useCardPoint: true,
       successUrl: "http://localhost:3000/order/waiting",
@@ -221,7 +222,7 @@ function PayPage() {
                   사용가능한 포인트
                 </span>
                 <span className="text-main font-bold flex items-center">
-                  {userPoint.toLocaleString()} BP
+                  {userPoint?.toLocaleString()} BP
                 </span>
               </div>
             </div>
@@ -263,6 +264,7 @@ function PayPage() {
               }`}
             >
               <CheckButton
+                color={"none"}
                 register={register("isChecked", {
                   required: true,
                   validate: (value) => value === true,

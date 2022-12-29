@@ -3,9 +3,10 @@ interface CheckProps {
   title?: string;
   width: number;
   height: number;
+  color: string;
 }
 
-function CheckButton({ register, width, height, title }: CheckProps) {
+function CheckButton({ register, width, height, title, color }: CheckProps) {
   return (
     <label className="flex flex-row cursor-pointer">
       <input type="checkbox" className="hidden peer" {...register} />

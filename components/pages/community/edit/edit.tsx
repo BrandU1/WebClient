@@ -26,7 +26,6 @@ function Edit() {
 
   const handleText = (value: any) => {
     setText(value);
-    console.log(text);
   };
 
   const [title, setTitle] = useState<string>("");
@@ -166,7 +165,7 @@ function Edit() {
   // @ts-ignore
   return (
     <div className="pt-10">
-      <div className="tip h-auto border-[2px] border-main  mb-10 rounded-xl ">
+      <div className="tip h-auto border-[2px] border-main  mb-10 rounded-xl text-sm ">
         <WriteAccordion
           title="글쓰기 가이드"
           subTitle="원할한 글쓰기를 위해 꼭 읽어주세요"
