@@ -1,3 +1,5 @@
+import { SimpleProduct } from "../recoil/totalamount";
+
 export interface pickInterface {
   id: number;
   is_basket: boolean;
@@ -13,13 +15,7 @@ export interface pickInterface {
 export interface basketInterface {
   amount: number;
   is_purchase: boolean;
-  product: {
-    backdrop_image: string;
-    id: number;
-    is_wish: boolean;
-    name: string;
-    price: number;
-  };
+  product: SimpleProduct;
 }
 
 export interface AddressInterface {
@@ -45,6 +41,7 @@ export interface UserInterface {
   social_link?: string;
   platforms: Platform[];
 }
+
 export interface Platform {
   created: string;
   platform: string;
@@ -52,6 +49,10 @@ export interface Platform {
 
 export interface History {
   id: number;
+  search_word: string;
+}
+
+export interface Ranking {
   search_word: string;
 }
 
@@ -85,6 +86,7 @@ export interface Product {
   category: number;
   view_count: number;
 }
+
 export interface Tags {
   id: number;
   name: string;
@@ -105,6 +107,7 @@ export interface SearchBase {
   previous: string;
   results: SearchResult[];
 }
+
 export interface SearchResult {
   id: number;
   name: string;
@@ -116,4 +119,46 @@ export interface SearchResult {
 export interface BranduBaseResponse<T> {
   success: boolean;
   results: T;
+  error?: T;
+}
+
+export interface Point {
+  point: number;
+  point_history: PointHistory[];
+}
+export interface PointHistory {
+  id: number;
+  memo: string;
+  point: number;
+  is_use: boolean;
+  created: string;
+}
+export interface Categories {
+  id: number;
+  name: string;
+  sub_categories: SubCategories[];
+}
+export interface SubCategories {
+  id: number;
+  name: string;
+  backdrop_image: string;
+}
+
+export interface FollowList {
+  follower: FollowingProfile[];
+  following: FollowingProfile[];
+}
+
+export interface FollowingProfile {
+  id: number;
+  nickname: string;
+  social_link: string;
+}
+
+export interface Community {
+  backdrop_image: string;
+  content: string;
+  id: number;
+  profile: number;
+  title: string;
 }

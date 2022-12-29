@@ -1,4 +1,3 @@
-import Input from "@common/input";
 import SearchIcon from "@icons/search";
 import HeartIcon from "@icons/heart";
 import BasketIcon from "@icons/basket";
@@ -7,7 +6,7 @@ import HamburgerIcon from "@icons/hamburger";
 import ProfileIcon from "@icons//profile";
 import BranduIcon from "@icons/brandu";
 import CloseIcon from "@icons/close";
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef, useState } from "react";
 import LoginModal from "@components/login";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -15,11 +14,15 @@ import Category from "@components/category";
 import GOTOMyPage from "@components/login/gomypage";
 import client from "@lib/api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { BranduBaseResponse, History } from "../../types/privacy";
+import { BranduBaseResponse, History, Ranking } from "../../types/privacy";
+import { useRecoilState } from "recoil";
+import { isLoginModalOpen } from "../../recoil/base";
+import { ToastState, ToastStateAtom } from "../../recoil/toast";
+import { AlertToast } from "@atoms/alerttoast";
+import { getHostname } from "next/dist/shared/lib/get-hostname";
 
 function Nav() {
   const [focused, setFocused] = useState<boolean>(false);
-  const showSearch = () => setFocused(true);
   const closeSearch = () => setFocused(false);
 
   // inputBar blur
@@ -43,7 +46,7 @@ function Nav() {
   const [input, setInput] = useState<string>("");
 
   // Login 관련
-  const [modalOpen, setModalOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useRecoilState(isLoginModalOpen);
 
   const [token, setToken] = useState<any>(null);
   useEffect(() => {
@@ -121,15 +124,21 @@ function Nav() {
   const handleMyPage = () => setOpen(false);
 
   // History API 연동
-
   const getHistory = () => {
     return client.get("search/history").then((res) => res.data);
   };
-
   const { data, isLoading } = useQuery<BranduBaseResponse<History[]>>(
     ["history"],
     getHistory
   );
+
+  // Ranking API 연동
+  const getRanking = () => {
+    return client.get("search/rank").then((res) => res.data);
+  };
+  const { data: rankingData, isLoading: rankLoading } = useQuery<
+    BranduBaseResponse<Ranking[]>
+  >(["rank"], getRanking);
 
   const onClicksSearch = () => {
     if (input !== "" && input.replace(/ /g, "") !== "") {
@@ -171,17 +180,70 @@ function Nav() {
     }
   );
 
+  //Pick, Bucket, ... 알림
+  const [toast, setToast] = useRecoilState<ToastState>(ToastStateAtom);
+
+  //alert 5초
+  useEffect(() => {
+    if (toast.alert == true) {
+      const timer = setTimeout(() => {
+        const temp = { ...toast };
+        temp.alert = false;
+        setToast(temp);
+      }, 5000);
+      return () => {
+        clearTimeout(timer);
+      };
+    }
+  }, [toast.alert]);
+
+  //이동하기 후 alert 지우기
+  const timerOut = () => {
+    const temp = { ...toast };
+    temp.alert = false;
+    setToast(temp);
+  };
+
   return (
     <>
       <div
         className={`top-0 z-50 transition bg-white border-b-[1px] border-gray`}
       >
         <div className=" m-auto  max-w-4xl py-3 flex justify-between items-center min-w-fit relative">
-          <Link href="/">
+          <Link
+            href="/"
+            onClick={() => {
+              setInput("");
+            }}
+          >
             <BranduIcon width={100} height={22} />
           </Link>
-          <p>스토어</p>
-          <p>커뮤니티</p>
+          {path.includes("/store") ? (
+            <Link href={"/store"}>
+              <div className={`text-main font-bold`}>
+                <p>스토어</p>
+              </div>
+            </Link>
+          ) : (
+            <Link href={"/store"}>
+              <div>
+                <p>스토어</p>
+              </div>
+            </Link>
+          )}
+          {path.includes("/community") ? (
+            <Link href={"/community"}>
+              <div className={`text-main font-bold`}>
+                <p>커뮤니티</p>
+              </div>
+            </Link>
+          ) : (
+            <Link href={"/community"}>
+              <div>
+                <p>커뮤니티</p>
+              </div>
+            </Link>
+          )}
           <div ref={inputEl}>
             <div
               onClick={() => setFocused(!focused)}
@@ -190,7 +252,7 @@ function Nav() {
               }`}
             >
               <input
-                className={`bg-transparent text-main w-full h-fit rounded-xl text-sm font-bold border-main  focus:outline-0 px-2`}
+                className={`text-main w-full h-fit rounded-xl text-sm font-bold border-main focus:outline-none px-2`}
                 onChange={(e: any) => {
                   setInput(e.target.value);
                 }}
@@ -204,7 +266,7 @@ function Nav() {
               </div>
             </div>
             {focused && (
-              <div className="dropdown bg-white border-[1px] border-main border-t-white rounded-b-xl py-3 absolute  w-[350px]">
+              <div className="dropdown bg-white border-[1px] border-main border-t-white rounded-b-xl py-3 absolute w-[350px]">
                 <div className="flex justify-between px-3 py-2">
                   <h3 className="text-sm">최근 검색어</h3>
                   <p
@@ -233,14 +295,14 @@ function Nav() {
                 <div className="topic">
                   <h3 className="p-3 text-sm">급상승 검색어</h3>
                   <div className="columns-2  m-auto">
-                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item, index) => {
+                    {rankingData?.results.map((item, index) => {
                       return (
                         <div key={index} className=" px-5 text-sm py-1 ">
                           <p>
                             <span className="text-main font-bold mx-4">
                               {index + 1}
                             </span>
-                            박재현 짱짱
+                            {item.search_word}
                           </p>
                           <div
                             className={`border-b-[1px] border-gray py-1 ${
@@ -340,8 +402,20 @@ function Nav() {
             category ? "block " : "hidden"
           }`}
         >
-          <Category ref={outside} />
+          <Category onClose={normalClose} />
         </div>
+      </div>
+      <div>
+        {toast && (
+          <AlertToast
+            text={toast.type}
+            path={toast.path}
+            start={toast.alert}
+            onClose={() => {
+              timerOut();
+            }}
+          />
+        )}
       </div>
     </>
   );

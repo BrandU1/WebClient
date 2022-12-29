@@ -1,36 +1,34 @@
 import Image from "next/image";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import client from "@lib/api";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "@common/loading";
-
-interface Categories {
-  id: number;
-  name: string;
-  sub_categories: SubCategories[];
-}
-interface SubCategories {
-  id: number;
-  name: string;
-  backdrop_image: string;
-}
+import { BranduBaseResponse, Categories } from "../../types/privacy";
+import ImgAtom from "@atoms/imgatom";
 
 interface CategoryProps {
-  ref: React.ForwardedRef<HTMLDivElement>;
+  // ref: React.ForwardedRef<HTMLDivElement>;
+  onClose: () => void;
 }
 
-function Category({ ref }: CategoryProps) {
-  const [id, setIndex] = useState(1);
+function Category({ onClose }: CategoryProps) {
+  const [id, setIndex] = useState(0);
 
-  const getCategories = () => {
-    return client.get("/products/categories").then((res) => res.data);
+  const categoryEl = useRef<HTMLDivElement>(null);
+  const handleCategory = (e: any) => {
+    if (!categoryEl.current?.contains(e.target)) {
+      onClose();
+    }
   };
 
-  const { data, isLoading } = useQuery<Categories[]>(
+  const getCategories = () => {
+    return client.get("products/categories").then((res) => res.data);
+  };
+
+  const { data, isLoading } = useQuery<BranduBaseResponse<Categories[]>>(
     ["category"],
     getCategories
   );
-
   if (isLoading) {
     return (
       <div className="flex justify-center">
@@ -40,9 +38,9 @@ function Category({ ref }: CategoryProps) {
   }
 
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center" onClick={handleCategory}>
       <div className=" pt-5 pb-40  w-[700px] ">
-        {data?.map((item, idx) => {
+        {data?.results.map((item, idx) => {
           return (
             <div
               key={idx}
@@ -50,14 +48,14 @@ function Category({ ref }: CategoryProps) {
             >
               {item.sub_categories.map((subItem, index) => {
                 return (
-                  <div key={index} className="text-center   pt-4 ">
+                  <div key={index} className="text-center pt-4 ">
                     <div className="h-[100px] w-[100px] bg-white flex justify-center items-center rounded-lg">
-                      <Image
-                        className="rounded-lg"
+                      <ImgAtom
+                        exist={subItem.backdrop_image}
                         src={subItem.backdrop_image}
                         width={100}
                         height={100}
-                        alt="product"
+                        alt={"product"}
                       />
                     </div>
                     <p className="my-3 text-sm text-subContent">
@@ -71,7 +69,7 @@ function Category({ ref }: CategoryProps) {
         })}
       </div>
       <div className="h-auto w-[110px] bg-white border-[1px] border-main text-center">
-        {data?.map((item, index) => {
+        {data?.results.map((item, index) => {
           return (
             <div
               key={index}

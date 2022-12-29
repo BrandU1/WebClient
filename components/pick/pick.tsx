@@ -14,7 +14,7 @@ function PickList({ picks }: PickList) {
 
   const mutation = useMutation(
     (id: number) =>
-      client.post(`/accounts/baskets/${id}/add`).then((res) => res.data),
+      client.post(`/accounts/baskets/${id}`).then((res) => res.data),
     {
       onSuccess: () => {
         queryClient.invalidateQueries(["basketList"]);
@@ -22,11 +22,20 @@ function PickList({ picks }: PickList) {
     }
   );
 
+  const mutationDelete = useMutation(
+    (id: number) => client.delete(`accounts/wishes/${id}`),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["pickList"]);
+      },
+    }
+  );
+
   return (
-    <div className="max-w-4xl m-auto ">
+    <div className="max-w-4xl m-auto">
       <div>
         <h2 className="py-5 font-bold text-xl">찜한상품</h2>
-        <div className="border-[1px] border-black" />
+        <div className="border-b-[1px] border-black" />
       </div>
       <div className="pickList grid grid-cols-2 gap-x-7 m-auto">
         {picks?.map((res, idx) => {
@@ -36,7 +45,7 @@ function PickList({ picks }: PickList) {
                 <div className="relative w-24 h-24">
                   <Image
                     className="rounded-lg"
-                    src={`http://192.168.0.2${res.product.backdrop_image}`}
+                    src={`${res.product.backdrop_image}`}
                     layout="fill"
                     alt="product"
                   />
@@ -57,25 +66,30 @@ function PickList({ picks }: PickList) {
               </div>
 
               <div className=" flex-row items-center space-y-14 align-middle ml-52">
-                <div className="ml-2">
+                <div
+                  onClick={() => {
+                    mutationDelete.mutate(res.product.id);
+                  }}
+                  className="ml-2"
+                >
                   <CloseIcon />
                 </div>
 
-                <div
-                  onClick={() => {
-                    mutation.mutate(res.product.id);
-                  }}
-                  className={`${
-                    res.is_basket === true ? "bg-[#0CABA8]" : "bg-[#D9D9D9]"
-                  } bg-gray rounded-lg flex justify-center items-center w-7 h-7 mt-3`}
-                >
-                  <BasketIcon
-                    color={`${res.is_basket === true ? "#fff" : "none"}`}
-                    width={18}
-                    height={18}
-                    stroke={`${res.is_basket === true ? "none" : "#fff"}`}
-                  />
-                </div>
+                {/*<div*/}
+                {/*  onClick={() => {*/}
+                {/*    mutation.mutate(res.product.id);*/}
+                {/*  }}*/}
+                {/*  className={`${*/}
+                {/*    res.is_basket === true ? "bg-[#0CABA8]" : "bg-[#D9D9D9]"*/}
+                {/*  } bg-gray rounded-lg flex justify-center items-center w-7 h-7 mt-3`}*/}
+                {/*>*/}
+                {/*  <BasketIcon*/}
+                {/*    color={`${res.is_basket === true ? "#fff" : "none"}`}*/}
+                {/*    width={18}*/}
+                {/*    height={18}*/}
+                {/*    stroke={`${res.is_basket === true ? "none" : "#fff"}`}*/}
+                {/*  />*/}
+                {/*</div>*/}
               </div>
 
               {/*<div className="bg-gray w-7 h-7 rounded-lg flex justify-center items-center  ">*/}

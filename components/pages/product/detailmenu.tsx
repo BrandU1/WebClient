@@ -1,117 +1,61 @@
 import { Link } from "react-scroll";
+import * as React from "react";
 import { useEffect, useState } from "react";
 
-function DetailMenu() {
-  const [scrollPs, setScrollPs] = useState<number>(0);
-  const [tab, setTab] = useState<number>(scrollPs);
+function ProductNavigationBar() {
+  const [scrollPosition, setScrollPosition] = useState<number>(0);
 
   useEffect(() => {
     const presentScroll = () => {
-      const infoEle = document.getElementById("1");
-      const infoRect = infoEle?.getBoundingClientRect().top;
+      const info = document.getElementById("0")?.getBoundingClientRect().top;
+      const guide = document.getElementById("1")?.getBoundingClientRect().top;
+      const review = document.getElementById("2")?.getBoundingClientRect().top;
+      const delivery = document
+        .getElementById("3")
+        ?.getBoundingClientRect().top;
 
-      const guideEle = document.getElementById("2");
-      const guideRect = guideEle?.getBoundingClientRect().top;
-
-      const reviewEle = document.getElementById("3");
-      const reviewRect = reviewEle?.getBoundingClientRect().top;
-
-      const delivEle = document.getElementById("4");
-      const delivRect = delivEle?.getBoundingClientRect().top;
-
-      // @ts-ignore
-      if (delivRect < 131) {
-        setScrollPs(3);
-      } else if (
-        // @ts-ignore
-        reviewRect < 101
-      ) {
-        setScrollPs(2);
-      } else if (
-        // @ts-ignore
-        guideRect < 101
-      ) {
-        setScrollPs(1);
+      if (delivery! < 146) {
+        setScrollPosition(3);
+      } else if (review! < 146) {
+        setScrollPosition(2);
+      } else if (guide! < 146) {
+        setScrollPosition(1);
       } else {
-        setScrollPs(0);
+        setScrollPosition(0);
       }
     };
 
     window.addEventListener("scroll", presentScroll);
-  }, [scrollPs]);
+  }, [scrollPosition, window]);
 
   return (
-    <>
-      <div className="menuTab mt-12 border-b bg-white border-gray sticky top-[98px] transition z-30">
-        <div className=" m-auto flex flex-row justify-around">
-          <Link
-            to="1"
-            offset={-100}
-            spy={true}
-            smooth={true}
-            className={`flex justify-center items-center text-sm py-1 w-full cursor-pointer pb-[10px] ${
-              scrollPs === 0
-                ? "font-bold text-main border-main border-b-[2px]"
-                : "text-gray"
-            }`}
-            onClick={() => {
-              setTab(0);
-            }}
-          >
-            상품정보
-          </Link>
-          <Link
-            to="2"
-            offset={-100}
-            spy={true}
-            smooth={true}
-            className={`flex justify-center items-center text-sm py-1 w-full cursor-pointer pb-[10px] ${
-              scrollPs === 1
-                ? "font-bold text-main border-main border-b-[2px]"
-                : "text-gray"
-            }`}
-            onClick={() => {
-              setTab(1);
-            }}
-          >
-            제작 가이드
-          </Link>
-          <Link
-            to="3"
-            offset={-100}
-            spy={true}
-            smooth={true}
-            className={`flex justify-center items-center text-sm py-1 w-full cursor-pointer pb-[10px] ${
-              scrollPs === 2
-                ? "font-bold text-main border-main border-b-[2px]"
-                : "text-gray"
-            }`}
-            onClick={() => {
-              setTab(2);
-            }}
-          >
-            리뷰
-          </Link>
-          <Link
-            to="4"
-            offset={-130}
-            spy={true}
-            smooth={true}
-            className={`flex justify-center items-center text-sm py-1 w-full cursor-pointer pb-[10px] ${
-              scrollPs === 3
-                ? "font-bold text-main border-main border-b-[2px]"
-                : "text-gray"
-            }`}
-            onClick={() => {
-              setTab(3);
-            }}
-          >
-            배송/환불
-          </Link>
-        </div>
+    <div className="border-b-lightGary border-b-[1px] sticky top-16 transition z-30 bg-white">
+      <div className="flex flex-row justify-between items-center mt-8 h-12 max-w-4xl">
+        {["상품정보", "제작가이드", "리뷰", "배송/환불"].map((item, index) => {
+          return (
+            <Link
+              to={String(index)}
+              key={index}
+              offset={-145}
+              spy
+              smooth
+              className={`w-full scroll-smooth `}
+            >
+              <span
+                className={`w-full scroll-smooth flex justify-center items-center cursor-pointer ${
+                  scrollPosition === index
+                    ? "font-bold text-main border-main border-b-[2px] py-3"
+                    : "text-gray"
+                }`}
+              >
+                {item}
+              </span>
+            </Link>
+          );
+        })}
       </div>
-    </>
+    </div>
   );
 }
 
-export default DetailMenu;
+export default ProductNavigationBar;

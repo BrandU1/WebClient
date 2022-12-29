@@ -5,10 +5,14 @@ import Link from "next/link";
 import Pick from "@common/pick";
 import Basket from "@common/basket";
 import client from "@lib/api";
-import { useRouter } from "next/router";
+import { useRouter } from "next/dist/client/router";
 import { useQuery } from "@tanstack/react-query";
 import { ProductInfoInterface } from "../../../types/product";
 import { Product } from "../../../types/privacy";
+import { router } from "next/client";
+import { customRecoil } from "../../../recoil/basketlist";
+import { useRecoilState } from "recoil";
+import PickButton from "@components/pick/pickbutton";
 
 interface ProductProps {
   productInfo: Product;
@@ -20,8 +24,11 @@ function Summary({ productInfo }: ProductProps) {
   const [amount, setAmount] = useState<number>(1);
   const [productId, setProductId] = useState<string>("");
 
+  const [custom, setCustom] = useRecoilState(customRecoil);
+
   useEffect(() => {
     setProductId(document.location.href.substr(-1));
+    setCustom(productInfo);
   });
 
   return (
@@ -41,7 +48,7 @@ function Summary({ productInfo }: ProductProps) {
               <div className="w-20 h-20 relative">
                 <Image
                   className="rounded-xl"
-                  src={`http://192.168.0.2/${productInfo?.backdrop_image} `}
+                  src={`${productInfo?.backdrop_image} `}
                   layout="fill"
                   alt={"imagePreview"}
                 />
@@ -55,7 +62,7 @@ function Summary({ productInfo }: ProductProps) {
         <div className={`w-[400px] h-[400px] ${toggle ? "hidden" : "block"}`}>
           <Image
             className="rounded-xl"
-            src={`http://192.168.0.2/${productInfo?.backdrop_image}`}
+            src={`${productInfo?.backdrop_image}`}
             alt="productInfo"
             layout="fill"
           />
@@ -179,27 +186,13 @@ function Summary({ productInfo }: ProductProps) {
         </div>
         <div className="flex flex-col mt-5">
           <div className="flex flex-row space-x-[10px]">
-            <Pick
-              li_height={24}
+            <PickButton
+              id={productInfo?.id}
+              wish={productInfo?.is_wish}
               li_width={24}
-              bg_height={45}
-              bg_width={45}
-              li_color={"white"}
+              li_height={24}
             />
-            <Basket
-              li_height={22}
-              li_width={22}
-              bg_height={45}
-              bg_width={45}
-              li_color={"white"}
-            />
-            <Link
-              href={{
-                pathname: "./1/custom",
-                query: { amount },
-              }}
-              as={"./1/custom"}
-            >
+            <Link href={`./${productInfo.id}/custom`}>
               <button className="w-64 h-11 bg-main rounded-xl flex flex-row justify-center items-center">
                 <span className="text-white font-bold text-sm">구매하기</span>
               </button>

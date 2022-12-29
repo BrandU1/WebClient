@@ -1,9 +1,21 @@
 import { basketInterface } from "../../types/privacy";
 import Image from "next/image";
 import CloseIcon from "@icons/close";
-import { useState } from "react";
 import AmountButton from "@common/amountbutton";
 import CheckBox from "@icons/checkBox";
+import { useRecoilState, useRecoilValue } from "recoil";
+import {
+  basketCheckedList,
+  basketPurchase,
+  totalPrice,
+} from "../../recoil/totalamount";
+import { useEffect, useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import client from "@lib/api";
+import { useRouter } from "next/router";
+import Pricebar from "@components/pages/order/pricebar";
+import { PriceBarPrint } from "../../pages/order";
+import Link from "next/link";
 
 interface BasketListProps {
   basketList: basketInterface[];
@@ -20,25 +32,98 @@ interface ProductCount {
 }
 
 function BasketList({ basketList }: BasketListProps) {
-  const [counts, setCounts] = useState<number>(1);
-  const [amountPrice, setAmountPrice] = useState<number>(0);
+  const router = useRouter();
+  const [basket, setBasket] = useRecoilState(basketPurchase);
+  const [checkList, setCheckList] = useRecoilState(basketCheckedList);
+  const price = useRecoilValue(totalPrice);
+  const queryClient = useQueryClient();
+  const deleteBasket = useMutation({
+    mutationFn: (id: number) => client.delete(`accounts/baskets/${id}`),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries(["basketList"]);
+    },
+    onError: (error) => {},
+    onSettled: () => {},
+  });
 
-  //선택 리스트 State
-  const [checkList, setCheckList] = useState<number[]>([]);
+  const [priceBarPrint, setPriceBarPrint] = useState<PriceBarPrint[]>([]);
 
-  // 단일 선택 리스트
+  useEffect(() => {
+    setPriceBarPrint([
+      {
+        id: 1,
+        title: "주문 금액",
+        price: price?.orderPrice || 0,
+      },
+      {
+        id: 2,
+        title: "배송비",
+        price: 3000,
+      },
+      {
+        id: 3,
+        title: "합계 금액",
+        price: price?.totalPrice || 0,
+        isBold: true,
+      },
+    ]);
+  }, [price]);
+
+  useEffect(() => {
+    if (basket.length === 0) {
+      setBasketList(basketList);
+    } else {
+      setBasketList(basketList, false);
+    }
+  }, [basketList]);
+
+  const setBasketList = (
+    baskets: basketInterface[],
+    isInit: boolean = true
+  ) => {
+    if (isInit) {
+      setBasket(
+        basketList.map((item) => {
+          return {
+            product: item.product,
+            count: 1,
+            price: item.product.price,
+          };
+        })
+      );
+    } else {
+      setBasket(
+        basket.filter((item) =>
+          baskets
+            .map((prevBasket) => prevBasket.product.id)
+            .includes(item.product.id)
+        )
+      );
+    }
+  };
+
+  /* 구매 개수 핸들러 */
+  const handleCount = (count: number, id: number) => {
+    const newBasket = basket.map((basket) => {
+      if (basket.product.id === id) {
+        return { ...basket, count };
+      }
+      return basket;
+    });
+    setBasket(newBasket);
+  };
+
+  /* 단일 선택 리스트 */
   const handleSingleCheck = (checked: boolean, id: number) => {
     if (checked) {
       // 선택 시 배열에 추가
-      setCheckList((prev) => [...prev, id]);
+      setCheckList([...checkList, id]);
     } else {
-      // 단일 선택 해제 시 제외
       setCheckList(checkList.filter((item) => item !== id));
     }
   };
 
-  // 전체 선택 리스트
-
+  /* 전체 선택 리스트 */
   const handelAllCheck = (checked: boolean) => {
     if (checked) {
       setCheckList((prev) => basketList.map((res, index) => res.product.id));
@@ -48,7 +133,7 @@ function BasketList({ basketList }: BasketListProps) {
   };
 
   return (
-    <div className="max-w-4xl m-auto flex space-x-10 ">
+    <div className="max-w-4xl m-auto flex flex-row space-x-10">
       <div className="rightSection w-[70%]">
         <h1 className="text-xl font-bold py-5">장바구니</h1>
         <div className="border-b-[1px] border-[black]" />
@@ -109,7 +194,7 @@ function BasketList({ basketList }: BasketListProps) {
                     <div className="w-[120px] h-[120px] relative  ">
                       <Image
                         className="rounded-lg "
-                        src={`http://192.168.0.2${res.product.backdrop_image}`}
+                        src={res.product.backdrop_image}
                         layout="fill"
                         alt="productImage"
                       />
@@ -128,7 +213,9 @@ function BasketList({ basketList }: BasketListProps) {
                             </p>
                           </div>
                         </div>
-                        <div>
+                        <div
+                          onClick={() => deleteBasket.mutate(res.product.id)}
+                        >
                           <CloseIcon />
                         </div>
                       </div>
@@ -136,7 +223,7 @@ function BasketList({ basketList }: BasketListProps) {
                         <AmountButton
                           id={res.product.id}
                           price={res.product.price}
-                          setCounts={setCounts}
+                          handleCount={handleCount}
                         />
                       </div>
                     </div>
@@ -148,31 +235,10 @@ function BasketList({ basketList }: BasketListProps) {
         </div>
       </div>
       <div className="leftSection w-[30%] ">
-        <div className="text-white py-5">cartList</div>
-        <div className=" border-[1px] border-main rounded-lg h-80 relative ">
-          <div className="px-2 py-5 space-y-2">
-            <div className="flex items-center text-sm justify-between">
-              <p className="text-subContent ">주문금액</p>
-              <p>0 원</p>
-            </div>
-            <div className="flex justify-between text-sm items-center">
-              <p className="text-subContent  ">배송비</p>
-              <p>3,000 원</p>
-            </div>
-            <div className="flex justify-between items-center ">
-              <p className="text-lg">합계 금액</p>
-              <p>3,000 원</p>
-            </div>
-          </div>
-
-          <div className="px-2 w-full absolute  bottom-2 ">
-            <button className="w-full bg-main rounded-lg text-white p-3">
-              구매하기
-            </button>
-          </div>
-        </div>
+        <Pricebar printList={priceBarPrint} disabled={checkList.length === 0} />
       </div>
     </div>
   );
 }
+
 export default BasketList;

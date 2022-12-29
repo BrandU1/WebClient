@@ -3,9 +3,8 @@ import GoogleLogin from "react-google-login";
 import GoogleLoginIcon from "@components/icons/google";
 import KakaoLoginIcon from "@components/icons/kakao";
 import KakaoLogin from "react-kakao-login";
-import Axios from "axios";
-import { setCookie } from "cookies-next";
 import client from "@lib/api";
+import { useEffect } from "react";
 
 interface LoginProps {
   open: boolean;
@@ -38,10 +37,19 @@ function LoginModal({ open, close, pageRef }: LoginProps) {
       });
   };
 
+  useEffect(() => {
+    if (open) {
+      const mainPage = document.getElementById("main-view");
+      if (mainPage) {
+        mainPage.style.overflow = "hidden";
+      }
+    }
+  }, [open]);
+
   return (
     <div
-      className={`absolute flex justify-center py-36 top-0 ${
-        open ? "w-[100vw] h-[100vh] bg-notice bg-opacity-60 " : null
+      className={`absolute flex py-36 top-0 z-50 justify-center left-0 ${
+        open && "w-screen h-screen justify-center bg-notice bg-opacity-60"
       }  `}
     >
       <div onBlur={close} className={open ? "openModal modal " : "modal "}>
@@ -56,7 +64,7 @@ function LoginModal({ open, close, pageRef }: LoginProps) {
             <div className="login-button mt-16">
               <div className="googleLogin flex justify-center ">
                 <GoogleLogin
-                  clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || " "}
+                  clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || ""}
                   render={(renderProps) => (
                     <button
                       className="bg-white flex items-center px-4

@@ -51,7 +51,7 @@ function NewImgModal({ handleClose }: newModalProps) {
   return (
     <ModalFrame
       width={600}
-      height="auto"
+      height={500}
       close={handleClose}
       blur={handleSecondModal}
       pageRef={secondEl}
