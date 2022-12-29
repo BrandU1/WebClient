@@ -2,8 +2,9 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 
 import CircularProgress from "@mui/material/CircularProgress";
-import { useMutation } from "@tanstack/react-query";
+import {dehydrate, QueryClient, useMutation} from "@tanstack/react-query";
 import client from "@lib/api";
+import {GetServerSideProps} from "next";
 
 interface ConfirmOrder {
   orderId: string;
@@ -48,10 +49,10 @@ function Waiting() {
   );
 }
 
-export const getStaticProps = async (context: any) => {
-  console.log(context);
+export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
-    props: {},
+    props: {
+    },
   };
 };
 

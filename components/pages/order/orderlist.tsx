@@ -19,10 +19,10 @@ function OrderList({
   const [selectedNumber, setSelectedNumber] = useState<number>(0);
 
   useEffect(() => {
-    if (selectedNumber > 0) {
-      setAddress(addresses[selectedNumber].id);
+    if (addresses && selectedNumber >= 0) {
+      setAddress(addresses[selectedNumber]);
     }
-  }, [selectedNumber]);
+  }, [selectedNumber, addresses]);
 
   return (
     <div className="w-[554px]">

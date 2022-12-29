@@ -17,7 +17,6 @@ function Product({ title, subTitle, products }: ProductProps) {
       setToken(localStorage.getItem("access_token"));
     }
   });
-  // console.log(products);
 
   return (
     <div className=" m-auto px-5">

@@ -16,7 +16,6 @@ function OrderCancel({ onClose }: CancelProps) {
   //주문취소사유 open
   const [reason, setReason] = useState<boolean>(false);
 
-  console.log(reason);
   //주문취소 상품 선택
   const [cancelList, setCancelList] = useState<number[]>([]);
   // 주문취소 사유 선택

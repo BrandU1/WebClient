@@ -159,7 +159,6 @@ const Canvas = ({ backgroundImage, width, height, images }: CanvasProps) => {
 
   /* 이미지 추가 */
   useEffect(() => {
-    console.log(backgroundImage);
     images.forEach((src, index) => {
       if (usedImages.includes(index)) {
         return;
@@ -199,7 +198,6 @@ const Canvas = ({ backgroundImage, width, height, images }: CanvasProps) => {
       });
 
       newText.on("mousemove", (event) => {
-        console.log(event);
       });
 
       canvas!.add(newText);

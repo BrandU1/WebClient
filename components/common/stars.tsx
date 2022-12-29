@@ -18,7 +18,7 @@ function Stars({ count, size, clickable }: StarProps) {
       setValue(idx + 1);
     }
   };
-  console.log(value);
+
   return (
     <div className="flex flex-row space-x-1">
       {[1, 2, 3, 4, 5].map((star, index) => {

@@ -20,7 +20,6 @@ function OrderPage() {
   const [priceBarPrint, setPriceBarPrint] = useState<PriceBarPrint[]>([]);
   const baskets = useRecoilValue(purchaseProducts);
   const [address, setAddress] = useRecoilState(selectedAddress);
-
   console.log(address);
 
   const {
@@ -31,6 +30,8 @@ function OrderPage() {
     queryKey: ["addresses"],
     queryFn: () => getAddresses(),
   });
+
+
 
   const onClick = () => {
     alert("결제하기");
@@ -56,6 +57,8 @@ function OrderPage() {
       },
     ]);
   }, [price]);
+
+  if (isLoading) return <div>로딩중</div>;
 
   return (
     <div className="max-w-4xl m-auto flex flex-row space-x-10">
