@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { useState } from "react";
+import Share from "@atoms/share";
 import client from "@lib/api";
 import { useQuery } from "@tanstack/react-query";
 import { BranduBaseResponse, Community } from "../../../types/privacy";
@@ -25,7 +26,7 @@ function Post({ data }: Post) {
         />
         <div className="mt-2 flex justify-between px-2">
           <h2 className="font-bold text-lg">{data?.title}</h2>
-          <Image src={"/logo/share.svg"} alt={"share"} width={18} height={20} />
+          <Share image={"/dummy/cat.png"} name={data?.title} />
         </div>
         <div className="flex flex-row items-center mt-5 px-2">
           <div className="w-9 h-9 bg-gray rounded-xl" />

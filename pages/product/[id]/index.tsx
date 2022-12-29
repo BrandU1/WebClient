@@ -16,6 +16,7 @@ import useAuth from "@hooks/useAuth";
 import { useRecoilState } from "recoil";
 import { isLoginModalOpen } from "../../../recoil/base";
 import PickButton from "@components/pick/pickbutton";
+import Share from "@atoms/share";
 
 export const getProduct = async (id: number) => {
   const response = await client.get(`products/${id}`);
@@ -190,7 +191,13 @@ function ProductDetail({ id }: ProductDetailProps) {
         </div>
         <div className="flex flex-col mx-5 w-fit h-fit">
           {/* 상품 이름 */}
-          <p className="w-max text-base">{productResponse?.results.name}</p>
+          <div className="flex flex-row justify-between">
+            <p className="w-max text-base">{productResponse?.results.name}</p>
+            <Share
+              image={productResponse?.results.images[shownImage]?.image!}
+              name={productResponse?.results.name!}
+            />
+          </div>
           {/* 상품 태그 */}
           <div className="flex flex-row my-1 space-x-1">
             {productResponse?.results.tags.map((tag, index) => {
