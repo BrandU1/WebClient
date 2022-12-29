@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { useState } from "react";
+import Share from "@atoms/share";
 
 function Post() {
   const [text, setText] = useState<string>("");
@@ -20,7 +21,10 @@ function Post() {
           <h2 className="font-bold text-lg">
             브랜뉴로 만들어가는 우리집 리뉴얼
           </h2>
-          <Image src={"/logo/share.svg"} alt={"share"} width={18} height={20} />
+          <Share
+            image={"/dummy/cat.png"}
+            name={"브랜뉴로 만들어가는 우리집 리뉴얼"}
+          />
         </div>
         <div className="flex flex-row items-center mt-5 px-2">
           <div className="w-9 h-9 bg-gray rounded-xl" />

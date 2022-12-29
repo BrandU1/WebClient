@@ -16,7 +16,6 @@ function SidePost() {
               </div>
             </div>
           </div>
-          <Image src={"/logo/share.svg"} alt={"share"} width={18} height={20} />
         </div>
         <div className="button flex flex-row mt-5 justify-between">
           <button className="bg-main h-11 w-36 text-white text-sm rounded-xl mr-2">
