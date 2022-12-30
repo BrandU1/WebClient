@@ -2,13 +2,18 @@ import Image from "next/image";
 import { useState } from "react";
 import client from "@lib/api";
 import { useQuery } from "@tanstack/react-query";
-import { BranduBaseResponse, Community } from "../../../types/privacy";
+import {
+  BranduBaseResponse,
+  Community,
+  RecommendComment,
+} from "../../../types/privacy";
 
 interface Post {
   data: Community;
+  recommend: RecommendComment[];
 }
 
-function Post({ data }: Post) {
+function Post({ data, recommend }: Post) {
   const [text, setText] = useState<string>("");
   const onChange = (e: any) => {
     setText(e.target.value);
@@ -50,14 +55,19 @@ function Post({ data }: Post) {
           <p className="font-bold">422</p>
         </div>
         <div className="flex flex-row mt-5 border-b border-gray pb-5 px-2">
-          <div className="w-9 h-9 bg-gray rounded-xl mr-2" />
-          <div className="flex flex-col">
-            <h2 className="text-[12px]">이수빈</h2>
-            <p className="text-[12px] text-subContent">
-              우드톤 분위기랑 너무 잘 어울리는 조합이네요~ 저도 한 번
-              맞춰봐야겠어요
-            </p>
-          </div>
+          {recommend?.map((recommend, index) => {
+            return (
+              <>
+                <div className="w-9 h-9 bg-gray rounded-xl mr-2" />
+                <div className="flex flex-col">
+                  <h2 className="text-[12px]">{recommend?.profile}</h2>
+                  <p className="text-[12px] text-subContent">
+                    {recommend.comment}
+                  </p>
+                </div>
+              </>
+            );
+          })}
         </div>
         <div className="mt-5">
           <input

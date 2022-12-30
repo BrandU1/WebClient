@@ -1,7 +1,7 @@
 import Image from "next/image";
 
 interface ImgProps {
-  exist: string; //src 이미지 경로
+  exist: string | null; //src 이미지 경로
   src: string;
   width: number;
   height: number;

@@ -25,14 +25,6 @@ function SidePost() {
           <ScrapButton width={26} height={24} />
         </div>
       </div>
-      <div className="flex flex-col items-center mt-5">
-        <h2 className="text-[12px]">구매목록</h2>
-        <div className="grid grid-cols-2 gap-2 mt-5">
-          {[1, 2, 3, 4, 5, 6].map((list, index) => {
-            return <div className="w-[70px] h-[70px] bg-gray rounded-xl" />;
-          })}
-        </div>
-      </div>
     </div>
   );
 }

@@ -32,7 +32,7 @@ function Index() {
 
   return (
     <div>
-      <Search searchResult={data?.results.results!} />
+      <Search searchResult={data?.results!} />
     </div>
   );
 }
