@@ -102,9 +102,26 @@ export interface Inquiry {
 }
 
 export interface SearchBase {
+  posts: searchPost;
+  products: searchProduct;
+}
+export interface searchPost {
   count: number;
-  next: string;
-  previous: string;
+  next: number;
+  previous: number;
+  results: searchPost[];
+}
+export interface searchPost {
+  id: number;
+  title: string;
+  backdrop_image: string;
+  profile: number;
+  created: string;
+}
+export interface searchProduct {
+  count: number;
+  next: number;
+  previous: number;
   results: SearchResult[];
 }
 
@@ -161,4 +178,16 @@ export interface Community {
   id: number;
   profile: number;
   title: string;
+}
+export interface BestPost {
+  backdrop_image: string;
+  id: number;
+  likes_count: number;
+  title: string;
+}
+export interface RecommendComment {
+  id: number;
+  profile: number;
+  comment: string;
+  created: string;
 }
