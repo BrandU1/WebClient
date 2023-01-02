@@ -191,3 +191,13 @@ export interface RecommendComment {
   comment: string;
   created: string;
 }
+export interface infiniteScroll {
+  pageParams: [];
+  pages: infinitePost[];
+}
+export interface infinitePost {
+  count: number;
+  next: string;
+  previous: string;
+  results: Community[];
+}

@@ -100,7 +100,7 @@ function ProductCustom({ id }: ProductCustomProps): ReactElement {
       <div className="flex flex-col justify-center items-center">
         <CustomIcon handleSelect={handleSelectOpen} />
         <div className="w-screen h-[1px] bg-gray" />
-        <div className="flex flex-row m-auto mt-3 z-30">
+        <div className="flex flex-row m-auto mt-3 z-30 ">
           <Canvas
             canvasRef={canvasRef}
             images={images}
