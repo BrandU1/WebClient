@@ -6,7 +6,13 @@ import { useEffect, useState } from "react";
 import useBranduQuery from "@hooks/useBranduQuery";
 import { getAddresses } from "@lib/fetches";
 import { selectedAddress } from "../../recoil/order";
-import { AddressInterface } from "../../types/privacy";
+import {
+  AddressInterface,
+  BranduBaseResponse,
+  UserInterface,
+} from "../../types/privacy";
+import client from "@lib/api";
+import { useQuery } from "@tanstack/react-query";
 
 export interface PriceBarPrint {
   id: number;
@@ -29,8 +35,6 @@ function OrderPage() {
     queryKey: ["addresses"],
     queryFn: () => getAddresses(),
   });
-
-
 
   const onClick = () => {
     alert("결제하기");

@@ -38,10 +38,11 @@ export const newOrder = selector<OrderRecoilState>({
     return {
       name: `${products[0]?.product.name} 외 ${products.length - 1}개` || "",
       address: address?.id || 0,
-      products: products.map((product) => ({
-        product: product.product.id,
-        count: product.count,
-      })) || [],
+      products:
+        products.map((product) => ({
+          product: product.product.id,
+          count: product.count,
+        })) || [],
       orderPrice: price || 0,
     };
   },

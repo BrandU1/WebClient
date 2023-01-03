@@ -42,7 +42,6 @@ function Nav() {
   };
 
   // input State
-
   const [input, setInput] = useState<string>("");
 
   // Login 관련
@@ -150,9 +149,11 @@ function Nav() {
     }
     if (input.replace(/ /g, "") === "") {
       setFocused(false);
+      setInput("");
       alert("공백은 검색이 불가능합니다.");
     }
   };
+
   const onKeyPress = (e: any) => {
     if (e.key === "Enter") {
       onClicksSearch();
@@ -282,7 +283,11 @@ function Nav() {
                   {data?.results.map((item, index) => {
                     return (
                       <div className="flex items-center justify-between">
-                        <div key={index}>
+                        <div
+                          className="cursor-pointer"
+                          key={index}
+                          onClick={() => {}}
+                        >
                           <p className="py-2">{item.search_word}</p>
                         </div>
                         <div onClick={() => deleteHistory.mutate(item.id)}>
@@ -298,7 +303,7 @@ function Nav() {
                     {rankingData?.results.map((item, index) => {
                       return (
                         <div key={index} className=" px-5 text-sm py-1 ">
-                          <p>
+                          <p className="cursor-pointer" onClick={() => {}}>
                             <span className="text-main font-bold mx-4">
                               {index + 1}
                             </span>
