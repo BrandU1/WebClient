@@ -22,7 +22,6 @@ function PostPage() {
     getEdit
   );
 
-  console.log(data);
   const getRecommend = () => {
     return client
       .get(`communities/posts/${id}/comments`)

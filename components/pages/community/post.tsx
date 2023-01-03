@@ -8,6 +8,7 @@ import {
   Community,
   RecommendComment,
 } from "../../../types/privacy";
+import ModifyRecommend from "@common/modifyrecommend";
 
 interface Post {
   data: Community;
@@ -20,17 +21,64 @@ function Post({ data, recommend }: Post) {
     setText(e.target.value);
   };
   const queryClient = useQueryClient();
+  const [modify, setModify] = useState<boolean>(false);
+  const [recommendId, setRecommendId] = useState<number>(-1);
 
-  // const mutation = useMutation(
-  //   (newRecom: RecommendComment["comment"]) => {
-  //     return client.post(`communities/posts/${data?.id}/comments`, newRecom);
-  //   },
-  //   {
-  //     onSuccess: () => {
-  //       queryClient.invalidateQueries(["recommend", data?.id]);
-  //     },
-  //   }
-  // );
+  const mutation = useMutation(
+    (id: any) => {
+      return client.post(
+        `communities/posts/${data?.id}/comments`,
+        {
+          comment: text,
+        },
+        id
+      );
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["recommend"]);
+        setText("");
+      },
+    }
+  );
+
+  //댓글 삭제
+  const deleteRecommend = useMutation(
+    (id: any) => {
+      return client.delete(
+        `communities/comments/${id}`,
+
+        id
+      );
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["recommend"]);
+      },
+    }
+  );
+
+  // 댓글 수정
+  const modifyRecommend = useMutation(
+    (id: any) => {
+      return client.patch(
+        `communities/comments/${id}`,
+        {
+          comment: text,
+        },
+        id
+      );
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["recommend"]);
+        setText("");
+        setModify(false);
+        setRecommendId(-1);
+      },
+    }
+  );
+
   return (
     <div className="flex flex-col w-[610px]">
       <div className="title border-b border-gray pb-5">
@@ -67,17 +115,42 @@ function Post({ data, recommend }: Post) {
           <p className="ml-2">조회</p>
           <p className="font-bold">422</p>
         </div>
-        <div className="flex flex-row mt-5 border-b border-gray pb-5 px-2">
+        <div className=" mt-5 border-b border-gray pb-5 px-2">
           {recommend?.map((recommend, index) => {
             return (
               <>
-                <div className="w-9 h-9 bg-gray rounded-xl mr-2" />
-                <div className="flex flex-col">
-                  <h2 className="text-[12px]">{recommend?.profile}</h2>
-                  <p className="text-[12px] text-subContent">
-                    {recommend.comment}
-                  </p>
+                <div className="flex justify-between">
+                  <div className="flex">
+                    <div className="w-9 h-9 bg-gray rounded-xl mr-2" />
+                    <div className="flex flex-col">
+                      <h2 className="text-[12px]">{recommend?.profile}</h2>
+                      <p className={`text-[12px] text-subContent`}>
+                        {recommend.comment}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="cursor-pointer flex space-x-2">
+                    <p
+                      onClick={() => deleteRecommend.mutate(recommend.id)}
+                      className="text-red text-xs"
+                    >
+                      삭제
+                    </p>
+                    <p className="text-xs">/</p>
+                    <p
+                      onClick={() => {
+                        setText(recommend.comment);
+                        setModify(true);
+                        setRecommendId(recommend.id);
+                      }}
+                      className="text-main text-xs"
+                    >
+                      수정
+                    </p>
+                  </div>
                 </div>
+                <div className="my-3 border-[1px] border-gray " />
               </>
             );
           })}
@@ -90,8 +163,17 @@ function Post({ data, recommend }: Post) {
             placeholder="댓글을 입력해주세요"
             value={text}
           />
-          <button className="font-bold text-sm text-white bg-main rounded-xl ml-2 h-10 w-[70px]">
-            댓글달기
+          <button
+            onClick={() => {
+              if (modify) {
+                modifyRecommend.mutate(recommendId);
+              } else {
+                mutation.mutate(data.id);
+              }
+            }}
+            className={`font-bold text-sm text-white bg-main rounded-xl ml-2 h-10 w-[70px]`}
+          >
+            추가하기
           </button>
         </div>
       </div>
