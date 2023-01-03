@@ -35,15 +35,15 @@ function PriceBar({ printList, disabled }: PriceBarProps) {
       {router.route == "/order/pay" ? (
         <input
           type="submit"
-          className={`w-56 h-11 bg-main rounded-xl text-white font-bold text-base flex justify-center items-center m-auto mb-2 disabled:opacity-50 ${
-            disabled && "hidden"
+          className={`w-56 h-11 bg-main rounded-xl text-white font-bold text-base flex justify-center items-center m-auto mb-2 ${
+            disabled && "opacity-50"
           }`}
           value="결제하기"
         />
       ) : (
         <button
-          className={`w-56 h-11 bg-main rounded-xl text-white font-bold text-base flex justify-center items-center m-auto mb-2 disabled:opacity-50 ${
-            disabled && "hidden"
+          className={`w-56 h-11 bg-main rounded-xl text-white font-bold text-base flex justify-center items-center m-auto mb-2 ${
+            disabled && "opacity-50"
           }`}
         >
           <Link

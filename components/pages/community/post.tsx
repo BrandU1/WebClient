@@ -2,7 +2,7 @@ import Image from "next/image";
 import { useState } from "react";
 import Share from "@atoms/share";
 import client from "@lib/api";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   BranduBaseResponse,
   Community,
@@ -19,6 +19,18 @@ function Post({ data, recommend }: Post) {
   const onChange = (e: any) => {
     setText(e.target.value);
   };
+  const queryClient = useQueryClient();
+
+  // const mutation = useMutation(
+  //   (newRecom: RecommendComment["comment"]) => {
+  //     return client.post(`communities/posts/${data?.id}/comments`, newRecom);
+  //   },
+  //   {
+  //     onSuccess: () => {
+  //       queryClient.invalidateQueries(["recommend", data?.id]);
+  //     },
+  //   }
+  // );
   return (
     <div className="flex flex-col w-[610px]">
       <div className="title border-b border-gray pb-5">

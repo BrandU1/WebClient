@@ -17,6 +17,7 @@ import { useRecoilState } from "recoil";
 import { isLoginModalOpen } from "../../../recoil/base";
 import PickButton from "@components/pick/pickbutton";
 import Share from "@atoms/share";
+import ModelViewer from "@components/product/modelviewer";
 
 export const getProduct = async (id: number) => {
   const response = await client.get(`products/${id}`);
@@ -181,11 +182,14 @@ function ProductDetail({ id }: ProductDetailProps) {
         <div className="ml-2 relative">
           {/* 상품 이미지 */}
           <div className="w-96 h-96">
-            <Image
+            {/*<Image
               className="rounded-xl"
               src={productResponse?.results.images[shownImage]?.image!}
               alt={productResponse?.results.images[shownImage]?.image!}
               layout="fill"
+            />*/}
+            <ModelViewer
+              src={productResponse?.results.images[shownImage]?.image!}
             />
           </div>
         </div>
