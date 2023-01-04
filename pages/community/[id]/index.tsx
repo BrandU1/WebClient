@@ -22,7 +22,6 @@ function PostPage() {
     getEdit
   );
 
-  console.log(data);
   const getRecommend = () => {
     return client
       .get(`communities/posts/${id}/comments`)
@@ -31,8 +30,6 @@ function PostPage() {
   const { data: recommend, isLoading: recommendLoading } = useQuery<
     BranduBaseResponse<RecommendComment[]>
   >(["recommend", id], getRecommend);
-
-  console.log(recommend, 123);
 
   return (
     <div className="flex flex-row mt-5">

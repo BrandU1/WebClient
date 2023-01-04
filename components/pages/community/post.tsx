@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Share from "@atoms/share";
 import client from "@lib/api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -21,16 +21,21 @@ function Post({ data, recommend }: Post) {
   };
   const queryClient = useQueryClient();
 
-  // const mutation = useMutation(
-  //   (newRecom: RecommendComment["comment"]) => {
-  //     return client.post(`communities/posts/${data?.id}/comments`, newRecom);
-  //   },
-  //   {
-  //     onSuccess: () => {
-  //       queryClient.invalidateQueries(["recommend", data?.id]);
-  //     },
-  //   }
-  // );
+  const mutation = useMutation(
+    (comment: string) => {
+      return client
+        .post(`communities/posts/${data.id}/comments`, {
+          comment: comment,
+        })
+        .then((res) => res.data);
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["recommend", data.id]);
+      },
+    }
+  );
+
   return (
     <div className="flex flex-col w-[610px]">
       <div className="title border-b border-gray pb-5">
@@ -67,10 +72,10 @@ function Post({ data, recommend }: Post) {
           <p className="ml-2">조회</p>
           <p className="font-bold">422</p>
         </div>
-        <div className="flex flex-row mt-5 border-b border-gray pb-5 px-2">
+        <div className="flex flex-col mt-5 border-b border-gray px-2">
           {recommend?.map((recommend, index) => {
             return (
-              <>
+              <div className="flex flex-row mb-5">
                 <div className="w-9 h-9 bg-gray rounded-xl mr-2" />
                 <div className="flex flex-col">
                   <h2 className="text-[12px]">{recommend?.profile}</h2>
@@ -78,7 +83,7 @@ function Post({ data, recommend }: Post) {
                     {recommend.comment}
                   </p>
                 </div>
-              </>
+              </div>
             );
           })}
         </div>
@@ -90,7 +95,12 @@ function Post({ data, recommend }: Post) {
             placeholder="댓글을 입력해주세요"
             value={text}
           />
-          <button className="font-bold text-sm text-white bg-main rounded-xl ml-2 h-10 w-[70px]">
+          <button
+            className="font-bold text-sm text-white bg-main rounded-xl ml-2 h-10 w-[70px]"
+            onClick={() => {
+              mutation.mutate(text);
+            }}
+          >
             댓글달기
           </button>
         </div>
