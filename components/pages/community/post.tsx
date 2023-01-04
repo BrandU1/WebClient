@@ -3,11 +3,10 @@ import { useEffect, useState } from "react";
 import Share from "@atoms/share";
 import client from "@lib/api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-  BranduBaseResponse,
-  Community,
-  RecommendComment,
-} from "../../../types/privacy";
+import { Community, RecommendComment } from "../../../types/privacy";
+import { useRecoilValue } from "recoil";
+import { userData } from "../../../recoil/user";
+import { Link } from "react-scroll";
 
 interface Post {
   data: Community;
@@ -15,23 +14,86 @@ interface Post {
 }
 
 function Post({ data, recommend }: Post) {
+  // comment
   const [text, setText] = useState<string>("");
   const onChange = (e: any) => {
     setText(e.target.value);
   };
   const queryClient = useQueryClient();
+  const [modify, setModify] = useState<boolean>(false);
+  const [recommendId, setRecommendId] = useState<number>(-1);
 
+  // 유저 정보
+  const userInfo = useRecoilValue(userData);
+  console.log(userInfo);
+  // 버튼 상태
+  const [btnStat, setBtnStat] = useState<string>("댓글 달기");
+  const onKeyPress = (e: any) => {
+    if (e.key === "Enter") {
+      if (modify) {
+        modifyRecommend.mutate(recommendId);
+      } else {
+        mutation.mutate(data.id);
+      }
+    }
+  };
+
+  // 댓글달기
   const mutation = useMutation(
-    (comment: string) => {
-      return client
-        .post(`communities/posts/${data.id}/comments`, {
-          comment: comment,
-        })
-        .then((res) => res.data);
+    (id: any) => {
+      return client.post(
+        `communities/posts/${data?.id}/comments`,
+        {
+          comment: text,
+        },
+        id
+      );
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(["recommend", data.id]);
+        queryClient.invalidateQueries(["recommend"]);
+        setText("");
+      },
+    }
+  );
+
+  //댓글 삭제
+  const deleteRecommend = useMutation(
+    (id: any) => {
+      return client.delete(
+        `communities/comments/${id}`,
+
+        id
+      );
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["recommend"]);
+        setModify(false);
+        setText("");
+        setBtnStat("댓글 달기");
+      },
+    }
+  );
+
+  // 댓글 수정
+  const modifyRecommend = useMutation(
+    (id: any) => {
+      return client.patch(
+        `communities/comments/${id}`,
+        {
+          comment: text,
+        },
+        id
+      );
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["recommend"]);
+        setText("");
+        setModify(false);
+        setBtnStat("댓글 달기");
+        setRecommendId(-1);
       },
     }
   );
@@ -72,36 +134,76 @@ function Post({ data, recommend }: Post) {
           <p className="ml-2">조회</p>
           <p className="font-bold">422</p>
         </div>
-        <div className="flex flex-col mt-5 border-b border-gray px-2">
+        <div className="mt-3">
           {recommend?.map((recommend, index) => {
             return (
-              <div className="flex flex-row mb-5">
-                <div className="w-9 h-9 bg-gray rounded-xl mr-2" />
-                <div className="flex flex-col">
-                  <h2 className="text-[12px]">{recommend?.profile}</h2>
-                  <p className="text-[12px] text-subContent">
-                    {recommend.comment}
-                  </p>
+              <>
+                <div className="flex justify-between mx-2">
+                  <div className="flex">
+                    <div className="w-9 h-9 bg-gray rounded-xl mr-2" />
+                    <div className="flex flex-col">
+                      <h2 className="text-[12px]">{recommend?.profile}</h2>
+                      <p className={`text-[12px] text-subContent`}>
+                        {recommend.comment}
+                      </p>
+                    </div>
+                  </div>
+
+                  {recommend.profile === userInfo.id && (
+                    <div className="cursor-pointer flex space-x-2">
+                      <p
+                        onClick={() => deleteRecommend.mutate(recommend.id)}
+                        className="text-red text-xs"
+                      >
+                        삭제
+                      </p>
+                      <p className="text-xs">/</p>
+                      <Link
+                        to={String("commentScroll")}
+                        offset={-320}
+                        spy
+                        smooth
+                      >
+                        <p
+                          onClick={() => {
+                            setText(recommend.comment);
+                            setBtnStat("댓글 수정");
+                            setModify(true);
+                            setRecommendId(recommend.id);
+                          }}
+                          className="text-main text-xs"
+                        >
+                          수정
+                        </p>
+                      </Link>
+                    </div>
+                  )}
                 </div>
-              </div>
+                <div className="my-3 border-b border-gray " />
+              </>
             );
           })}
         </div>
-        <div className="mt-5">
+        <div className="mt-5" id={"commentScroll"}>
           <input
             className="w-[520px] h-10 rounded-xl border border-main text-sm p-2 text-subContent focus:outline-none"
             onChange={onChange}
             type="text"
             placeholder="댓글을 입력해주세요"
             value={text}
+            onKeyPress={onKeyPress}
           />
           <button
-            className="font-bold text-sm text-white bg-main rounded-xl ml-2 h-10 w-[70px]"
             onClick={() => {
-              mutation.mutate(text);
+              if (modify) {
+                modifyRecommend.mutate(recommendId);
+              } else {
+                mutation.mutate(data.id);
+              }
             }}
+            className={`font-bold text-sm text-white bg-main rounded-xl ml-2 h-10 w-[70px]`}
           >
-            댓글달기
+            {btnStat}
           </button>
         </div>
       </div>
