@@ -31,8 +31,6 @@ function PostPage() {
     BranduBaseResponse<RecommendComment[]>
   >(["recommend", id], getRecommend);
 
-  console.log(recommend, 123);
-
   return (
     <div className="flex flex-row mt-5">
       <div className="flex flex-col">

@@ -5,8 +5,6 @@ import { GetServerSideProps } from "next";
 import useBranduQuery from "@hooks/useBranduQuery";
 import Image from "next/image";
 import Badge from "@atoms/badge";
-import Pick from "@common/pick";
-import Basket from "@common/basket";
 import { useRef, useState } from "react";
 import Price from "@components/product/price";
 import ProductNavigationBar from "@components/pages/product/detailmenu";
@@ -17,7 +15,6 @@ import { useRecoilState } from "recoil";
 import { isLoginModalOpen } from "../../../recoil/base";
 import PickButton from "@components/pick/pickbutton";
 import Share from "@atoms/share";
-import ModelViewer from "@components/product/modelviewer";
 import ThreeJS from "@components/product/three";
 
 export const getProduct = async (id: number) => {

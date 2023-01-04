@@ -1,14 +1,12 @@
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Share from "@atoms/share";
 import client from "@lib/api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-  BranduBaseResponse,
-  Community,
-  RecommendComment,
-} from "../../../types/privacy";
-import ModifyRecommend from "@common/modifyrecommend";
+import { Community, RecommendComment } from "../../../types/privacy";
+import { useRecoilValue } from "recoil";
+import { userData } from "../../../recoil/user";
+import { Link } from "react-scroll";
 
 interface Post {
   data: Community;
@@ -16,6 +14,7 @@ interface Post {
 }
 
 function Post({ data, recommend }: Post) {
+  // comment
   const [text, setText] = useState<string>("");
   const onChange = (e: any) => {
     setText(e.target.value);
@@ -24,6 +23,22 @@ function Post({ data, recommend }: Post) {
   const [modify, setModify] = useState<boolean>(false);
   const [recommendId, setRecommendId] = useState<number>(-1);
 
+  // 유저 정보
+  const userInfo = useRecoilValue(userData);
+  console.log(userInfo);
+  // 버튼 상태
+  const [btnStat, setBtnStat] = useState<string>("댓글 달기");
+  const onKeyPress = (e: any) => {
+    if (e.key === "Enter") {
+      if (modify) {
+        modifyRecommend.mutate(recommendId);
+      } else {
+        mutation.mutate(data.id);
+      }
+    }
+  };
+
+  // 댓글달기
   const mutation = useMutation(
     (id: any) => {
       return client.post(
@@ -54,6 +69,9 @@ function Post({ data, recommend }: Post) {
     {
       onSuccess: () => {
         queryClient.invalidateQueries(["recommend"]);
+        setModify(false);
+        setText("");
+        setBtnStat("댓글 달기");
       },
     }
   );
@@ -74,6 +92,7 @@ function Post({ data, recommend }: Post) {
         queryClient.invalidateQueries(["recommend"]);
         setText("");
         setModify(false);
+        setBtnStat("댓글 달기");
         setRecommendId(-1);
       },
     }
@@ -115,11 +134,11 @@ function Post({ data, recommend }: Post) {
           <p className="ml-2">조회</p>
           <p className="font-bold">422</p>
         </div>
-        <div className=" mt-5 border-b border-gray pb-5 px-2">
+        <div className="mt-3">
           {recommend?.map((recommend, index) => {
             return (
               <>
-                <div className="flex justify-between">
+                <div className="flex justify-between mx-2">
                   <div className="flex">
                     <div className="w-9 h-9 bg-gray rounded-xl mr-2" />
                     <div className="flex flex-col">
@@ -130,38 +149,49 @@ function Post({ data, recommend }: Post) {
                     </div>
                   </div>
 
-                  <div className="cursor-pointer flex space-x-2">
-                    <p
-                      onClick={() => deleteRecommend.mutate(recommend.id)}
-                      className="text-red text-xs"
-                    >
-                      삭제
-                    </p>
-                    <p className="text-xs">/</p>
-                    <p
-                      onClick={() => {
-                        setText(recommend.comment);
-                        setModify(true);
-                        setRecommendId(recommend.id);
-                      }}
-                      className="text-main text-xs"
-                    >
-                      수정
-                    </p>
-                  </div>
+                  {recommend.profile === userInfo.id && (
+                    <div className="cursor-pointer flex space-x-2">
+                      <p
+                        onClick={() => deleteRecommend.mutate(recommend.id)}
+                        className="text-red text-xs"
+                      >
+                        삭제
+                      </p>
+                      <p className="text-xs">/</p>
+                      <Link
+                        to={String("commentScroll")}
+                        offset={-320}
+                        spy
+                        smooth
+                      >
+                        <p
+                          onClick={() => {
+                            setText(recommend.comment);
+                            setBtnStat("댓글 수정");
+                            setModify(true);
+                            setRecommendId(recommend.id);
+                          }}
+                          className="text-main text-xs"
+                        >
+                          수정
+                        </p>
+                      </Link>
+                    </div>
+                  )}
                 </div>
-                <div className="my-3 border-[1px] border-gray " />
+                <div className="my-3 border-b border-gray " />
               </>
             );
           })}
         </div>
-        <div className="mt-5">
+        <div className="mt-5" id={"commentScroll"}>
           <input
             className="w-[520px] h-10 rounded-xl border border-main text-sm p-2 text-subContent focus:outline-none"
             onChange={onChange}
             type="text"
             placeholder="댓글을 입력해주세요"
             value={text}
+            onKeyPress={onKeyPress}
           />
           <button
             onClick={() => {
@@ -173,7 +203,7 @@ function Post({ data, recommend }: Post) {
             }}
             className={`font-bold text-sm text-white bg-main rounded-xl ml-2 h-10 w-[70px]`}
           >
-            추가하기
+            {btnStat}
           </button>
         </div>
       </div>

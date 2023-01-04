@@ -42,7 +42,7 @@ function OrderList({
   const handleModifyClose = () => {
     setAddressModify(false);
   };
-  const [infoAddress, setInfoAddress] = useState<modifyAddress>();
+  // const [infoAddress, setInfoAddress] = useState<modifyAddress>();
 
   return (
     <div className="w-[554px]">

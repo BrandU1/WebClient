@@ -1,7 +1,6 @@
 import * as React from "react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { clearInterval } from "timers";
 
 interface AlertProps {
   text: string;
