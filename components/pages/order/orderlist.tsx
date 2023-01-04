@@ -18,12 +18,7 @@ const getProfile = () => {
   return client.get(`accounts/me`).then((res) => res.data);
 };
 
-function OrderList({
-  baskets,
-  addresses,
-  address,
-  setAddress,
-}: OrderListProps) {
+function OrderList({ baskets, addresses, setAddress }: OrderListProps) {
   const [selectedNumber, setSelectedNumber] = useState<number>(0);
 
   useEffect(() => {
@@ -129,7 +124,7 @@ function OrderList({
       </div>
       {addressModify && (
         <ModifyAddress
-          infoAddress={infoAddress!}
+          infoAddress={addresses[selectedNumber]!}
           handleClose={handleModifyClose}
         />
       )}

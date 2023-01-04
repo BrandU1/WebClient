@@ -1,8 +1,6 @@
-import { atom, selector } from "recoil";
+import { selector } from "recoil";
 import { BranduBaseResponse, Point, UserInterface } from "../types/privacy";
 import client from "@lib/api";
-import { useEffect } from "react";
-import { userInfo } from "os";
 
 interface UserRecoilState {
   id: number;
@@ -36,9 +34,9 @@ export const getUserInfo = selector<BranduBaseResponse<UserInterface> | null>({
 
 export const userData = selector<UserRecoilState>({
   key: "userDataState",
-  get: ({ get }) => {
-    const point = get(getUserPoint);
-    const info = get(getUserInfo);
+  get: async ({ get }) => {
+    const point = await get(getUserPoint);
+    const info = await get(getUserInfo);
 
     return {
       id: info?.results.id!,
