@@ -23,7 +23,7 @@ export interface AddressInterface {
   name: string;
   recipient: string;
   road_name_address: string;
-  zip_code: number;
+  zip_code: string;
   detail_address: string;
   phone_number: string;
   is_main: boolean;

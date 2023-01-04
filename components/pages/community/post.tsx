@@ -4,7 +4,7 @@ import Share from "@atoms/share";
 import client from "@lib/api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Community, RecommendComment } from "../../../types/privacy";
-import { useRecoilValue } from "recoil";
+import { useRecoilRefresher_UNSTABLE, useRecoilValue } from "recoil";
 import { userData } from "../../../recoil/user";
 import { Link } from "react-scroll";
 
@@ -25,6 +25,11 @@ function Post({ data, recommend }: Post) {
 
   // 유저 정보
   const userInfo = useRecoilValue(userData);
+  const refreshUserInfo = useRecoilRefresher_UNSTABLE(userData);
+
+  useEffect(() => {
+    refreshUserInfo;
+  });
   console.log(userInfo);
   // 버튼 상태
   const [btnStat, setBtnStat] = useState<string>("댓글 달기");
