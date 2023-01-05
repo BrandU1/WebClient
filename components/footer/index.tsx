@@ -4,6 +4,7 @@ import AppleIcon from "@icons/apple";
 import PlayStore from "@icons/playstore";
 import Facebook from "@icons/facebook";
 import Instargram from "@icons/instargram";
+import BranduLogo from "@icons/brandu-logo";
 
 function Footer() {
   return (
@@ -40,47 +41,51 @@ function Footer() {
         </div>
       </div>
       <div className="max-w-4xl m-auto mt-5">
-        <div className="flex flex-row justify-between">
-          <div className="flex flex-col">
-            <p className="text-sm mb-[5px] font-bold">(주) 더미</p>
-            <h1 className="font-bold text-xl text-main">1004-0000</h1>
-            <p className="text-sm font-normal">
-              평일 09:00 ~ 18:00 (주말 &amp; 공휴일 제외)
-            </p>
+        <div className="flex flex-row space-x-12">
+          <div className="flex flex-col justify-center items-center">
+            <BranduLogo />
+            <div className="flex flex-col items-center mt-5 text-subContent text-xs">
+              <p className="mb-[5px] font-bold">(주) 더미</p>
+              <p>평일 09:00 ~ 18:00</p>
+              <p>(주말 &amp; 공휴일 제외)</p>
+            </div>
           </div>
-          <div className="icons flex flex-row space-x-5 mr-5">
+          <div className="flex flex-row mt-5">
+            <div className="flex flex-col text-xs space-y-1 justify-between">
+              <span>대표자</span>
+              <span>주소</span>
+              <span>사업자등록번호</span>
+              <span>통신판매업 신고번호</span>
+              <span>전화</span>
+            </div>
+            <div className="flex flex-col text-[12px] text-subContent space-y-1 ml-3 justify-between">
+              <span>민준수</span>
+              <span className="text-[10px] pb-1">
+                경기도 안산시 상록구 한양대학로 55 한양대학교 ERICA 제5공학관
+                지하 1층 SW창업실 5호
+              </span>
+              <span>771-37-0100</span>
+              <span>제2002경기안산-0000호</span>
+              <span>010-9995-5728</span>
+            </div>
+          </div>
+          <div className="icons flex flex-row space-x-5 mr-5 mt-3">
             <AppleIcon />
             <PlayStore />
             <Facebook />
             <Instargram />
           </div>
         </div>
-        <div className="mt-5 font-normal text-xs text-notice">
-          <p>
-            대표자:민준수 경기도 안산시 상록구 한양대학로 55 한양대학교 ERICA
-            제5공학관 지하 1층 SW창업실 5호
-          </p>
-          <p>
-            사업자등록번호 : 0000-00-00000 통신판매업 신고번호 :
-            제2002경기안산-0000호
-          </p>
-        </div>
-        <div className="mt-5 font-normal text-xs text-notice">
-          <p>
-            (주)더미에서 판매되는 상품 중에는 개별 판매자가 판매하는 오픈마켓
-            상품이 포함되어 있습니다. 오픈마켓 상품의 경우, (주)더미는
-            통신판매중개자로서 거래 당사자가 아니며 , 입점 판매사가 등록한
-            상품정보 및 거래 등에 대해 책임을 지지 않습니다.
-          </p>
+        <div className="flex flex-col mt-10 font-normal text-[12px] text-notice px-5">
           <p>
             (주)더미 사이트의 상품/판매자/쇼핑정보, 컨텐츠, UI 등에 대한 무단
             복제, 전송, 배포, 스크래핑 등의 행위는 저작권법, 콘텐츠사업 진흥법
             등에 의하여 엄격히 금지됩니다.
           </p>
+          <p className="mt-2 font-normal text-[12px] text-notice mb-10">
+            COPYRIGHT (C) 2023 THEMEALWAYS CORP. ALL RIGHTS RESERVED
+          </p>
         </div>
-        <p className="mt-5 font-normal text-xs text-notice mb-10">
-          Copyright 2022, themealways, Co., Ltd All rights reserved
-        </p>
       </div>
     </>
   );

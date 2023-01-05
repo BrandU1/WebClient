@@ -1,28 +1,10 @@
 import type { ReactElement } from "react";
 import React, { useRef, useState } from "react";
 import Badge from "@atoms/badge";
-import Pick from "@common/pick";
-import Image from "next/image";
 import Basket from "@common/basket";
 import Canvas from "@components/ImageCustom/canvas";
-import BackButton from "@icons/back-button";
-import ForwardButton from "@icons/forward-button";
-import MoveButton from "@icons/move-button";
-import PencilButton from "@icons/pencil-button";
-import TextButton from "@icons/text-button";
-import ImageButton from "@icons/image-button";
 import useImage from "@hooks/useImage";
 import ImageSelect from "@components/pages/custom/imageselect";
-import { useRecoilState, useRecoilValue } from "recoil";
-import {
-  canvasAction,
-  canvasActionSelected,
-  CanvasActionType,
-  canvasHistoriesLength,
-  canvasHistoryIndex,
-  canvasText,
-  canvasUndoOrRedo,
-} from "../../../../recoil/canvas";
 import client from "@lib/api";
 import { GetServerSideProps } from "next";
 import { dehydrate, QueryClient } from "@tanstack/react-query";
