@@ -65,7 +65,6 @@ function Edit() {
           const editor = quillRef.current?.getEditor();
           const range = editor?.getSelection();
           editor?.insertEmbed(range.index, "image", imgUrl);
-          console.log("이미지 업로드 성공");
           // const range = quillRef.current?.getEditor().getSelection()?.index;
           //  if (range !== null && range !== undefined) {
           //    let quill = quillRef.current?.getEditor();
