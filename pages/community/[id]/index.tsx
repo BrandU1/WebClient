@@ -9,27 +9,32 @@ import {
   RecommendComment,
 } from "../../../types/privacy";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+
+const getEdit = (id: string) => {
+  return client.get(`communities/posts/${id}`).then((res) => res.data);
+};
+
+const getRecommend = (id: string) => {
+  return client.get(`communities/posts/${id}/comments`).then((res) => res.data);
+};
 
 function PostPage() {
   const router = useRouter();
-  const id = router.query.id;
+  const [id, setId] = useState<string>("");
 
-  const getEdit = () => {
-    return client.get(`communities/posts/${id}`).then((res) => res.data);
-  };
+  useEffect(() => {
+    setId(router.query.id as string);
+  }, [router.isReady, router.query.id]);
+
   const { data, isLoading } = useQuery<BranduBaseResponse<Community>>(
     ["edit", id],
-    getEdit
+    () => getEdit(id)
   );
 
-  const getRecommend = () => {
-    return client
-      .get(`communities/posts/${id}/comments`)
-      .then((res) => res.data);
-  };
   const { data: recommend, isLoading: recommendLoading } = useQuery<
     BranduBaseResponse<RecommendComment[]>
-  >(["recommend", id], getRecommend);
+  >(["recommend", id], () => getRecommend(id));
 
   return (
     <div className="flex flex-row mt-5">
