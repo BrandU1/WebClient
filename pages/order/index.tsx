@@ -6,7 +6,15 @@ import { useEffect, useState } from "react";
 import useBranduQuery from "@hooks/useBranduQuery";
 import { getAddresses } from "@lib/fetches";
 import { selectedAddress } from "../../recoil/order";
-import { AddressInterface } from "../../types/privacy";
+import {
+  AddressInterface,
+  BranduBaseResponse,
+  UserInterface,
+} from "../../types/privacy";
+import client from "@lib/api";
+import { useQuery } from "@tanstack/react-query";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
 export interface PriceBarPrint {
   id: number;
@@ -19,6 +27,7 @@ function OrderPage() {
   const price = useRecoilValue(totalPrice);
   const [priceBarPrint, setPriceBarPrint] = useState<PriceBarPrint[]>([]);
   const baskets = useRecoilValue(purchaseProducts);
+  const router = useRouter();
   const [address, setAddress] = useRecoilState(selectedAddress);
 
   const {
@@ -30,10 +39,9 @@ function OrderPage() {
     queryFn: () => getAddresses(),
   });
 
-
-
-  const onClick = () => {
-    alert("결제하기");
+  /* 결제하기 버튼 처리 */
+  const onClick = async () => {
+    await router.push(`/order/pay`);
   };
 
   useEffect(() => {
@@ -66,12 +74,16 @@ function OrderPage() {
         <OrderList
           baskets={baskets!}
           addresses={addresses?.results!}
-          address={address!}
           setAddress={setAddress}
         />
       </div>
       <div className="price w-[30%]">
-        <PriceBar printList={priceBarPrint} disabled={addresses === null} />
+        {/*<PriceBar printList={priceBarPrint} disabled={addresses === null} />*/}
+        <PriceBar printList={priceBarPrint}>
+          <button className="w-56 h-11 bg-main rounded-xl text-white font-bold text-base flex justify-center items-center m-auto mb-2 disabled:opacity-50">
+            <Link href="/order/pay">결제하기</Link>
+          </button>
+        </PriceBar>
       </div>
     </div>
   );

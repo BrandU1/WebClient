@@ -1,21 +1,22 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { BasketPurchase } from "../../../recoil/totalamount";
-import { AddressInterface } from "../../../types/privacy";
+import { AddressInterface, UserInterface } from "../../../types/privacy";
 import Accordion from "@common/accordion";
+import client from "@lib/api";
+import useBranduQuery from "@hooks/useBranduQuery";
+import ModifyAddress from "@components/modal/modifyaddress";
 
 interface OrderListProps {
   baskets: BasketPurchase[];
   addresses: AddressInterface[];
-  address: AddressInterface | null;
   setAddress: any;
 }
 
-function OrderList({
-  baskets,
-  addresses,
-  address,
-  setAddress,
-}: OrderListProps) {
+const getProfile = () => {
+  return client.get(`accounts/me`).then((res) => res.data);
+};
+
+function OrderList({ baskets, addresses, setAddress }: OrderListProps) {
   const [selectedNumber, setSelectedNumber] = useState<number>(0);
 
   useEffect(() => {
@@ -23,6 +24,18 @@ function OrderList({
       setAddress(addresses[selectedNumber]);
     }
   }, [selectedNumber, addresses]);
+
+  const { data: profileData, isLoading: profileLoading } =
+    useBranduQuery<UserInterface>({
+      queryKey: ["profile"],
+      queryFn: () => getProfile(),
+    });
+
+  const [addressModify, setAddressModify] = useState<boolean>(false);
+  const handleModifyClose = () => {
+    setAddressModify(false);
+  };
+  // const [infoAddress, setInfoAddress] = useState<modifyAddress>();
 
   return (
     <div className="w-[554px]">
@@ -52,9 +65,9 @@ function OrderList({
             <p>이메일</p>
           </div>
           <div className="flex flex-col space-y-[10px] text-sm justify-start px-5 mt-[10px]">
-            <p>민수</p>
-            <p>010-2222-2222</p>
-            <p>222@222.com</p>
+            <p>{profileData?.results.name}</p>
+            <p>{profileData?.results.phone_number}</p>
+            <p>{profileData?.results.email}</p>
           </div>
         </div>
       </div>
@@ -80,7 +93,12 @@ function OrderList({
               })}
             </div>
           </div>
-          <button className="border border-main rounded-xl text-main text-sm w-[90px] h-[36px] flex justify-center items-center">
+          <button
+            className="border border-main rounded-xl text-main text-sm w-[90px] h-[36px] flex justify-center items-center"
+            onClick={() => {
+              setAddressModify(true);
+            }}
+          >
             수정하기
           </button>
         </div>
@@ -93,15 +111,21 @@ function OrderList({
           <div className="flex flex-col space-y-[10px] text-sm justify-start mt-[10px]">
             {addresses && (
               <>
-                <span>{addresses[selectedNumber].recipient}</span>
-                <span>{addresses[selectedNumber].phone_number}</span>
-                <span>{`[${addresses[selectedNumber].zip_code}] ${addresses[selectedNumber].road_name_address}`}</span>
-                <span>{addresses[selectedNumber].detail_address}</span>
+                <span>{addresses[selectedNumber]?.recipient}</span>
+                <span>{addresses[selectedNumber]?.phone_number}</span>
+                <span>{`[${addresses[selectedNumber]?.zip_code}] ${addresses[selectedNumber]?.road_name_address}`}</span>
+                <span>{addresses[selectedNumber]?.detail_address}</span>
               </>
             )}
           </div>
         </div>
       </div>
+      {addressModify && (
+        <ModifyAddress
+          infoAddress={addresses[selectedNumber]!}
+          handleClose={handleModifyClose}
+        />
+      )}
     </div>
   );
 }

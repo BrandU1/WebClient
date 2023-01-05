@@ -23,7 +23,7 @@ export interface AddressInterface {
   name: string;
   recipient: string;
   road_name_address: string;
-  zip_code: number;
+  zip_code: string;
   detail_address: string;
   phone_number: string;
   is_main: boolean;
@@ -190,4 +190,14 @@ export interface RecommendComment {
   profile: number;
   comment: string;
   created: string;
+}
+export interface infiniteScroll {
+  pageParams: [];
+  pages: infinitePost[];
+}
+export interface infinitePost {
+  count: number;
+  next: string;
+  previous: string;
+  results: Community[];
 }

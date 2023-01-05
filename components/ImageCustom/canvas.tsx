@@ -12,8 +12,8 @@ import {
 import { useRecoilState } from "recoil";
 
 const initialPosition = {
-  y: 230,
-  x: 160,
+  y: 260,
+  x: 115,
   height: 200,
   width: 180,
 };
@@ -92,9 +92,9 @@ const Canvas = ({ backgroundImage, width, height, images }: CanvasProps) => {
 
   useEffect(() => {
     if (backgroundImage) {
-      canvas?.setBackgroundImage(backgroundImage, () => {
-        canvas?.renderAll();
-      });
+      // canvas?.setBackgroundImage(backgroundImage, () => {
+      //   canvas?.renderAll();
+      // });
     }
   }, [backgroundImage]);
 
@@ -163,12 +163,12 @@ const Canvas = ({ backgroundImage, width, height, images }: CanvasProps) => {
       if (usedImages.includes(index)) {
         return;
       }
-      fabric.Image.fromURL(backgroundImage, (image) => {
-        setUsedImages((prev) => [...prev, index]);
-        image.scale(1);
-        canvas!.add(image);
-        canvas!.renderAll();
-      });
+      // fabric.Image.fromURL(backgroundImage, (image) => {
+      //   setUsedImages((prev) => [...prev, index]);
+      //   image.scale(1);
+      //   canvas!.add(image);
+      //   canvas!.renderAll();
+      // });
     });
   }, [images, backgroundImage]);
 
@@ -197,8 +197,7 @@ const Canvas = ({ backgroundImage, width, height, images }: CanvasProps) => {
         textAlign: "center",
       });
 
-      newText.on("mousemove", (event) => {
-      });
+      newText.on("mousemove", (event) => {});
 
       canvas!.add(newText);
     });
@@ -210,16 +209,18 @@ const Canvas = ({ backgroundImage, width, height, images }: CanvasProps) => {
   };
 
   return (
-    <canvas
-      width={500}
-      height={500}
-      ref={canvasRef}
-      style={{
-        backgroundRepeat: "no-repeat",
-        backgroundPosition: "center",
-        backgroundSize: "contain",
-      }}
-    />
+    <div className="bg-[url('https://brandu-server-bucket.s3.amazonaws.com/media/product/images/2022-12/%EC%97%90%EC%BD%94%EB%B0%B1_%EC%95%9E%EB%A9%B4.jpeg')] bg-no-repeat z-20 ">
+      <canvas
+        width={500}
+        height={500}
+        ref={canvasRef}
+        style={{
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center",
+          backgroundSize: "contain",
+        }}
+      />
+    </div>
   );
 };
 export default Canvas;

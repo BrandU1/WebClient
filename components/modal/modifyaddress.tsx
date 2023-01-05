@@ -15,13 +15,13 @@ interface AddressForm {
   id: number;
   name: string;
   recipient: string;
-  phone_number: string;
+  phone_number?: string;
   road_name_address: string;
   detail_address: string;
   is_main: boolean;
-  memo: string;
+  memo?: string;
   zip_code: string;
-  address: string;
+  address?: string;
 }
 
 function ModifyAddress({ handleClose, infoAddress }: addressModifyProps) {

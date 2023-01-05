@@ -5,8 +5,6 @@ import { GetServerSideProps } from "next";
 import useBranduQuery from "@hooks/useBranduQuery";
 import Image from "next/image";
 import Badge from "@atoms/badge";
-import Pick from "@common/pick";
-import Basket from "@common/basket";
 import { useRef, useState } from "react";
 import Price from "@components/product/price";
 import ProductNavigationBar from "@components/pages/product/detailmenu";
@@ -17,6 +15,7 @@ import { useRecoilState } from "recoil";
 import { isLoginModalOpen } from "../../../recoil/base";
 import PickButton from "@components/pick/pickbutton";
 import Share from "@atoms/share";
+import ThreeJS from "@components/product/three";
 
 export const getProduct = async (id: number) => {
   const response = await client.get(`products/${id}`);
@@ -181,12 +180,13 @@ function ProductDetail({ id }: ProductDetailProps) {
         <div className="ml-2 relative">
           {/* 상품 이미지 */}
           <div className="w-96 h-96">
-            <Image
-              className="rounded-xl"
-              src={productResponse?.results.images[shownImage]?.image!}
-              alt={productResponse?.results.images[shownImage]?.image!}
-              layout="fill"
-            />
+            {/*<Image*/}
+            {/*  className="rounded-xl"*/}
+            {/*  src={productResponse?.results.images[shownImage]?.image!}*/}
+            {/*  alt={productResponse?.results.images[shownImage]?.image!}*/}
+            {/*  layout="fill"*/}
+            {/*/>*/}
+            <ThreeJS />
           </div>
         </div>
         <div className="flex flex-col mx-5 w-fit h-fit">
