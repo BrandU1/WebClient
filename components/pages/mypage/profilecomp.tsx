@@ -84,7 +84,7 @@ function ProfileComp({ profile }: ProfileForm) {
             {profile.backdrop_image && (
               <Image
                 className="rounded-xl"
-                src={`http://192.168.0.2/${profile.backdrop_image}`}
+                src={`${profile.backdrop_image}`}
                 height={200}
                 width={674}
                 decoding="async"
@@ -151,7 +151,7 @@ function ProfileComp({ profile }: ProfileForm) {
               {profile.profile_image && (
                 <Image
                   className="rounded-xl"
-                  src={`http://192.168.0.2/${profile.profile_image}`}
+                  src={`${profile.profile_image}`}
                   height={105}
                   width={100}
                   decoding="async"
