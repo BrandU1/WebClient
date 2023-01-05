@@ -99,7 +99,29 @@ function ProductDetailBox({ mainImage, reviews }: DetailProps) {
           height={798}
           alt={"infoImg"}
         />
+        <h2 className="font-bold flex justify-center mb-5 text-main">
+          제작 주의사항
+        </h2>
+        <div className="whitespace-pre-wrap text-[12px]">
+          • 배경이 투명한 PNG의 경우, CMYK 색상모드로 웹용(Save for Web) 저장해
+          주세요.
+          <br /> {"  "}배경이 꽉 찬 JPG의 경우, RGB 색상모드로 저장해 주세요.
+          <br /> {"  "}이미지 크기는 최소 2500~3500px / 해상도는 150dpi 이상으로
+          제작해 주세요.
+          <br />
+          <br />• 상품마다 이미지 크기가 다르므로, 해당 상품의 이미지 가이드를
+          확인해 주세요. <br />
+          {"  "}작은 원본 이미지를 사이즈 규격에 맞게 임의로 크게 확대할 경우
+          인쇄 시 화질이 깨질 수 있습니다. <br />
+          <br />• 상품 실측 사이즈를 반드시 확인해 주세요. <br />
+          <br />• 인쇄를 원하시는 위치가 있을 시 [상품 제작 요청사항]에
+          남겨주시거나, 1:1 상담 또는 고객센터(ceo@themealways.com)로 메일
+          주세요. <br />
+          <br />• 모니터, 핸드폰에 따라 실제 인쇄 색상과 다르게 보일 수
+          있습니다.{" "}
+        </div>
       </div>
+
       {/* 제작 가이드 하단선 */}
       <div id="2" className="w-screen h-[1px] bg-gray" />
       <div className="review flex flex-col justify-center items-center relative">
@@ -187,34 +209,14 @@ function ProductDetailBox({ mainImage, reviews }: DetailProps) {
       <div className="delivery flex flex-col justify-center items-center">
         <span className="flex justify-center font-bold text-xl">배송/환불</span>
         <div className="m-auto w-[780px] h-fit mt-[10px] shadow-lg px-5 select-none">
-          <h2 className="font-bold flex justify-center text-xl my-5 text-main">
-            주의사항
-          </h2>
-          <div className="whitespace-pre-wrap">
-            • 배경이 투명한 PNG의 경우, CMYK 색상모드로 웹용(Save for Web)
-            저장해 주세요.
-            <br /> {"  "}배경이 꽉 찬 JPG의 경우, RGB 색상모드로 저장해 주세요.
-            <br /> {"  "}이미지 크기는 최소 2500~3500px / 해상도는 150dpi
-            이상으로 제작해 주세요.
-            <br />
-            <br />• 상품마다 이미지 크기가 다르므로, 해당 상품의 이미지 가이드를
-            확인해 주세요. <br />
-            {"  "}작은 원본 이미지를 사이즈 규격에 맞게 임의로 크게 확대할 경우
-            인쇄 시 화질이 깨질 수 있습니다. <br />
-            <br />• 상품 실측 사이즈를 반드시 확인해 주세요. <br />
-            <br />• 인쇄를 원하시는 위치가 있을 시 [상품 제작 요청사항]에
-            남겨주시거나, 1:1 상담 또는 고객센터(ceo@themealways.com)로 메일
-            주세요. <br />
-            <br />• 모니터, 핸드폰에 따라 실제 인쇄 색상과 다르게 보일 수
-            있습니다.{" "}
-          </div>
-          <h2 className="font-bold flex justify-center text-xl mt-10 mb-5 text-main">
+          <h2 className="font-bold flex justify-center mt-10 mb-5 text-main">
             환불 불가 사항
           </h2>
-          <div className="mb-5">
-            • BrandU의 모든 상품은 고객 주문에 따라 개별 제작되는 방식으로 단순
-            변심을 포함, 아래의 경우에는 <br />
-            교환 / 환불이 불가합니다. <br />
+          <span className="font-bold text-xs flex justify-center">
+            BrandU의 모든 상품은 고객 주문에 따라 개별 제작되는 방식으로 단순
+            변심을 포함, 아래의 경우에는 교환 / 환불이 불가합니다.
+          </span>
+          <div className="mb-5 text-[12px]">
             <br />• 디자인 시안 색상의 차이 프린팅 방식과 원단 재질에 따른
             경우의 수가 다양하므로 인쇄 후 모니터, 혹은 종이 출력물과 색상
             차이가 발생할 수 있습니다. <br />
@@ -228,16 +230,22 @@ function ProductDetailBox({ mainImage, reviews }: DetailProps) {
             수 있습니다. <br />
             <br />• 화학 제품 사용으로 인한 손상 우레탄 전사(PU Heat Transfer)
             인쇄 제품에 솔벤트와 같은 용해력이 있는 용매를 사용한 향수를
-            직접적으로 분사할 경우 인쇄 부분이 손상될 수 있으니 주의해 주세요.{" "}
+            직접적으로 분사할 경우 인쇄 부분이 손상될 수 있으니 주의해 주세요.
+          </div>
+
+          <h2 className="font-bold flex justify-center mt-10 mb-5 text-main">
+            교환 / 환불 기간
+          </h2>
+          <div className="mb-5 text-[12px]">
+            • 상품 하자, 오배송 등 물품에 문제 되는 사항에 대해서는 수령 후 7일
+            이내 이메일 ceo@themealways.com으로 연락 또는 마이페이지에서 신청
+            (교환/반품비 무료)
             <br />
-            <br />• 교환/환불 기간 물품에 문제 되는 사항에 대해서는 수령 후 7일
-            이내 이메일 ceo@themealways.com 또는 고객센터로 연락주셔야
-            가능합니다. <br />
+            <br /> <br />
+            ★주문 완료 후 상품 및 이미지 변경을 원하실 경우 [제작준비중]
+            상태에서만 변경이 가능하며 [제작중]에는 변경 및 취소가 불가합니다★
             <br />
-            <br />★ 주문 완료 후 상품 및 이미지 변경을 원하실 경우 [제작준비중]
-            상태에서만 변경이 가능하며 [제작중]에는 변경 및 취소가 불가합니다. ★
-            <br />
-            변경을 원하시는 경우 1:1 상담 및 카톡 또는 고객센터를 통해 문의
+            변경을 원하시는 경우 ceo@themealways.com 또는 고객센터를 통해 문의
             바랍니다.
           </div>
         </div>

@@ -4,13 +4,11 @@ import { AddressInterface, UserInterface } from "../../../types/privacy";
 import Accordion from "@common/accordion";
 import client from "@lib/api";
 import useBranduQuery from "@hooks/useBranduQuery";
-import { useRecoilState } from "recoil";
 import ModifyAddress from "@components/modal/modifyaddress";
 
 interface OrderListProps {
   baskets: BasketPurchase[];
   addresses: AddressInterface[];
-  address: AddressInterface | null;
   setAddress: any;
 }
 
@@ -113,10 +111,10 @@ function OrderList({ baskets, addresses, setAddress }: OrderListProps) {
           <div className="flex flex-col space-y-[10px] text-sm justify-start mt-[10px]">
             {addresses && (
               <>
-                <span>{addresses[selectedNumber].recipient}</span>
-                <span>{addresses[selectedNumber].phone_number}</span>
-                <span>{`[${addresses[selectedNumber].zip_code}] ${addresses[selectedNumber].road_name_address}`}</span>
-                <span>{addresses[selectedNumber].detail_address}</span>
+                <span>{addresses[selectedNumber]?.recipient}</span>
+                <span>{addresses[selectedNumber]?.phone_number}</span>
+                <span>{`[${addresses[selectedNumber]?.zip_code}] ${addresses[selectedNumber]?.road_name_address}`}</span>
+                <span>{addresses[selectedNumber]?.detail_address}</span>
               </>
             )}
           </div>
