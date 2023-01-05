@@ -1,12 +1,12 @@
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Share from "@atoms/share";
 import client from "@lib/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Community, RecommendComment } from "../../../types/privacy";
-import { useRecoilRefresher_UNSTABLE, useRecoilValue } from "recoil";
-import { userData } from "../../../recoil/user";
+import { useRecoilValue } from "recoil";
 import { Link } from "react-scroll";
+import { userData } from "../../../recoil/user";
 
 interface Post {
   data: Community;
@@ -25,11 +25,7 @@ function Post({ data, recommend }: Post) {
 
   // 유저 정보
   const userInfo = useRecoilValue(userData);
-  const refreshUserInfo = useRecoilRefresher_UNSTABLE(userData);
 
-  useEffect(() => {
-    refreshUserInfo;
-  });
   console.log(userInfo);
   // 버튼 상태
   const [btnStat, setBtnStat] = useState<string>("댓글 달기");
