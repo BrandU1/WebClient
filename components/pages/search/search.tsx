@@ -113,12 +113,12 @@ function Search({ searchResult }: SearchProps) {
                   <div key={index} className="py-3 relative">
                     <Link
                       href={{
-                        pathname: `/product/${item.id}`,
+                        pathname: `/community/${item.id}`,
                         query: {
                           index: item.id,
                         },
                       }}
-                      as={`/product/${item.id}`}
+                      as={`/community/${item.id}`}
                     >
                       <div className="h-60 relative">
                         <ImgAtom
