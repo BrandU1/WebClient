@@ -26,7 +26,6 @@ function Post({ data, recommend }: Post) {
   // 유저 정보
   const userInfo = useRecoilValue(userData);
 
-  console.log(userInfo);
   // 버튼 상태
   const [btnStat, setBtnStat] = useState<string>("댓글 달기");
   const onKeyPress = (e: any) => {
