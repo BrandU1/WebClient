@@ -1,7 +1,6 @@
 import Accordion from "@common/accordion";
 import CheckButton from "@common/check-button";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { useRouter } from "next/router";
+import { useRecoilValue } from "recoil";
 import { useEffect, useState } from "react";
 import { PaymentMethodType } from "@tosspayments/payment__types/types/payment/PaymentRequest";
 import { loadTossPayments } from "@tosspayments/payment-sdk";
@@ -17,8 +16,7 @@ import { useMutation } from "@tanstack/react-query";
 import client from "@lib/api";
 import { newOrder } from "../../recoil/order";
 import CheckBox from "@icons/checkBox";
-import dynamic from "next/dynamic";
-import NoSsr from "@components/no-ssr";
+import { userData } from "../../recoil/user";
 
 interface PaymentForm {
   point: number;
@@ -69,7 +67,7 @@ export interface OrderCreate {
 
 function PayPage() {
   const orderData = useRecoilValue(newOrder);
-  const userPoint = 0;
+  const userPoint = useRecoilValue(userData);
 
   const [priceBarPrint, setPriceBarPrint] = useState<PriceBarPrint[]>([]);
   const { register, handleSubmit, setValue, watch, reset } =
@@ -94,7 +92,7 @@ function PayPage() {
 
   /* 포인트 전액 사용 */
   const useAllPoint = () => {
-    setValue("point", userPoint);
+    setValue("point", userPoint.point.point);
     alert(watch("point") + " Point");
   };
 
@@ -207,7 +205,7 @@ function PayPage() {
                   autoComplete="off"
                   {...register("point", {
                     required: true,
-                    validate: (value) => value <= (userPoint || 0),
+                    validate: (value) => value <= userPoint.point.point,
                   })}
                 />
                 <button
@@ -222,7 +220,7 @@ function PayPage() {
                   사용가능한 포인트
                 </span>
                 <span className="text-main font-bold flex items-center">
-                  {userPoint?.toLocaleString() || "0"} BP
+                  {userPoint.point.point.toLocaleString() || "0"} BP
                 </span>
               </div>
             </div>

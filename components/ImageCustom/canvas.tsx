@@ -92,9 +92,9 @@ const Canvas = ({ backgroundImage, width, height, images }: CanvasProps) => {
 
   useEffect(() => {
     if (backgroundImage) {
-      canvas?.setBackgroundImage(backgroundImage, () => {
-        canvas?.renderAll();
-      });
+      // canvas?.setBackgroundImage(backgroundImage, () => {
+      //   canvas?.renderAll();
+      // });
     }
   }, [backgroundImage]);
 
@@ -163,12 +163,12 @@ const Canvas = ({ backgroundImage, width, height, images }: CanvasProps) => {
       if (usedImages.includes(index)) {
         return;
       }
-      fabric.Image.fromURL(backgroundImage, (image) => {
-        setUsedImages((prev) => [...prev, index]);
-        image.scale(1);
-        canvas!.add(image);
-        canvas!.renderAll();
-      });
+      // fabric.Image.fromURL(backgroundImage, (image) => {
+      //   setUsedImages((prev) => [...prev, index]);
+      //   image.scale(1);
+      //   canvas!.add(image);
+      //   canvas!.renderAll();
+      // });
     });
   }, [images, backgroundImage]);
 

@@ -1,53 +1,42 @@
-import { selector } from "recoil";
-import { BranduBaseResponse, Point, UserInterface } from "../types/privacy";
-import client from "@lib/api";
+import { atom, selector } from "recoil";
+import { Point, UserInterface } from "../types/privacy";
 
 interface UserRecoilState {
-  id: number;
-  name?: string;
-  nickname?: string;
-  email?: string;
-  phone_number?: string;
-  profile_image: string;
-  social_link?: string;
-  platforms: {
-    platform: string;
-  }[];
-  point: number;
+  user: UserInterface;
+  point: Point;
 }
 
-export const getUserPoint = selector<Point | null>({
+export const userPoint = atom<Point>({
   key: "getUserPoint",
-  get: async ({ get }) => {
-    const response = await client.get("accounts/point");
-    return response.data;
+  default: {
+    point: 0,
+    point_history: [],
   },
 });
 
-export const getUserInfo = selector<BranduBaseResponse<UserInterface> | null>({
+export const userInfo = atom<UserInterface>({
   key: "getUserInfo",
-  get: async ({ get }) => {
-    const response = await client.get("accounts/me");
-    return response.data;
+  default: {
+    id: 0,
+    name: "",
+    nickname: "",
+    email: "",
+    phone_number: "",
+    profile_image: "",
+    social_link: "",
+    platforms: [],
   },
 });
 
 export const userData = selector<UserRecoilState>({
   key: "userDataState",
-  get: async ({ get }) => {
-    const point = await get(getUserPoint);
-    const info = await get(getUserInfo);
+  get: ({ get }) => {
+    const point = get(userPoint);
+    const info = get(userInfo);
 
     return {
-      id: info?.results.id!,
-      name: info?.results.name!,
-      nickname: info?.results.nickname!,
-      email: info?.results.email!,
-      phone_number: info?.results.phone_number!,
-      profile_image: info?.results.profile_image!,
-      social_link: info?.results.social_link!,
-      platforms: info?.results.platforms!,
-      point: point?.point!,
+      user: info,
+      point: point,
     };
   },
 });

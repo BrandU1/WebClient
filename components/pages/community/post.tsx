@@ -2,7 +2,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import Share from "@atoms/share";
 import client from "@lib/api";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Community, RecommendComment } from "../../../types/privacy";
 import { useRecoilRefresher_UNSTABLE, useRecoilValue } from "recoil";
 import { userData } from "../../../recoil/user";
@@ -154,7 +154,7 @@ function Post({ data, recommend }: Post) {
                     </div>
                   </div>
 
-                  {recommend.profile === userInfo.id && (
+                  {recommend.profile === userInfo.user.id && (
                     <div className="cursor-pointer flex space-x-2">
                       <p
                         onClick={() => deleteRecommend.mutate(recommend.id)}

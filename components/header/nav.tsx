@@ -19,9 +19,10 @@ import { useRecoilState } from "recoil";
 import { isLoginModalOpen } from "../../recoil/base";
 import { ToastState, ToastStateAtom } from "../../recoil/toast";
 import { AlertToast } from "@atoms/alerttoast";
-import { getHostname } from "next/dist/shared/lib/get-hostname";
+import useUserInfo from "@hooks/defaultValue";
 
 function Nav() {
+  useUserInfo();
   const [focused, setFocused] = useState<boolean>(false);
   const closeSearch = () => setFocused(false);
 
