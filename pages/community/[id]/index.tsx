@@ -11,30 +11,32 @@ import {
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-const getEdit = (id: string) => {
-  return client.get(`communities/posts/${id}`).then((res) => res.data);
-};
-
-const getRecommend = (id: string) => {
-  return client.get(`communities/posts/${id}/comments`).then((res) => res.data);
-};
-
 function PostPage() {
   const router = useRouter();
-  const [id, setId] = useState<string>("");
-
   useEffect(() => {
-    setId(router.query.id as string);
-  }, [router.isReady, router.query.id]);
+    if (router.isReady) {
+    }
+  }, [router.isReady]);
+  const id = router.query.id;
+
+  const getEdit = () => {
+    return client.get(`communities/posts/${id}`).then((res) => res.data);
+  };
+
+  const getRecommend = () => {
+    return client
+      .get(`communities/posts/${id}/comments`)
+      .then((res) => res.data);
+  };
 
   const { data, isLoading } = useQuery<BranduBaseResponse<Community>>(
     ["edit", id],
-    () => getEdit(id)
+    getEdit
   );
 
   const { data: recommend, isLoading: recommendLoading } = useQuery<
     BranduBaseResponse<RecommendComment[]>
-  >(["recommend", id], () => getRecommend(id));
+  >(["recommend", id], getRecommend);
 
   return (
     <div className="flex flex-row mt-5">
@@ -45,6 +47,11 @@ function PostPage() {
       <SidePost />
     </div>
   );
+}
+export async function getServerSideProps() {
+  return {
+    props: {},
+  };
 }
 
 export default PostPage;

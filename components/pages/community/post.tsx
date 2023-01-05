@@ -138,7 +138,7 @@ function Post({ data, recommend }: Post) {
           {recommend?.map((recommend, index) => {
             return (
               <>
-                <div className="flex justify-between mx-2">
+                <div key={index} className="flex justify-between mx-2">
                   <div className="flex">
                     <div className="w-9 h-9 bg-gray rounded-xl mr-2" />
                     <div className="flex flex-col">

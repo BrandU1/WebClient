@@ -24,7 +24,7 @@ function Community({ bestCommunity }: bestCommunityProps) {
           <div className="grid grid-cols-5 gap-y-5 gap-x-2 mt-5">
             {bestCommunity?.map((post, index) => {
               return (
-                <Link href={`/community/${post.id}`}>
+                <Link key={index} href={`/community/${post.id}`}>
                   <div className="relative">
                     <ImgAtom
                       exist={null}
