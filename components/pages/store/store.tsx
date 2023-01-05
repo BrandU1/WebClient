@@ -1,7 +1,7 @@
 import { HotDeal } from "../../../types/privacy";
 import Link from "next/link";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import PickButton from "@components/pick/pickbutton";
 
 interface storeProps {
@@ -19,6 +19,10 @@ function Store({ store }: storeProps) {
 
   return (
     <div className="py-3">
+      <div className="font-bold border-[2px] border-main flex justify-center py-3">
+        <h2>브랜뉴 오늘의 상품</h2>
+      </div>
+
       <div className="list grid grid-cols-5 gap-x-4">
         {store?.map((item, index) => {
           return (

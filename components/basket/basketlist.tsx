@@ -235,7 +235,14 @@ function BasketList({ basketList }: BasketListProps) {
         </div>
       </div>
       <div className="leftSection w-[30%] ">
-        <Pricebar printList={priceBarPrint} disabled={checkList.length === 0} />
+        <Pricebar printList={priceBarPrint}>
+          <button
+            className="w-56 h-11 bg-main rounded-xl text-white font-bold text-base flex justify-center items-center m-auto mb-2 disabled:opacity-50 disabled:cursor-auto"
+            disabled={checkList.length === 0}
+          >
+            <Link href="/order">결제하기</Link>
+          </button>
+        </Pricebar>
       </div>
     </div>
   );

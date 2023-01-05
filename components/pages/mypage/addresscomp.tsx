@@ -4,7 +4,6 @@ import { AddressInterface, BranduBaseResponse } from "../../../types/privacy";
 import client from "@lib/api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import ModifyAddress from "@components/modal/modifyaddress";
-import addaddress from "@components/modal/addaddress";
 
 interface AddressList {
   address: AddressInterface[];
@@ -44,19 +43,7 @@ function AddressComp({ address }: AddressList) {
     setModifyModal(false);
   };
 
-  const [infoAddress, setInfoAddress] = useState<modifyAddress>();
-
-  const mutationModify = useMutation(
-    (id: number) =>
-      client
-        .get(`accounts/addresses/${id}`)
-        .then((res) => setInfoAddress(res.data.results)),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(["address"]);
-      },
-    }
-  );
+  const [modifyNum, setModifyNum] = useState<number>(-1);
 
   return (
     <div className={` flex flex-col px-5 mt-10 flex-1 `}>
@@ -94,7 +81,9 @@ function AddressComp({ address }: AddressList) {
                 >
                   대표
                 </div>
-                <p className={`${!list.is_main && "pt-6"}`}>{list?.name}</p>
+                <p className={`${!list.is_main && "pt-6"}`}>
+                  {list?.recipient}
+                </p>
                 <p>{list?.phone_number}</p>
                 <p>
                   {list?.road_name_address} {list?.detail_address}
@@ -105,7 +94,7 @@ function AddressComp({ address }: AddressList) {
             <div className="flex flex-col">
               <button
                 onClick={() => {
-                  mutationModify.mutate(list.id);
+                  setModifyNum(index);
                   setModifyModal(true);
                 }}
                 className="w-24 h-9 border border-main text-main rounded-xl text-sm"
@@ -127,7 +116,7 @@ function AddressComp({ address }: AddressList) {
       {addressModal && <AddressAdd handleClose={handleAddressClose} />}
       {modifyModal && (
         <ModifyAddress
-          infoAddress={infoAddress!}
+          infoAddress={address[modifyNum]!}
           handleClose={handleModifyClose}
         />
       )}

@@ -1,11 +1,7 @@
 import TopInfo from "@components/pages/mypage/topinfo";
 import SideTab from "@components/pages/mypage/sidetab";
 import AddressComp from "@components/pages/mypage/addresscomp";
-import {
-  AddressInterface,
-  BranduBaseResponse,
-  pickInterface,
-} from "../../types/privacy";
+import { AddressInterface, BranduBaseResponse } from "../../types/privacy";
 import client from "@lib/api";
 import { useQuery } from "@tanstack/react-query";
 
