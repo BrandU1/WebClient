@@ -120,17 +120,6 @@ function ProfileComp({ profile }: ProfileForm) {
                   alt={"profile"}
                 />
               ))}
-            {/*{backBase64 ? (*/}
-            {/*  <Image*/}
-            {/*    src={`http://192.168.0.2/${backBase64}`}*/}
-            {/*    width={674}*/}
-            {/*    height={200}*/}
-            {/*    decoding="async"*/}
-            {/*    alt={"backImage"}*/}
-            {/*  />*/}
-            {/*) : (*/}
-            {/*  <div className="w-[674px] h-[200px]"></div>*/}
-            {/*)}*/}
           </div>
           <div className="border-[1px] text-center border-main bg-white rounded-2xl absolute right-5 bottom-5 text-main text-xs w-[35px] h-[20px] cursor-pointer">
             <label className="input-file-button" htmlFor="backImage">

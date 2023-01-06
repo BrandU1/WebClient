@@ -1,19 +1,15 @@
 import TopInfo from "@components/pages/mypage/topinfo";
 import SideTab from "@components/pages/mypage/sidetab";
 import AddressComp from "@components/pages/mypage/addresscomp";
-import { AddressInterface, BranduBaseResponse } from "../../types/privacy";
-import client from "@lib/api";
-import { useQuery } from "@tanstack/react-query";
+import { AddressInterface } from "../../types/privacy";
+import useBranduQuery from "@hooks/useBranduQuery";
+import { getAddress } from "@lib/fetches";
 
 function Address() {
-  const getAddress = () => {
-    return client.get(`accounts/addresses`).then((res) => res.data);
-  };
-
-  const { data, isLoading } = useQuery<BranduBaseResponse<AddressInterface[]>>(
-    ["address"],
-    getAddress
-  );
+  const { data, isLoading } = useBranduQuery<AddressInterface[]>({
+    queryKey: ["address"],
+    queryFn: getAddress,
+  });
 
   return (
     <div className="m-auto">
