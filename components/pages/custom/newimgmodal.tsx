@@ -1,6 +1,7 @@
 import ModalFrame from "@common/modalframe";
 import { useRef, useState } from "react";
 import Image from "next/image";
+import client from "@lib/api";
 
 interface newModalProps {
   handleClose: () => void;
@@ -15,16 +16,16 @@ function NewImgModal({ handleClose }: newModalProps) {
     formData.append("size", "auto");
     formData.append("image_url", "https://www.remove.bg/example-hd.jpg");
 
-    // axios
-    //   .post("https://api.remove.bg/v1.0/removebg", formData, {
-    //     headers: {
-    //       "content-type": "multipart/form-data",
-    //       "X-Api-Key": "eQVuQAkiR2Tru7cu99wvYkaM",
-    //     },
-    //   })
-    //   .then((res) => {
-    //     // console.log(fs.writeFileSync("no-bg.png", res.data));
-    //   });
+    client
+      .post("https://api.remove.bg/v1.0/removebg", formData, {
+        headers: {
+          "content-type": "multipart/form-data",
+          "X-Api-Key": "eQVuQAkiR2Tru7cu99wvYkaM",
+        },
+      })
+      .then((res) => {
+        // console.log(fs.writeFileSync("no-bg.png", res.data));
+      });
   };
   const handleChangeFile = (e: any) => {
     const reader = new FileReader();
