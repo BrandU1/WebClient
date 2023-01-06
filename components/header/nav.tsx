@@ -44,6 +44,12 @@ function Nav() {
 
   // input State
   const [input, setInput] = useState<string>("");
+  const [clickInput, setClickInput] = useState<string>("");
+
+  const inputClear = () => {
+    setInput("");
+    setClickInput("");
+  };
 
   // Login 관련
   const [modalOpen, setModalOpen] = useRecoilState(isLoginModalOpen);
@@ -140,26 +146,37 @@ function Nav() {
     BranduBaseResponse<Ranking[]>
   >(["rank"], getRanking);
 
-  const onClicksSearch = () => {
+  /*input search*/
+  const onSearch = () => {
     if (input !== "" && input.replace(/ /g, "") !== "") {
       router.push(`/search?query=${input}`);
       setFocused(false);
     } else if (input === "") {
       setFocused(false);
       alert("검색어를 입력해주세요");
-    }
-    if (input.replace(/ /g, "") === "") {
+    } else if (input.replace(/ /g, "") === "") {
       setFocused(false);
-      setInput("");
+      inputClear();
       alert("공백은 검색이 불가능합니다.");
     }
   };
-
   const onKeyPress = (e: any) => {
     if (e.key === "Enter") {
-      onClicksSearch();
+      onSearch();
     }
   };
+
+  /*click search*/
+  const onClickSearch = () => {
+    setInput(clickInput);
+    router.push(`/search?query=${clickInput}`);
+    setFocused(false);
+  };
+  useEffect(() => {
+    if (clickInput !== "") {
+      onClickSearch();
+    }
+  }, [clickInput]);
 
   const queryClient = useQueryClient();
 
@@ -215,7 +232,7 @@ function Nav() {
           <Link
             href="/"
             onClick={() => {
-              setInput("");
+              inputClear();
             }}
           >
             <BranduIcon width={100} height={22} />
@@ -228,7 +245,11 @@ function Nav() {
             </Link>
           ) : (
             <Link href={"/store"}>
-              <div>
+              <div
+                onClick={() => {
+                  inputClear();
+                }}
+              >
                 <p>스토어</p>
               </div>
             </Link>
@@ -241,7 +262,11 @@ function Nav() {
             </Link>
           ) : (
             <Link href={"/community"}>
-              <div>
+              <div
+                onClick={() => {
+                  inputClear();
+                }}
+              >
                 <p>커뮤니티</p>
               </div>
             </Link>
@@ -263,7 +288,7 @@ function Nav() {
                 value={input}
                 onKeyPress={onKeyPress}
               />
-              <div onClick={onClicksSearch} className="mx-3">
+              <div onClick={onSearch} className="mx-3">
                 <SearchIcon />
               </div>
             </div>
@@ -287,9 +312,13 @@ function Nav() {
                         <div
                           className="cursor-pointer"
                           key={index}
-                          onClick={() => {}}
+                          onClick={() => {
+                            setClickInput(item.search_word);
+                          }}
                         >
-                          <p className="py-2">{item.search_word}</p>
+                          <p className="py-2" onClick={() => {}}>
+                            {item.search_word}
+                          </p>
                         </div>
                         <div onClick={() => deleteHistory.mutate(item.id)}>
                           <CloseIcon />
@@ -304,7 +333,12 @@ function Nav() {
                     {rankingData?.results.map((item, index) => {
                       return (
                         <div key={index} className=" px-5 text-sm py-1 ">
-                          <p className="cursor-pointer" onClick={() => {}}>
+                          <p
+                            className="cursor-pointer"
+                            onClick={() => {
+                              setClickInput(item.search_word);
+                            }}
+                          >
                             <span className="text-main font-bold mx-4">
                               {index + 1}
                             </span>
@@ -326,7 +360,7 @@ function Nav() {
           <div className="flex items-center space-x-4">
             <div
               onClick={() => {
-                setInput("");
+                inputClear();
               }}
               className="flex items-center space-x-4"
             >
