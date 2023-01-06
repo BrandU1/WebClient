@@ -8,9 +8,9 @@ interface newModalProps {
 }
 
 function NewImgModal({ handleClose }: newModalProps) {
-  const [imgBase64, setImgBase64] = useState<string>("");
-  const [imgFile, setImgFile] = useState(null);
-
+  const [imgBase64, setImgBase64] = useState("");
+  const [imgFile, setImgFile] = useState<any>(null);
+  //
   const removeBg = () => {
     const formData = new FormData();
     formData.append("size", "auto");
@@ -38,7 +38,7 @@ function NewImgModal({ handleClose }: newModalProps) {
     };
     if (e.target.files[0]) {
       reader.readAsDataURL(e.target.files[0]);
-      setImgFile(e.target.files[0].name);
+      setImgFile(e.target.files[0]);
     }
   };
 
@@ -48,11 +48,26 @@ function NewImgModal({ handleClose }: newModalProps) {
       handleClose();
     }
   };
+  const saveImg = () => {
+    const formData = new FormData();
+    if (imgFile) {
+      formData.append("image", imgFile);
+    }
+    client
+      .post("accounts/customs", formData, {
+        headers: {
+          "content-type": "multipart/form-data",
+        },
+      })
+      .then((res) => {
+        alert("이미지가 성공적으로 저장되었습니다.");
+      });
+  };
 
   return (
     <ModalFrame
       width={600}
-      height={500}
+      height="auto"
       close={handleClose}
       blur={handleSecondModal}
       pageRef={secondEl}
@@ -60,10 +75,10 @@ function NewImgModal({ handleClose }: newModalProps) {
       bgColor={"none"}
       components={
         <div className="mt-10">
-          {imgBase64 === "" ? (
+          {!imgBase64 ? (
             <div className="text-sm text-subContent flex flex-col m-auto h-[258px] w-[338px] rounded-xl border-2 border-gray justify-center items-center">
               <span>+</span>
-              <span>이미지 업로드</span>
+              <span>신규 이미지 업로드</span>
             </div>
           ) : (
             <div className="w-[600px] flex justify-center">
@@ -76,7 +91,7 @@ function NewImgModal({ handleClose }: newModalProps) {
               />
             </div>
           )}
-          <div className="w-[338px] m-auto flex flex-row justify-between mt-5">
+          <div className="w-[338px]  m-auto flex flex-row justify-between mt-5">
             <button className="border border-main rounded-xl w-[100px] h-[45px] flex justify-center items-center text-main">
               <Image
                 src={"/logo/removebg.svg"}
@@ -88,18 +103,26 @@ function NewImgModal({ handleClose }: newModalProps) {
                 배경제거
               </span>
             </button>
-            <label
-              htmlFor="removeBg"
-              className="border rounded-xl bg-main w-[218px] h-[45px] text-white font-bold tet-sm flex justify-center items-center"
+            <div>
+              <label
+                htmlFor="input-file-button"
+                className="px-5 input-file-button border rounded-xl bg-main h-[45px] text-white font-bold tet-sm flex justify-center items-center"
+              >
+                추가하기
+              </label>
+              <input
+                type="file"
+                id="input-file-button"
+                className="hidden border rounded-xl bg-main h-[45px] text-white font-bold tet-sm flex justify-center items-center"
+                onChange={handleChangeFile}
+              />
+            </div>
+            <button
+              className="text-white px-5 h-[45px] text-sm font-bold rounded-xl bg-main"
+              onClick={saveImg}
             >
-              추가하기
-            </label>
-            <input
-              onChange={handleChangeFile}
-              type="file"
-              id="removeBg"
-              className="hidden border rounded-xl bg-main w-[218px] h-[45px] text-white font-bold tet-sm flex justify-center items-center"
-            />
+              저장하기
+            </button>
           </div>
         </div>
       }
