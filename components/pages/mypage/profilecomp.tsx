@@ -289,60 +289,6 @@ function ProfileComp({ profile }: ProfileForm) {
           </span>
         </div>
       </div>
-      {/*<div className="snsIcon flex flex-row justify-evenly mt-[23px]">*/}
-      {/*  <div className="google">*/}
-      {/*    {data?.platforms[0].platform == "GOOGLE" ? (*/}
-      {/*      <div className="flex flex-col justify-center items-center text-[14px] text-[#767676]">*/}
-      {/*        <GoogleLoginIcon /> //색 있는 Icon*/}
-      {/*        <div>로그인연동</div>*/}
-      {/*      </div>*/}
-      {/*    ) : (*/}
-      {/*      <GoogleLoginIcon />*/}
-      {/*    )}*/}
-      {/*  </div>*/}
-      {/*  <div className="kakao">*/}
-      {/*    {data?.platforms[0].platform == "KAKAO" ? (*/}
-      {/*      <div className="flex flex-col justify-center items-center text-[14px] text-[#767676]">*/}
-      {/*        <KakaoLoginIcon />*/}
-      {/*        <div className="mt-[10px]">*/}
-      {/*          {data?.platforms[0].created.slice(0, 10)}*/}
-      {/*        </div>*/}
-      {/*        <div>로그인연동</div>*/}
-      {/*      </div>*/}
-      {/*    ) : (*/}
-      {/*      //흑백 icon으로 변경*/}
-      {/*      <KakaoLoginIcon />*/}
-      {/*    )}*/}
-      {/*  </div>*/}
-      {/*  <div className="naver">*/}
-      {/*    {data?.platforms[0].platform == "NAVER" ? (*/}
-      {/*      <div className="flex flex-col justify-center items-center text-[14px] text-[#767676]">*/}
-      {/*        //color icon으로 변경*/}
-      {/*        <NaverIcon />*/}
-      {/*        <div className="mt-[10px]">*/}
-      {/*          {data?.platforms[0].created.slice(0, 10)}*/}
-      {/*        </div>*/}
-      {/*        <div>로그인연동</div>*/}
-      {/*      </div>*/}
-      {/*    ) : (*/}
-      {/*      <NaverIcon />*/}
-      {/*    )}*/}
-      {/*  </div>*/}
-      {/*  <div className="apple">*/}
-      {/*    {data?.platforms[0].platform == "APPLE" ? (*/}
-      {/*      <div className="flex flex-col justify-center items-center text-[14px] text-[#767676]">*/}
-      {/*        //color icon으로 변경*/}
-      {/*        <AppleIcon />*/}
-      {/*        <div className="mt-[10px]">*/}
-      {/*          {data?.platforms[0].created.slice(0, 10)}*/}
-      {/*        </div>*/}
-      {/*        <div>로그인연동</div>*/}
-      {/*      </div>*/}
-      {/*    ) : (*/}
-      {/*      <AppleIcon />*/}
-      {/*    )}*/}
-      {/*  </div>*/}
-      {/*</div>*/}
     </div>
   );
 }

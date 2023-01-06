@@ -12,16 +12,6 @@ interface PickList {
 function PickList({ picks }: PickList) {
   const queryClient = useQueryClient();
 
-  const mutation = useMutation(
-    (id: number) =>
-      client.post(`/accounts/baskets/${id}`).then((res) => res.data),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(["basketList"]);
-      },
-    }
-  );
-
   const mutationDelete = useMutation(
     (id: number) => client.delete(`accounts/wishes/${id}`),
     {

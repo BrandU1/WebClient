@@ -65,7 +65,7 @@ function Footer() {
                 지하 1층 SW창업실 5호
               </span>
               <span>771-37-0100</span>
-              <span>제2002경기안산-0000호</span>
+              <span>제2023-경기안산-0097</span>
               <span>010-9995-5728</span>
             </div>
           </div>
