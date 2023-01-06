@@ -1,5 +1,3 @@
-import { basketInterface } from "../../types/privacy";
-import Image from "next/image";
 import CloseIcon from "@icons/close";
 import AmountButton from "@common/amountbutton";
 import CheckBox from "@icons/checkBox";
@@ -16,9 +14,11 @@ import { useRouter } from "next/router";
 import Pricebar from "@components/pages/order/pricebar";
 import { PriceBarPrint } from "../../pages/order";
 import Link from "next/link";
+import { Basket } from "../../pages/basket";
+import Image from "next/image";
 
 interface BasketListProps {
-  basketList: basketInterface[];
+  basketList: Basket[];
 }
 
 interface Count {
@@ -77,26 +77,23 @@ function BasketList({ basketList }: BasketListProps) {
     }
   }, [basketList]);
 
-  const setBasketList = (
-    baskets: basketInterface[],
-    isInit: boolean = true
-  ) => {
+  const setBasketList = (baskets: Basket[], isInit: boolean = true) => {
     if (isInit) {
       setBasket(
         basketList.map((item) => {
           return {
-            product: item.product,
-            count: 1,
-            price: item.product.price,
+            custom_product: item.custom_product,
+            amount: 1,
+            is_purchase: item.is_purchase,
           };
         })
       );
     } else {
       setBasket(
-        basket.filter((item) =>
+        baskets.filter((item) =>
           baskets
-            .map((prevBasket) => prevBasket.product.id)
-            .includes(item.product.id)
+            .map((prevBasket) => prevBasket?.custom_product.product.id)
+            .includes(item.custom_product.product.id)
         )
       );
     }
@@ -105,7 +102,7 @@ function BasketList({ basketList }: BasketListProps) {
   /* 구매 개수 핸들러 */
   const handleCount = (count: number, id: number) => {
     const newBasket = basket.map((basket) => {
-      if (basket.product.id === id) {
+      if (basket.custom_product.product.id === id) {
         return { ...basket, count };
       }
       return basket;
@@ -126,7 +123,9 @@ function BasketList({ basketList }: BasketListProps) {
   /* 전체 선택 리스트 */
   const handelAllCheck = (checked: boolean) => {
     if (checked) {
-      setCheckList((prev) => basketList.map((res, index) => res.product.id));
+      setCheckList((prev) =>
+        basketList.map((res, index) => res.custom_product.product.id)
+      );
     } else {
       setCheckList([]);
     }
@@ -172,7 +171,7 @@ function BasketList({ basketList }: BasketListProps) {
                     <div className="absolute top-6 left-10 z-20">
                       <label
                         className={`text-sm font-bold flex w-5 h-5 rounded-full flex justify-center items-center ${
-                          checkList.includes(res.product.id)
+                          checkList.includes(res.custom_product.product.id)
                             ? "bg-main"
                             : "bg-gray"
                         }`}
@@ -181,20 +180,26 @@ function BasketList({ basketList }: BasketListProps) {
                         <CheckBox />
                         <input
                           onChange={(e) =>
-                            handleSingleCheck(e.target.checked, res.product.id)
+                            handleSingleCheck(
+                              e.target.checked,
+                              res.custom_product.product.id
+                            )
                           }
                           className="hidden"
                           type="checkbox"
                           id={`check${idx}`}
                           name="checkList"
-                          checked={checkList.includes(res.product.id)}
+                          checked={checkList.includes(
+                            res.custom_product.product.id
+                          )}
                         />
                       </label>
                     </div>
+
                     <div className="w-[120px] h-[120px] relative  ">
                       <Image
-                        className="rounded-lg "
-                        src={res.product.backdrop_image}
+                        className="rounded-lg"
+                        src={"/custom/test.svg"}
                         layout="fill"
                         alt="productImage"
                       />
@@ -204,25 +209,28 @@ function BasketList({ basketList }: BasketListProps) {
                         <div className="w-24">
                           <div>
                             <p className="text-subContent text-sm">
-                              {res.product.name}
+                              {res.custom_product.product.name}
                             </p>
                           </div>
                           <div>
                             <p className="font-bold">
-                              {res.product.price.toLocaleString()} 원
+                              {res.custom_product.product.price.toLocaleString()}{" "}
+                              원
                             </p>
                           </div>
                         </div>
                         <div
-                          onClick={() => deleteBasket.mutate(res.product.id)}
+                          onClick={() =>
+                            deleteBasket.mutate(res.custom_product.product.id)
+                          }
                         >
                           <CloseIcon />
                         </div>
                       </div>
                       <div className="mt-8">
                         <AmountButton
-                          id={res.product.id}
-                          price={res.product.price}
+                          id={res.custom_product.product.id}
+                          price={res.custom_product.product.price}
                           handleCount={handleCount}
                         />
                       </div>

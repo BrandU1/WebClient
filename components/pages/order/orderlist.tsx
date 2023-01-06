@@ -35,7 +35,6 @@ function OrderList({ baskets, addresses, setAddress }: OrderListProps) {
   const handleModifyClose = () => {
     setAddressModify(false);
   };
-  // const [infoAddress, setInfoAddress] = useState<modifyAddress>();
 
   return (
     <div className="w-[554px]">
@@ -76,19 +75,45 @@ function OrderList({ baskets, addresses, setAddress }: OrderListProps) {
           <div className="flex flex-row">
             <p className="text-base">배송지</p>
             <div className="flex flex-row space-x-[10px] ml-[25px]">
+              {/*메인 주소*/}
+              {addresses?.map((mainAddress, index) => {
+                return (
+                  <>
+                    {mainAddress.is_main && (
+                      <button
+                        key={index}
+                        className={`border border-main w-[42px] h-[22px] flex justify-center items-center rounded-xl text-xs font-bold ${
+                          selectedNumber === index
+                            ? "bg-main text-white"
+                            : "text-main"
+                        }`}
+                        onClick={() => setSelectedNumber(index)}
+                      >
+                        {mainAddress.name}
+                      </button>
+                    )}
+                  </>
+                );
+              })}
+
+              {/*메인 외 주소*/}
               {addresses?.map((address, index) => {
                 return (
-                  <button
-                    key={index}
-                    className={`border border-main w-[42px] h-[22px] flex justify-center items-center rounded-xl text-xs font-bold ${
-                      selectedNumber === index
-                        ? "bg-main text-white"
-                        : "text-main"
-                    }`}
-                    onClick={() => setSelectedNumber(index)}
-                  >
-                    {address.name}
-                  </button>
+                  <>
+                    {!address.is_main && (
+                      <button
+                        key={index}
+                        className={`border border-main w-[42px] h-[22px] flex justify-center items-center rounded-xl text-xs font-bold ${
+                          selectedNumber === index
+                            ? "bg-main text-white"
+                            : "text-main"
+                        }`}
+                        onClick={() => setSelectedNumber(index)}
+                      >
+                        {address.name}
+                      </button>
+                    )}
+                  </>
                 );
               })}
             </div>

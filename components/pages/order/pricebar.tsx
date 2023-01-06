@@ -10,7 +10,6 @@ interface PriceBarProps {
 
 function PriceBar({ printList, children }: PriceBarProps) {
   const router = useRouter();
-  console.log(router.route);
 
   return (
     <div className="border border-main rounded-xl flex flex-col w-64 h-80 sticky mt-10">

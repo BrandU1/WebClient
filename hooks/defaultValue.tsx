@@ -8,13 +8,25 @@ const useUserInfo = () => {
   const [__, setInfo] = useRecoilState(userInfo);
 
   const fetchUserPoint = async () => {
-    const response = await client.get("accounts/point");
-    setPoint(response.data);
+    try {
+      if (localStorage.getItem("accessToken")) {
+        const response = await client.get("accounts/point");
+        setPoint(response.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const fetchUserInfo = async () => {
-    const response = await client.get("accounts/me");
-    setInfo(response.data.results);
+    try {
+      if (localStorage.getItem("accessToken")) {
+        const response = await client.get("accounts/me");
+        setInfo(response.data.results);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {

@@ -1,0 +1,47 @@
+<svg
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        xmlns="http://www.w3.org/2000/svg"
+        version="1.1"
+        width="500"
+        height="500"
+        viewBox="0 0 500 500"
+        xml:space="preserve"
+>
+                        <desc>Created with Fabric.js 5.2.4</desc>
+    <defs></defs>
+    <g transform="matrix(1 0 0 1 203.5 275)">
+                          <image
+                                  style="stroke: none; stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1;"
+                                  xlink:href="https://brandu-server-bucket.s3.amazonaws.com/media/product/images/2022-12/%EC%97%90%EC%BD%94%EB%B0%B1_%EC%95%9E%EB%A9%B4.jpeg"
+                                  x="-203.5"
+                                  y="-275"
+                                  width="407"
+                                  height="550"
+                          ></image>
+                        </g>
+    <g transform="matrix(1 0 0 1 205.5 360.5)">
+                          <rect
+                                  style="stroke: rgb(0,128,0); stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(255,255,255); fill-opacity: 0; fill-rule: nonzero; opacity: 1;"
+                                  x="-90"
+                                  y="-100"
+                                  rx="0"
+                                  ry="0"
+                                  width="180"
+                                  height="200"
+                          />
+                        </g>
+    <g transform="matrix(1 0 0 1 158.17 296.8)" style="">
+                          <text
+                                  xml:space="preserve"
+                                  font-family="Noto Sans KR"
+                                  font-size="20"
+                                  font-style="normal"
+                                  font-weight="normal"
+                                  style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(255,0,0); fill-rule: nonzero; opacity: 1; white-space: pre;"
+                          >
+                            <tspan x="-16.67" y="6.28">
+                              text
+                            </tspan>
+                          </text>
+                        </g>
+                      </svg>

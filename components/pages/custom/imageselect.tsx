@@ -48,7 +48,7 @@ function ImageSelect() {
             width={150}
             height={150}
           />
-          <h2 className="font-bold text-xl mt-12">신규이미지 추가</h2>
+          <h2 className="font-bold text-xl mt-12"> 추가</h2>
         </div>
       </div>
       {newModalOpen && <NewImgModal handleClose={handleSecondClose} />}

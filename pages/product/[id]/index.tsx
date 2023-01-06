@@ -123,6 +123,8 @@ function ProductDetail({ id }: ProductDetailProps) {
       queryFn: () => getProduct(id),
     });
 
+  console.log(productResponse);
+
   const { data: reviewsResponse, isLoading: reviewsLoading } = useBranduQuery<
     Review[]
   >({

@@ -14,22 +14,26 @@ function PickButton({ id, wish, li_width, li_height }: pickProp) {
   const queryClient = useQueryClient();
   // pick 추가
   const mutation = useMutation(
-    (id: number) =>
-      client.post(`accounts/wishes/${id}`).then((res) => res.data),
+    (id: any) => {
+      return client.post(`accounts/wishes/${id}`, id);
+    },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(["hotDeal"]);
+        queryClient.invalidateQueries(["hotDeal", "pickList"]);
         handleAlertOpen("찜한 상품", true, "pick");
       },
     }
   );
+
   // pick 삭제
   const deletePick = useMutation(
-    (id: number) =>
-      client.delete(`accounts/wishes/${id}`).then((res) => res.data),
+    (id: any) => {
+      return client.delete(`accounts/wishes/${id}`, id);
+      // .then((res) => res.data);
+    },
     {
-      onSuccess: () => {
-        queryClient.invalidateQueries(["hotDeal"]);
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(["hotDeal", "pickList"]);
       },
     }
   );

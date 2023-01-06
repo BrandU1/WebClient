@@ -4,7 +4,7 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { purchaseProducts, totalPrice } from "../../recoil/totalamount";
 import { useEffect, useState } from "react";
 import useBranduQuery from "@hooks/useBranduQuery";
-import { getAddresses } from "@lib/fetches";
+import { getAddress } from "@lib/fetches";
 import { selectedAddress } from "../../recoil/order";
 import {
   AddressInterface,
@@ -30,13 +30,9 @@ function OrderPage() {
   const router = useRouter();
   const [address, setAddress] = useRecoilState(selectedAddress);
 
-  const {
-    data: addresses,
-    isLoading,
-    isError,
-  } = useBranduQuery<AddressInterface[]>({
-    queryKey: ["addresses"],
-    queryFn: () => getAddresses(),
+  const { data: addresses, isLoading } = useBranduQuery<AddressInterface[]>({
+    queryKey: ["address"],
+    queryFn: getAddress,
   });
 
   /* 결제하기 버튼 처리 */
@@ -78,7 +74,6 @@ function OrderPage() {
         />
       </div>
       <div className="price w-[30%]">
-        {/*<PriceBar printList={priceBarPrint} disabled={addresses === null} />*/}
         <PriceBar printList={priceBarPrint}>
           <button className="w-56 h-11 bg-main rounded-xl text-white font-bold text-base flex justify-center items-center m-auto mb-2 disabled:opacity-50">
             <Link href="/order/pay">결제하기</Link>

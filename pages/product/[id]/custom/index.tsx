@@ -12,6 +12,9 @@ import useBranduQuery from "@hooks/useBranduQuery";
 import { getProduct } from "../index";
 import CustomIcon from "@components/pages/product/customicon";
 import PickButton from "@components/pick/pickbutton";
+import { useRecoilState } from "recoil";
+import { canvasImage } from "../../../../recoil/canvas";
+import { useRouter } from "next/router";
 
 export enum CanvasState {
   DRAG = "DRAG",
@@ -48,6 +51,7 @@ interface ProductCustomProps {
 }
 
 function ProductCustom({ id }: ProductCustomProps): ReactElement {
+  const router = useRouter();
   const { data: productResponse, isLoading: productLoading } =
     useBranduQuery<Product>({
       queryKey: ["product", id],
@@ -57,6 +61,18 @@ function ProductCustom({ id }: ProductCustomProps): ReactElement {
   const goBasket = (id: any) => {
     client.post(`accounts/baskets/${id}`).then((res) => res.data);
   };
+
+  const createCustomProduct = async () => {
+    const response = await client.post("products/customs", {
+      product: id,
+      image: customImage,
+    });
+    if (response.status === 201) {
+      await router.push("/basket");
+    }
+  };
+
+  const [customImage, _] = useRecoilState(canvasImage);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -164,9 +180,7 @@ function ProductCustom({ id }: ProductCustomProps): ReactElement {
                 li_color={"white"}
               />
               <button
-                onClick={() => {
-                  goBasket(productResponse?.results.id);
-                }}
+                onClick={createCustomProduct}
                 className="w-64 h-11 bg-main rounded-xl ml-[10px] flex flex-row justify-center items-center"
               >
                 <span className="text-white font-bold text-sm">구매하기</span>

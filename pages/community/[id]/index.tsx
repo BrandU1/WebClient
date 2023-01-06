@@ -9,24 +9,31 @@ import {
   RecommendComment,
 } from "../../../types/privacy";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 function PostPage() {
   const router = useRouter();
+  useEffect(() => {
+    if (router.isReady) {
+    }
+  }, [router.isReady]);
   const id = router.query.id;
 
   const getEdit = () => {
     return client.get(`communities/posts/${id}`).then((res) => res.data);
   };
-  const { data, isLoading } = useQuery<BranduBaseResponse<Community>>(
-    ["edit", id],
-    getEdit
-  );
 
   const getRecommend = () => {
     return client
       .get(`communities/posts/${id}/comments`)
       .then((res) => res.data);
   };
+
+  const { data, isLoading } = useQuery<BranduBaseResponse<Community>>(
+    ["edit", id],
+    getEdit
+  );
+
   const { data: recommend, isLoading: recommendLoading } = useQuery<
     BranduBaseResponse<RecommendComment[]>
   >(["recommend", id], getRecommend);
@@ -40,6 +47,11 @@ function PostPage() {
       <SidePost />
     </div>
   );
+}
+export async function getServerSideProps() {
+  return {
+    props: {},
+  };
 }
 
 export default PostPage;

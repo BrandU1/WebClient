@@ -6,6 +6,7 @@ import {
   CanvasActionType,
   canvasHistories,
   canvasHistoryIndex,
+  canvasImage,
   canvasText,
   canvasUndoOrRedo,
 } from "../../recoil/canvas";
@@ -40,6 +41,7 @@ const Canvas = ({ backgroundImage, width, height, images }: CanvasProps) => {
   const [action, setAction] = useRecoilState(canvasAction);
   const [actionSelected, setActionSelected] =
     useRecoilState(canvasActionSelected);
+  const [customImage, setCustomImage] = useRecoilState(canvasImage);
 
   const baseLine = new fabric.Rect({
     top: initialPosition.y,
@@ -75,6 +77,7 @@ const Canvas = ({ backgroundImage, width, height, images }: CanvasProps) => {
           saveHistory();
         }
       });
+
       fabricRef.current.add(baseLine);
       return fabricRef.current;
     };
@@ -89,14 +92,6 @@ const Canvas = ({ backgroundImage, width, height, images }: CanvasProps) => {
       disposeFabric();
     };
   }, []);
-
-  useEffect(() => {
-    if (backgroundImage) {
-      // canvas?.setBackgroundImage(backgroundImage, () => {
-      //   canvas?.renderAll();
-      // });
-    }
-  }, [backgroundImage]);
 
   /* Action 처리 */
   useEffect(() => {
@@ -163,7 +158,7 @@ const Canvas = ({ backgroundImage, width, height, images }: CanvasProps) => {
       if (usedImages.includes(index)) {
         return;
       }
-      // fabric.Image.fromURL(backgroundImage, (image) => {
+      // fabric.Image.fabric.Image.fromURL(backgroundImage, (image) => {
       //   setUsedImages((prev) => [...prev, index]);
       //   image.scale(1);
       //   canvas!.add(image);
@@ -206,10 +201,20 @@ const Canvas = ({ backgroundImage, width, height, images }: CanvasProps) => {
   const saveHistory = () => {
     setHistoryIndex((prev) => prev + 1);
     setHistories((prev) => [...prev, fabricRef.current.toJSON()]);
+    setCustomImage(fabricRef.current.toSVG());
   };
 
+  useEffect(() => {
+    fabricRef.current.setBackgroundImage(
+      "https://brandu-server-bucket.s3.amazonaws.com/media/product/images/2022-12/%EC%97%90%EC%BD%94%EB%B0%B1_%EC%95%9E%EB%A9%B4.jpeg",
+      () => {
+        fabricRef.current.renderAll();
+      }
+    );
+  }, []);
+
   return (
-    <div className="bg-[url('https://brandu-server-bucket.s3.amazonaws.com/media/product/images/2022-12/%EC%97%90%EC%BD%94%EB%B0%B1_%EC%95%9E%EB%A9%B4.jpeg')] bg-no-repeat z-20 ">
+    <div className="bg-no-repeat z-20 ">
       <canvas
         width={500}
         height={500}
