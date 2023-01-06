@@ -69,3 +69,8 @@ export const canvasText = atom<string[]>({
   key: "canvasText",
   default: [],
 });
+
+export const canvasImage = atom<string>({
+  key: "canvasImage",
+  default: "",
+});

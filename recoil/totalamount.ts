@@ -1,5 +1,6 @@
 import { atom, selector } from "recoil";
 import { recoilPersist } from "recoil-persist";
+import { Basket } from "../pages/basket";
 
 export interface SimpleProduct {
   backdrop_image: string;
@@ -30,7 +31,7 @@ interface OrderPrice {
 
 const { persistAtom } = recoilPersist();
 
-export const basketPurchase = atom<BasketPurchase[]>({
+export const basketPurchase = atom<Basket[]>({
   key: "basketPurchase",
   default: [],
   effects_UNSTABLE: [persistAtom],
@@ -48,7 +49,7 @@ export const purchaseProducts = selector({
     const basketPurchaseList = get(basketPurchase);
     const checkedList = get(basketCheckedList);
     const purchaseProducts = basketPurchaseList.filter((item) =>
-      checkedList.includes(item.product.id)
+      checkedList.includes(item.custom_product.product.id)
     );
     return purchaseProducts;
   },
@@ -60,8 +61,13 @@ export const totalPrice = selector<OrderPrice | undefined>({
     const purchaseList = get(basketPurchase);
     const checkedList = get(basketCheckedList);
     const price = purchaseList
-      .filter((basket) => checkedList.includes(basket.product.id))
-      .reduce((acc, cur) => acc + cur.price * cur.count, 0);
+      .filter((basket) =>
+        checkedList.includes(basket.custom_product.product.id)
+      )
+      .reduce(
+        (acc, cur) => acc + cur.custom_product.product.price * cur.amount,
+        0
+      );
     return {
       orderPrice: price,
       totalPrice: price + 3000,
