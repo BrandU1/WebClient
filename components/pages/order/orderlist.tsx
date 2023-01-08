@@ -1,13 +1,13 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { BasketPurchase } from "../../../recoil/totalamount";
+import { useEffect, useState } from "react";
 import { AddressInterface, UserInterface } from "../../../types/privacy";
 import Accordion from "@common/accordion";
 import client from "@lib/api";
 import useBranduQuery from "@hooks/useBranduQuery";
 import ModifyAddress from "@components/modal/modifyaddress";
+import { Basket } from "../../../pages/basket";
 
 interface OrderListProps {
-  baskets: BasketPurchase[];
+  baskets: Basket[];
   addresses: AddressInterface[];
   setAddress: any;
 }
@@ -43,8 +43,10 @@ function OrderList({ baskets, addresses, setAddress }: OrderListProps) {
           {baskets?.map((basket, index) => {
             return (
               <div className="flex flex-row justify-between px-2 mt-[10px]">
-                <p className="text-sm text-subContent">{basket.product.name}</p>
-                <p className="text-sm">{basket.count}개</p>
+                <p className="text-sm text-subContent">
+                  {basket.custom_product.product.name}
+                </p>
+                <p className="text-sm">{basket.amount}개</p>
               </div>
             );
           })}

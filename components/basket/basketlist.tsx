@@ -46,6 +46,11 @@ function BasketList({ basketList }: BasketListProps) {
     onSettled: () => {},
   });
 
+  useEffect(() => {
+    setBasket([]);
+    setCheckList([]);
+  }, []);
+
   const [priceBarPrint, setPriceBarPrint] = useState<PriceBarPrint[]>([]);
 
   useEffect(() => {
@@ -103,7 +108,7 @@ function BasketList({ basketList }: BasketListProps) {
   const handleCount = (count: number, id: number) => {
     const newBasket = basket.map((basket) => {
       if (basket.custom_product.product.id === id) {
-        return { ...basket, count };
+        return { ...basket, amount: count };
       }
       return basket;
     });
@@ -197,9 +202,14 @@ function BasketList({ basketList }: BasketListProps) {
                     </div>
 
                     <div className="w-[120px] h-[120px] relative  ">
+                      {/*<Image*/}
+                      {/*  className="rounded-lg"*/}
+                      {/*  src={"/custom/test.svg"}*/}
+                      {/*  layout="fill"*/}
+                      {/*  alt="productImage"*/}
                       <Image
                         className="rounded-lg"
-                        src={"/custom/test.svg"}
+                        src={res.custom_product.product.backdrop_image}
                         layout="fill"
                         alt="productImage"
                       />

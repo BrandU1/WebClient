@@ -65,7 +65,7 @@ function ProductCustom({ id }: ProductCustomProps): ReactElement {
   const createCustomProduct = async () => {
     const response = await client.post("products/customs", {
       product: id,
-      image: customImage,
+      image: customImage === "" ? "custom image none" : customImage,
     });
     if (response.status === 201) {
       await router.push("/basket");

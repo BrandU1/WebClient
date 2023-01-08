@@ -31,7 +31,7 @@ function AmountButton({ price, handleCount, id }: AmountButtonProps) {
         <button
           className="plusBtn text-main mx-3"
           onClick={() => {
-            setAmount(amount + 1);
+            setAmount((prev) => prev + 1);
           }}
         >
           <svg
