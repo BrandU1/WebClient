@@ -123,7 +123,15 @@ function ProductDetail({ id }: ProductDetailProps) {
       queryFn: () => getProduct(id),
     });
 
-  console.log(productResponse);
+  const createCustomProduct = async () => {
+    const response = await client.post("products/customs", {
+      product: id,
+      image: "custom image none",
+    });
+    if (response.status === 201) {
+      await router.push("/basket");
+    }
+  };
 
   const { data: reviewsResponse, isLoading: reviewsLoading } = useBranduQuery<
     Review[]
@@ -279,10 +287,18 @@ function ProductDetail({ id }: ProductDetailProps) {
                 />
               </div>
               <button
-                className="w-64 h-11 bg-main rounded-xl flex flex-row justify-center items-center"
+                className="w-32 h-11 bg-main rounded-xl flex flex-row justify-center items-center"
+                onClick={createCustomProduct}
+              >
+                <span className="text-white font-bold text-sm">바로 구매</span>
+              </button>
+              <button
+                className="w-32 h-11 bg-main rounded-xl flex flex-row justify-center items-center"
                 onClick={onClick}
               >
-                <span className="text-white font-bold text-sm">구매하기</span>
+                <span className="text-white font-bold text-sm">
+                  커스텀 하기
+                </span>
               </button>
             </div>
           </div>

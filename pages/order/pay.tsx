@@ -262,7 +262,7 @@ function PayPage() {
               }`}
             >
               <CheckButton
-                color={"none"}
+                color={watch("isChecked") == true ? "#0CABA8" : "gray"}
                 register={register("isChecked", {
                   required: true,
                   validate: (value) => value === true,

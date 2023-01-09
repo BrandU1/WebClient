@@ -129,23 +129,6 @@ function Nav() {
 
   const handleMyPage = () => setOpen(false);
 
-  // History API 연동
-  const getHistory = () => {
-    return client.get("search/history").then((res) => res.data);
-  };
-  const { data, isLoading } = useQuery<BranduBaseResponse<History[]>>(
-    ["history"],
-    getHistory
-  );
-
-  // Ranking API 연동
-  const getRanking = () => {
-    return client.get("search/rank").then((res) => res.data);
-  };
-  const { data: rankingData, isLoading: rankLoading } = useQuery<
-    BranduBaseResponse<Ranking[]>
-  >(["rank"], getRanking);
-
   /*input search*/
   const onSearch = () => {
     if (input !== "" && input.replace(/ /g, "") !== "") {
@@ -160,11 +143,28 @@ function Nav() {
       alert("공백은 검색이 불가능합니다.");
     }
   };
+
   const onKeyPress = (e: any) => {
     if (e.key === "Enter") {
       onSearch();
     }
   };
+
+  // History API 연동
+  const getHistory = () => {
+    return client.get("search/history").then((res) => res.data);
+  };
+  const { data, isLoading } = useQuery<BranduBaseResponse<History[]>>(
+    ["history"],
+    getHistory
+  );
+  // Ranking API 연동
+  const getRanking = () => {
+    return client.get("search/rank").then((res) => res.data);
+  };
+  const { data: rankingData, isLoading: rankLoading } = useQuery<
+    BranduBaseResponse<Ranking[]>
+  >(["rank"], getRanking);
 
   /*click search*/
   const onClickSearch = () => {
@@ -177,6 +177,10 @@ function Nav() {
       onClickSearch();
     }
   }, [clickInput]);
+
+  useEffect(() => {
+    setInput(router.query.query as string);
+  }, [router.isReady, router.query.query]);
 
   const queryClient = useQueryClient();
 

@@ -45,7 +45,7 @@ function Footer() {
           <div className="flex flex-col justify-center items-center">
             <BranduLogo />
             <div className="flex flex-col items-center mt-5 text-subContent text-xs">
-              <p className="mb-[5px] font-bold">(주) 더미</p>
+              <p className="mb-[5px] font-bold">더미 (THEME)</p>
               <p>평일 09:00 ~ 18:00</p>
               <p>(주말 &amp; 공휴일 제외)</p>
             </div>
@@ -64,7 +64,7 @@ function Footer() {
                 경기도 안산시 상록구 한양대학로 55 한양대학교 ERICA 제5공학관
                 지하 1층 SW창업실 5호
               </span>
-              <span>771-37-0100</span>
+              <span>771-37-01000</span>
               <span>제2023-경기안산-0097</span>
               <span>010-9995-5728</span>
             </div>

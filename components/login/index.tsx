@@ -3,8 +3,11 @@ import GoogleLogin from "react-google-login";
 import GoogleLoginIcon from "@components/icons/google";
 import KakaoLoginIcon from "@components/icons/kakao";
 import KakaoLogin from "react-kakao-login";
+import { useForm } from "react-hook-form";
 import client from "@lib/api";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import ModalFrame from "@common/modalframe";
+import { useMutation } from "@tanstack/react-query";
 
 interface LoginProps {
   open: boolean;
@@ -36,6 +39,27 @@ function LoginModal({ open, close, pageRef }: LoginProps) {
         window.location.href = "/";
       });
   };
+
+  const TestSuccess = async (res: any) => {
+    client
+      .post(`/auth/test/login`, {
+        username: res.id,
+        password: res.password,
+      })
+      .then((response) => {
+        if (response.status == 200) {
+          localStorage.setItem("access_token", response.data.access_token);
+          localStorage.setItem("refresh_token", response.data.refresh_token);
+          window.location.href = "/";
+        } else {
+          alert("로그인 정보가 올바르지 않습니다.");
+        }
+      });
+  };
+
+  const { register, handleSubmit } = useForm({});
+
+  const [testLogin, setTestLogin] = useState<boolean>(false);
 
   useEffect(() => {
     if (open) {
@@ -106,6 +130,18 @@ function LoginModal({ open, close, pageRef }: LoginProps) {
                   }}
                 />
               </div>
+
+              <div className="testLogin flex justify-center mt-5">
+                <button
+                  className="bg-white flex items-center px-4
+                    w-[320px] h-[46px] text-center rounded-xl"
+                  onClick={() => {
+                    setTestLogin(true);
+                  }}
+                >
+                  <p className="pl-20 text-sm text-notice">테스트 로그인</p>
+                </button>
+              </div>
               <div
                 onClick={close}
                 className="close text-center text-sm text-notice cursor-pointer mt-32"
@@ -115,6 +151,49 @@ function LoginModal({ open, close, pageRef }: LoginProps) {
             </div>
           </div>
         ) : null}
+        {testLogin && (
+          <ModalFrame
+            close={() => {
+              setTestLogin(false);
+            }}
+            blur={() => {}}
+            pageRef={null}
+            width={500}
+            height={600}
+            title={""}
+            components={
+              <div className="flex flex-col justify-center items-center space-y-5 mt-10 px-10 select-none">
+                <div className="flex flex-row">
+                  <span>아이디</span>
+                  <input
+                    id="test-id"
+                    {...register("id")}
+                    className="w-full flex-1 rounded-lg ml-3 pl-2 focus:outline-none"
+                    type="text"
+                    placeholder="아이디를 입력해주세요."
+                  />
+                </div>
+                <div className="flex flex-row pb-10">
+                  <span>비밀번호</span>
+                  <input
+                    id="test-password"
+                    {...register("password")}
+                    className="w-full flex-1 rounded-lg ml-3 pl-2 mr-5 focus:outline-none"
+                    type="text"
+                    placeholder="비밀번호를 입력해주세요."
+                  />
+                </div>
+                <button
+                  className="bg-main rounded-xl text-white w-48 h-10"
+                  onClick={handleSubmit(TestSuccess)}
+                >
+                  로그인하기
+                </button>
+              </div>
+            }
+            bgColor={"black"}
+          />
+        )}
       </div>
     </div>
   );

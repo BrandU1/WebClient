@@ -43,7 +43,7 @@ export const basketCheckedList = atom<number[]>({
   effects_UNSTABLE: [persistAtom],
 });
 
-export const purchaseProducts = selector({
+export const purchaseProducts = selector<Basket[]>({
   key: "purchaseProducts",
   get: ({ get }) => {
     const basketPurchaseList = get(basketPurchase);
@@ -60,6 +60,8 @@ export const totalPrice = selector<OrderPrice | undefined>({
   get: ({ get }) => {
     const purchaseList = get(basketPurchase);
     const checkedList = get(basketCheckedList);
+    console.log(purchaseList);
+    console.log(checkedList);
     const price = purchaseList
       .filter((basket) =>
         checkedList.includes(basket.custom_product.product.id)

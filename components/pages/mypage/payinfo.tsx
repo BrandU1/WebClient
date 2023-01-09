@@ -5,6 +5,8 @@ import SearchIcon from "@icons/search";
 import Link from "next/link";
 import OrderCancel from "@components/modal/ordercancel";
 import Refund from "@components/modal/refund";
+import client from "@lib/api";
+import UseBranduQuery from "@hooks/useBranduQuery";
 
 function PayInfo() {
   const [focused, setFocused] = useState<boolean>(false);
@@ -21,6 +23,14 @@ function PayInfo() {
   const refundClose = () => {
     setRefundModal(false);
   };
+
+  const getPurchase = () => {
+    return client.get("/accounts/baskets/purchase").then((res) => res.data);
+  };
+  const { data, isLoading } = UseBranduQuery({
+    queryKey: ["purchase"],
+    queryFn: getPurchase,
+  });
 
   return (
     <div className="pl-5 flex flex-col flex-1">

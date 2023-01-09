@@ -33,15 +33,21 @@ export const newOrder = selector<OrderRecoilState>({
   get: ({ get }) => {
     const address = get(orderAddress);
     const products = get(purchaseProducts);
-    const price = products.reduce((acc, cur) => acc + cur.price, 0);
+    const price = products.reduce(
+      (acc, cur) => acc + cur.custom_product.product.price,
+      0
+    );
 
     return {
-      name: `${products[0]?.product.name} 외 ${products.length - 1}개` || "",
+      name:
+        `${products[0]?.custom_product.product.name} 외 ${
+          products.length - 1
+        }개` || "",
       address: address?.id || 0,
       products:
         products.map((product) => ({
-          product: product.product.id,
-          count: product.count,
+          product: product.custom_product.product.id,
+          count: product.amount,
         })) || [],
       orderPrice: price || 0,
     };

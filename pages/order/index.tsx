@@ -23,6 +23,10 @@ export interface PriceBarPrint {
   isBold?: boolean;
 }
 
+const getProfile = () => {
+  return client.get(`accounts/me`).then((res) => res.data);
+};
+
 function OrderPage() {
   const price = useRecoilValue(totalPrice);
   const [priceBarPrint, setPriceBarPrint] = useState<PriceBarPrint[]>([]);
@@ -34,6 +38,12 @@ function OrderPage() {
     queryKey: ["address"],
     queryFn: getAddress,
   });
+
+  const { data: profileData, isLoading: profileLoading } =
+    useBranduQuery<UserInterface>({
+      queryKey: ["profile"],
+      queryFn: () => getProfile(),
+    });
 
   /* 결제하기 버튼 처리 */
   const onClick = async () => {
@@ -71,11 +81,18 @@ function OrderPage() {
           baskets={baskets!}
           addresses={addresses?.results!}
           setAddress={setAddress}
+          profileData={profileData?.results!}
         />
       </div>
       <div className="price w-[30%]">
         <PriceBar printList={priceBarPrint}>
-          <button className="w-56 h-11 bg-main rounded-xl text-white font-bold text-base flex justify-center items-center m-auto mb-2 disabled:opacity-50">
+          <button
+            className="w-56 h-11 bg-main rounded-xl text-white font-bold text-base flex justify-center items-center m-auto mb-2 disabled:opacity-50"
+            disabled={
+              profileData?.results.name == (null || "") ||
+              profileData?.results.phone_number == (null || "")
+            }
+          >
             <Link href="/order/pay">결제하기</Link>
           </button>
         </PriceBar>

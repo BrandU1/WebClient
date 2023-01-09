@@ -1,6 +1,6 @@
 import Search from "components/pages/search/search";
 import client from "@lib/api";
-import { useQuery } from "@tanstack/react-query";
+import { dehydrate, QueryClient, useQuery } from "@tanstack/react-query";
 import {
   BranduBaseResponse,
   SearchBase,
