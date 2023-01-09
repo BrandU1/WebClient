@@ -106,6 +106,14 @@ function LoginModal({ open, close, pageRef }: LoginProps) {
                   }}
                 />
               </div>
+              <div className="testLogin flex justify-center mt-5">
+                <button
+                  className="bg-white flex items-center px-4
+                    w-[320px] h-[46px] text-center rounded-xl"
+                >
+                  <p className="pl-20 text-sm text-notice">테스트 로그인</p>
+                </button>
+              </div>
               <div
                 onClick={close}
                 className="close text-center text-sm text-notice cursor-pointer mt-32"
