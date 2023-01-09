@@ -85,7 +85,6 @@ function Nav() {
 
   const router = useRouter();
   const path = router.pathname;
-  console.log(router.query);
 
   //category 창
 
@@ -159,8 +158,6 @@ function Nav() {
     ["history"],
     getHistory
   );
-
-  console.log(data);
   // Ranking API 연동
   const getRanking = () => {
     return client.get("search/rank").then((res) => res.data);
@@ -181,7 +178,6 @@ function Nav() {
     }
   }, [clickInput]);
 
-  console.log(router);
   useEffect(() => {
     setInput(router.query.query as string);
   }, [router.isReady, router.query.query]);

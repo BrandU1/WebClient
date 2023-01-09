@@ -41,16 +41,12 @@ function LoginModal({ open, close, pageRef }: LoginProps) {
   };
 
   const TestSuccess = async (res: any) => {
-    console.log(res);
     client
       .post(`/auth/test/login`, {
         username: res.id,
         password: res.password,
       })
       .then((response) => {
-        {
-          console.log(response);
-        }
         if (response.status == 200) {
           localStorage.setItem("access_token", response.data.access_token);
           localStorage.setItem("refresh_token", response.data.refresh_token);

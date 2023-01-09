@@ -39,6 +39,8 @@ function Success() {
     queryFn: () => getOrder(id as string),
   });
 
+  console.log(data);
+
   if (isLoading) {
     return <div></div>;
   }
@@ -49,8 +51,8 @@ function Success() {
         <BranduLogo />
         <h3 className="mt-2">결제가 완료되었습니다. </h3>
       </div>
-      <div className="max-w-4xl m-auto border-b border-[#EDEDED] flex justify-center mt-[50px]"></div>
-      <div className="p-3">
+      <div className="max-w-4xl m-auto border-b border-lightGary flex justify-center mt-[50px]"></div>
+      <div className="p-3 flex flex-col">
         <h2 className="text-[16px] ">주문내역</h2>
         {data?.results.products.map((product, index) => {
           {
@@ -58,17 +60,17 @@ function Success() {
           }
           return (
             <div key={index}>
-              <div className="flex items-center my-2">
+              <div className="flex flex-row items-center my-2">
                 <div className="w-20 h-20 relative">
                   <ImgAtom
                     exist={product.backdrop_image}
-                    src={product.backdrop_image}
+                    src={`https://brandu-server-bucket.s3.amazonaws.com/media/${product.backdrop_image}`}
                     width={80}
                     height={80}
                     alt={product.name}
                   />
                 </div>
-                <div className="ml-2">
+                <div className="ml-2 flex flex-col">
                   <p className="text-[#767676] text-sm">{product.name}</p>
                   <p className="text-[#191919] font-normal ">
                     {product.price.toLocaleString()} 원
