@@ -1,5 +1,6 @@
 import Image from "next/image";
 import ScrapButton from "@common/scrapbutton";
+import client from "@lib/api";
 
 function SidePost() {
   return (
