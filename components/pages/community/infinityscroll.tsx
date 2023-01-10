@@ -9,11 +9,13 @@ import {
   infinitePost,
   infiniteScroll,
 } from "../../../types/privacy";
+import router from "next/router";
+import Image from "next/image";
 
 const InfiniteScroll = () => {
-  const OFFSET = 10;
+  const OFFSET = 5;
 
-  const postList = ({ pageParam = OFFSET }) =>
+  const postList = ({ pageParam = 0 }) =>
     client
       .get("communities/posts", {
         params: {
@@ -30,10 +32,10 @@ const InfiniteScroll = () => {
   >(["postList"], postList, {
     getNextPageParam: (lastPage) => {
       const {
-        results: { next },
+        results: { previous, next, count },
       } = lastPage;
 
-      if (!next) return false;
+      if (!next) return count;
 
       return Number(new URL(next).searchParams.get("offset"));
     },
@@ -55,11 +57,17 @@ const InfiniteScroll = () => {
         {data?.pages.map((group, index) => (
           <div className="grid grid-cols-5 gap-x-2 " key={index}>
             {group.results.results?.map((item: any, index: number) => (
-              <div key={index} className="mb-4">
-                <div>
-                  <ImgAtom
-                    exist={null}
-                    src={""}
+              <div
+                onClick={() => {
+                  router.push(`/community/${item.id}`);
+                }}
+                key={index}
+                className="mb-4"
+              >
+                <div className=" w-[156px] h-[200px]">
+                  <Image
+                    // exist={null}
+                    src={item?.backdrop_image || ""}
                     width={156}
                     height={200}
                     alt={"searchResult"}

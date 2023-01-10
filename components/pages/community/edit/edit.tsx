@@ -41,9 +41,13 @@ function Edit() {
         title: title,
         //내용 데이터
         content: text,
-        // backdrop_image: backdropUrl,
+        backdrop_image: backdropUrl,
       })
-      .then((res) => res.data);
+      .then((res) => {
+        alert("글이 등록되었습니다.");
+        setText("");
+        setTitle("");
+      });
   };
   const imageHandler = () => {
     const input = document.createElement("input");

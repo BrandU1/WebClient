@@ -6,6 +6,7 @@ import { BestPost } from "../../../types/privacy";
 import ImgAtom from "@atoms/imgatom";
 import Link from "next/link";
 import InfiniteScroll from "@components/pages/community/infinityscroll";
+import Image from "next/image";
 
 interface bestCommunityProps {
   bestCommunity: BestPost[];
@@ -26,13 +27,15 @@ function Community({ bestCommunity }: bestCommunityProps) {
               return (
                 <Link key={index} href={`/community/${post.id}`}>
                   <div className="relative">
-                    <ImgAtom
-                      exist={null}
-                      src={post.backdrop_image}
-                      width={156}
-                      height={200}
-                      alt={"searchResult"}
-                    />
+                    <div className=" w-[156px] h-[200px]">
+                      <Image
+                        src={post.backdrop_image || ""}
+                        width={156}
+                        height={200}
+                        alt={"searchResult"}
+                      />
+                    </div>
+
                     <div className="absolute rounded-xl bg-main text-white font-bold w-7 h-7 top-2 left-2 flex justify-center items-center">
                       {index + 1}
                     </div>
