@@ -147,7 +147,7 @@ function PayPage() {
   };
 
   async function getTossPayments() {
-    return await loadTossPayments("test_ck_YPBal2vxj81eD2A7q7w85RQgOAND");
+    return await loadTossPayments(process.env.NEXT_PUBLIC_TOSS_KEY || "");
   }
 
   const requestTossPayment = async (orderNumber: string) => {
