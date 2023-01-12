@@ -28,8 +28,9 @@ function Community({ bestCommunity }: bestCommunityProps) {
                 <Link key={index} href={`/community/${post.id}`}>
                   <div className="relative">
                     <div className=" w-[156px] h-[200px]">
-                      <Image
-                        src={post.backdrop_image || ""}
+                      <ImgAtom
+                        exist={post.backdrop_image}
+                        src={post.backdrop_image}
                         width={156}
                         height={200}
                         alt={"searchResult"}
