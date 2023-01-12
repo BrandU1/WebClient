@@ -12,6 +12,8 @@ function Index() {
     getBestPost
   );
 
+  console.log(data?.results);
+
   return (
     <div>
       <Community bestCommunity={data?.results!} />
