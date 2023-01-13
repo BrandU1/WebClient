@@ -102,7 +102,7 @@ function Post({ data, recommend }: Post) {
     <div className="flex flex-col w-[610px]">
       <div className="title border-b border-gray pb-5">
         <Image
-          src={"/dummy/cat.png"}
+          src={data?.backdrop_image}
           alt={"titleImg"}
           width={600}
           height={300}

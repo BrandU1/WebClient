@@ -312,7 +312,11 @@ function Nav() {
                 <div className="recently px-5  text-sm text-notice border-b-[1px] border-gray w-[95%] m-auto">
                   {data?.results.map((item, index) => {
                     return (
-                      <div className="flex items-center justify-between">
+                      <div
+                        className={`${
+                          index > 9 ? "hidden" : "block"
+                        } flex items-center justify-between`}
+                      >
                         <div
                           className="cursor-pointer"
                           key={index}

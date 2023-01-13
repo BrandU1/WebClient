@@ -10,12 +10,16 @@ import {
 } from "@tanstack/react-query";
 import { useState } from "react";
 import { RecoilRoot } from "recoil";
+import Head from "next/head";
 
 export default function App({ Component, pageProps }: AppProps) {
   const [front] = useState(() => new QueryClient());
 
   return (
     <div>
+      <Head>
+        <link rel="shortcut icon" href="/logo/favicon.ico" />
+      </Head>
       <RecoilRoot>
         <QueryClientProvider client={front} contextSharing={true}>
           <Hydrate state={pageProps.dehydratedState}>

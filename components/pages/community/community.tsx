@@ -19,7 +19,6 @@ function Community({ bestCommunity }: bestCommunityProps) {
         <div className="TOP10 flex flex-col">
           <div className="flex justify-between items-center">
             <p>이번주 브랜뉴 인기게시글</p>
-            <p className="text-xs text-subContent">전체보기</p>
           </div>
           <h2 className="font-bold text-lg">TOP 10</h2>
           <div className="grid grid-cols-5 gap-y-5 gap-x-2 mt-5">
@@ -28,8 +27,9 @@ function Community({ bestCommunity }: bestCommunityProps) {
                 <Link key={index} href={`/community/${post.id}`}>
                   <div className="relative">
                     <div className=" w-[156px] h-[200px]">
-                      <Image
-                        src={post.backdrop_image || ""}
+                      <ImgAtom
+                        exist={post.backdrop_image}
+                        src={post.backdrop_image}
                         width={156}
                         height={200}
                         alt={"searchResult"}

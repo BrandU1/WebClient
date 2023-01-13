@@ -65,9 +65,9 @@ const InfiniteScroll = () => {
                 className="mb-4"
               >
                 <div className=" w-[156px] h-[200px]">
-                  <Image
-                    // exist={null}
-                    src={item?.backdrop_image || ""}
+                  <ImgAtom
+                    exist={item.backdrop_image}
+                    src={item.backdrop_image}
                     width={156}
                     height={200}
                     alt={"searchResult"}

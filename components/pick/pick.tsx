@@ -22,7 +22,7 @@ function PickList({ picks }: PickList) {
   );
 
   return (
-    <div className="max-w-4xl m-auto">
+    <div className="max-w-4xl m-auto min-h-[55vh]">
       <div>
         <h2 className="py-5 font-bold text-xl">찜한상품</h2>
         <div className="border-b-[1px] border-black" />

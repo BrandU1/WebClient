@@ -117,8 +117,8 @@ function Home() {
       <div className="productList">
         <Product
           products={hotDealData?.results!}
-          title="브랜뉴 오늘의 핫딜"
-          subTitle="오늘 하루만 싸게파는 초특가 상품"
+          title="브랜뉴 신상품"
+          subTitle="새롭게 나온 브랜뉴만의 상품"
         />
       </div>
     </div>
