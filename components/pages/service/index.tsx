@@ -35,7 +35,7 @@ function Service({ inquiries }: ServiceProps) {
   }
 
   return (
-    <div className=" m-auto ">
+    <div className=" m-auto min-h-[55vh] ">
       <div>
         <h2 className="py-5 font-bold text-xl">고객센터</h2>
         <div className="border-b-[1px] border-black" />

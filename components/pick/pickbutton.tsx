@@ -49,10 +49,12 @@ function PickButton({ id, wish, li_width, li_height }: pickProp) {
   return (
     <div
       onClick={() => {
-        if (wish == true) {
+        if (wish === true) {
           deletePick.mutate(id);
+          console.log(wish);
         } else {
           mutation.mutate(id);
+          console.log(wish);
         }
       }}
       className={`${
