@@ -93,6 +93,8 @@ function ProductCustom({ id }: ProductCustomProps): ReactElement {
     setSelectOpen(false);
   };
 
+  if (productLoading) return <div>loading...</div>;
+
   return (
     <>
       <div className="flex flex-col justify-center items-center">
@@ -116,7 +118,7 @@ function ProductCustom({ id }: ProductCustomProps): ReactElement {
                   {productResponse?.results.tags.map((tag, index) => {
                     return (
                       <span className="text-subContent text-xs cursor-pointer">
-                        #{tag.name}
+                        #{tag?.name}
                       </span>
                     );
                   })}
