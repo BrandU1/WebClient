@@ -117,7 +117,7 @@ function ProductCustom({ id }: ProductCustomProps): ReactElement {
                 <div className="flex flex-row my-1 space-x-1">
                   {productResponse?.results.tags.map((tag, index) => {
                     return (
-                      <span className="text-subContent text-xs cursor-pointer">
+                      <span className="text-subContent text-xs cursor-pointer" key={index}>
                         #{tag?.name}
                       </span>
                     );
