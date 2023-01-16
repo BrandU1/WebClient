@@ -8,6 +8,7 @@ import {
 } from "../../types/privacy";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import Head from "next/head";
 
 function Index() {
   const router = useRouter();
@@ -31,9 +32,14 @@ function Index() {
   }
 
   return (
-    <div>
-      <Search searchResult={data?.results!} />
-    </div>
+    <>
+      <Head>
+        <title>BrandU - {result}</title>
+      </Head>
+      <div>
+        <Search searchResult={data?.results!} />
+      </div>
+    </>
   );
 }
 

@@ -5,6 +5,7 @@ import { useMemo, useRef, useState } from "react";
 import WriteAccordion from "@common/writeAccordion";
 import client from "@lib/api";
 import ReactQuill from "react-quill";
+import Head from "next/head";
 
 const Quill = dynamic(
   async () => {
@@ -167,55 +168,61 @@ function Edit() {
   // @ts-ignore
   // @ts-ignore
   return (
-    <div className="pt-10">
-      <div className="tip h-auto border-[2px] border-main  mb-10 rounded-xl text-sm ">
-        <WriteAccordion
-          title="글쓰기 가이드"
-          subTitle="원할한 글쓰기를 위해 꼭 읽어주세요"
-        >
-          <>
-            <li>사진 속 제품 정보를 본문에 최대한 적어주세요.</li>
-            <li>
-              (제품분류/브랜드/제품명 순서) 사진 첨부 시 용량은 장당 최대
-              20MB까지 업로드할 수 있고, jpg, png, webp, heif, heic, gif 포맷을
-              지원합니다.
-            </li>
-            <li>
-              정보를 많이 입력할수록 검색 결과에 많이 노출되어 조회수가
-              올라갑니다.
-            </li>
-            <li>
-              커버사진과 제목은 본사에 의해 변경될 수 있습니다. 글 작성과 이미지
-              업로드 시, 타인의 지식재산권을 침해하지 않도록 유의해주세요.
-            </li>
-          </>
-        </WriteAccordion>
-      </div>
-      <div className="my-4">
-        <input
-          placeholder="제목을 입력해주세요"
-          className="w-full h-14 p-3 border-gray border-[1px] outline-0"
-          onChange={handleTitle}
-          value={title}
+    <>
+      <Head>
+        <title>글쓰기</title>
+      </Head>
+      <div className="pt-10">
+        <div className="tip h-auto border-[2px] border-main  mb-10 rounded-xl text-sm ">
+          <WriteAccordion
+            title="글쓰기 가이드"
+            subTitle="원할한 글쓰기를 위해 꼭 읽어주세요"
+          >
+            <>
+              <li>사진 속 제품 정보를 본문에 최대한 적어주세요.</li>
+              <li>
+                (제품분류/브랜드/제품명 순서) 사진 첨부 시 용량은 장당 최대
+                20MB까지 업로드할 수 있고, jpg, png, webp, heif, heic, gif
+                포맷을 지원합니다.
+              </li>
+              <li>
+                정보를 많이 입력할수록 검색 결과에 많이 노출되어 조회수가
+                올라갑니다.
+              </li>
+              <li>
+                커버사진과 제목은 본사에 의해 변경될 수 있습니다. 글 작성과
+                이미지 업로드 시, 타인의 지식재산권을 침해하지 않도록
+                유의해주세요.
+              </li>
+            </>
+          </WriteAccordion>
+        </div>
+        <div className="my-4">
+          <input
+            placeholder="제목을 입력해주세요"
+            className="w-full h-14 p-3 border-gray border-[1px] outline-0"
+            onChange={handleTitle}
+            value={title}
+          />
+        </div>
+        <Quill
+          // @ts-ignore
+          forwardedRef={quillRef}
+          placeholder="내용을 입력해주세요"
+          className="h-full"
+          theme="snow"
+          formats={formats}
+          modules={modules}
+          value={text}
+          onChange={handleText}
         />
+        <div onClick={submit} className="flex justify-center py-5">
+          <button className="p-3 border-main border-[2px] rounded-2xl">
+            글 등록하기
+          </button>
+        </div>
       </div>
-      <Quill
-        // @ts-ignore
-        forwardedRef={quillRef}
-        placeholder="내용을 입력해주세요"
-        className="h-full"
-        theme="snow"
-        formats={formats}
-        modules={modules}
-        value={text}
-        onChange={handleText}
-      />
-      <div onClick={submit} className="flex justify-center py-5">
-        <button className="p-3 border-main border-[2px] rounded-2xl">
-          글 등록하기
-        </button>
-      </div>
-    </div>
+    </>
   );
 }
 

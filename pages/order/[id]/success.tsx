@@ -6,6 +6,7 @@ import BranduLogo from "@icons/brandu-logo";
 import useBranduQuery from "@hooks/useBranduQuery";
 import Image from "next/image";
 import ImgAtom from "@atoms/imgatom";
+import Head from "next/head";
 
 interface Bucket {
   id: number;
@@ -46,73 +47,78 @@ function Success() {
   }
 
   return (
-    <div className="max-w-4xl m-auto mt-5 h-fit">
-      <div className="flex justify-center flex-col items-center mt-[50px]">
-        <BranduLogo />
-        <h3 className="mt-2">결제가 완료되었습니다. </h3>
-      </div>
-      <div className="max-w-4xl m-auto border-b border-lightGary flex justify-center mt-[50px]"></div>
-      <div className="p-3 flex flex-col">
-        <h2 className="text-[16px] ">주문내역</h2>
-        {data?.results.products.map((product, index) => {
-          {
-            /* TODO: 이미지 URL 변경 */
-          }
-          return (
-            <div key={index}>
-              <div className="flex flex-row items-center my-2">
-                <div className="w-20 h-20 relative">
-                  <ImgAtom
-                    exist={product.backdrop_image}
-                    src={`https://brandu-server-bucket.s3.amazonaws.com/media/${product.backdrop_image}`}
-                    width={80}
-                    height={80}
-                    alt={product.name}
-                  />
-                </div>
-                <div className="ml-2 flex flex-col">
-                  <p className="text-[#767676] text-sm">{product.name}</p>
-                  <p className="text-[#191919] font-normal ">
-                    {product.price.toLocaleString()} 원
-                  </p>
+    <>
+      <Head>
+        <title>주문 및 결제</title>
+      </Head>
+      <div className="max-w-4xl m-auto mt-5 h-fit">
+        <div className="flex justify-center flex-col items-center mt-[50px]">
+          <BranduLogo />
+          <h3 className="mt-2">결제가 완료되었습니다. </h3>
+        </div>
+        <div className="max-w-4xl m-auto border-b border-lightGary flex justify-center mt-[50px]"></div>
+        <div className="p-3 flex flex-col">
+          <h2 className="text-[16px] ">주문내역</h2>
+          {data?.results.products.map((product, index) => {
+            {
+              /* TODO: 이미지 URL 변경 */
+            }
+            return (
+              <div key={index}>
+                <div className="flex flex-row items-center my-2">
+                  <div className="w-20 h-20 relative">
+                    <ImgAtom
+                      exist={product.backdrop_image}
+                      src={`https://brandu-server-bucket.s3.amazonaws.com/media/${product.backdrop_image}`}
+                      width={80}
+                      height={80}
+                      alt={product.name}
+                    />
+                  </div>
+                  <div className="ml-2 flex flex-col">
+                    <p className="text-[#767676] text-sm">{product.name}</p>
+                    <p className="text-[#191919] font-normal ">
+                      {product.price.toLocaleString()} 원
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
+        <div className="max-w-4xl m-auto border-b border-[#EDEDED] flex justify-center mt-1"></div>
+        <div className="p-3">
+          <div className="flex items-center justify-between ">
+            <span className="text-[#767676] text-sm">주문금액</span>
+            <span className="text-sm">{data?.results.order.price} 원</span>
+          </div>
+          <div className="flex items-center justify-between mt-3">
+            <span className="text-[#767676] text-sm">배송비</span>
+            <span className="text-sm">3,000 원</span>
+          </div>
+          <div className="flex items-center justify-between mt-3">
+            <span className="text-[#767676] text-sm">쿠폰 사용</span>
+            <span className="text-sm">{data?.results.order.price} 원</span>
+          </div>
+          <div className="flex items-center justify-between mt-3">
+            <span className="text-[#767676] text-sm">포인트 사용</span>
+            <span className="text-sm">{data?.results.order.price} 원</span>
+          </div>
+          <div className="flex items-center justify-between mt-3">
+            <span className="text-[#191919] text-[16px]">최종 결제 금액</span>
+            <span className="text-sm">{data?.results.order.price} 원</span>
+          </div>
+        </div>
+        <div className="my-10 text-center">
+          <button
+            className="w-48 h-12 bg-main rounded-lg text-sm font-semibold text-white"
+            onClick={async () => await router.push("/")}
+          >
+            홈으로 돌아가기
+          </button>
+        </div>
       </div>
-      <div className="max-w-4xl m-auto border-b border-[#EDEDED] flex justify-center mt-1"></div>
-      <div className="p-3">
-        <div className="flex items-center justify-between ">
-          <span className="text-[#767676] text-sm">주문금액</span>
-          <span className="text-sm">{data?.results.order.price} 원</span>
-        </div>
-        <div className="flex items-center justify-between mt-3">
-          <span className="text-[#767676] text-sm">배송비</span>
-          <span className="text-sm">3,000 원</span>
-        </div>
-        <div className="flex items-center justify-between mt-3">
-          <span className="text-[#767676] text-sm">쿠폰 사용</span>
-          <span className="text-sm">{data?.results.order.price} 원</span>
-        </div>
-        <div className="flex items-center justify-between mt-3">
-          <span className="text-[#767676] text-sm">포인트 사용</span>
-          <span className="text-sm">{data?.results.order.price} 원</span>
-        </div>
-        <div className="flex items-center justify-between mt-3">
-          <span className="text-[#191919] text-[16px]">최종 결제 금액</span>
-          <span className="text-sm">{data?.results.order.price} 원</span>
-        </div>
-      </div>
-      <div className="my-10 text-center">
-        <button
-          className="w-48 h-12 bg-main rounded-lg text-sm font-semibold text-white"
-          onClick={async () => await router.push("/")}
-        >
-          홈으로 돌아가기
-        </button>
-      </div>
-    </div>
+    </>
   );
 }
 

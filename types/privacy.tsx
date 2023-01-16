@@ -174,9 +174,14 @@ export interface FollowingProfile {
 
 export interface Community {
   backdrop_image: string;
+  comments: number;
   content: string;
+  created: string;
+  hits: number;
   id: number;
+  likes: number;
   profile: number;
+  scraps: number;
   title: string;
 }
 export interface BestPost {

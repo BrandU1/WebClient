@@ -1,5 +1,6 @@
 import { atom, selector } from "recoil";
 import { Point, UserInterface } from "../types/privacy";
+import { recoilPersist } from "recoil-persist";
 
 interface UserRecoilState {
   user: UserInterface;
