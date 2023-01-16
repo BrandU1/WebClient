@@ -168,33 +168,45 @@ function Post({ data, recommend }: Post) {
                     </div>
                   </div>
 
-                  {recommend.profile === myInfo?.results.id && (
-                    <div className="cursor-pointer flex space-x-2">
-                      <p
-                        onClick={() => deleteRecommend.mutate(recommend.id)}
-                        className="text-red text-xs"
-                      >
-                        삭제
-                      </p>
-                      <p className="text-xs">/</p>
-                      <Link
-                        to={String("commentScroll")}
-                        offset={-320}
-                        spy
-                        smooth
-                      >
-                        <p
-                          onClick={() => {
-                            setText(recommend.comment);
-                            setBtnStat("댓글 수정");
-                            setModify(true);
-                            setRecommendId(recommend.id);
-                          }}
-                          className="text-main text-xs"
-                        >
-                          수정
-                        </p>
-                      </Link>
+                  {recommend.profile === myInfo?.results.id ? (
+                    <>
+                      <div className="space-y-5">
+                        <div className="flex space-x-2 cursor-pointer">
+                          <p
+                            onClick={() => deleteRecommend.mutate(recommend.id)}
+                            className="text-red text-xs"
+                          >
+                            삭제
+                          </p>
+                          <p className="text-xs">/</p>
+                          <Link
+                            to={String("commentScroll")}
+                            offset={-320}
+                            spy
+                            smooth
+                          >
+                            <p
+                              onClick={() => {
+                                setText(recommend.comment);
+                                setBtnStat("댓글 수정");
+                                setModify(true);
+                                setRecommendId(recommend.id);
+                              }}
+                              className="text-main text-xs"
+                            >
+                              수정
+                            </p>
+                          </Link>
+                        </div>
+
+                        <div className="text-xs text-subContent">
+                          {recommend.created.slice(0, 10)}
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="text-xs text-subContent mt-8">
+                      {recommend.created.slice(0, 10)}
                     </div>
                   )}
                 </div>
