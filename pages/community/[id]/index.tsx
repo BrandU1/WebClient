@@ -49,7 +49,7 @@ function PostPage() {
           <Post recommend={recommend?.results!} data={data?.results!} />
         </div>
         <div className="ml-14">
-          <SidePost />
+          <SidePost data={data?.results!} />
         </div>
       </div>
     </>

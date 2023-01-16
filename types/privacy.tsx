@@ -206,3 +206,18 @@ export interface infinitePost {
   previous: string;
   results: Community[];
 }
+
+export interface communityProfile {
+  id: number;
+  name?: string;
+  backdrop_image?: string;
+  nickname?: string;
+  email?: string;
+  description?: string;
+  phone_number?: string;
+  profile_image?: string;
+  social_link?: string;
+  followers: number;
+  followings: number;
+  platforms: Platform[];
+}

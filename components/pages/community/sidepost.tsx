@@ -1,12 +1,23 @@
 import Image from "next/image";
 import ScrapButton from "@common/scrapbutton";
 import client from "@lib/api";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import HeartIcon from "@icons/heart";
 import ScrapIcon from "@icons/scrap";
+import {
+  BranduBaseResponse,
+  Community,
+  communityProfile,
+  RecommendComment,
+  UserInterface,
+} from "../../../types/privacy";
 
-function SidePost() {
+interface Side {
+  data: Community;
+}
+
+function SidePost({ data }: Side) {
   const queryClient = useQueryClient();
 
   // 팔로우 상태
@@ -37,6 +48,14 @@ function SidePost() {
     }
   );
 
+  const getProfile = () => {
+    return client.get(`accounts/${data.profile}`).then((res) => res.data);
+  };
+
+  const { data: profileData, isLoading } = useQuery<
+    BranduBaseResponse<communityProfile>
+  >(["postProfile", data?.profile], getProfile);
+
   return (
     <div className="w-[214px] flex flex-col sticky top-40">
       <div className="flex flex-col border border-main rounded-xl h-[137px] p-5">
@@ -44,10 +63,12 @@ function SidePost() {
           <div className="flex flex-row">
             <div className="w-9 h-9 bg-gray rounded-xl" />
             <div className="flex flex-col ml-2 text-[12px]">
-              <h2>김이삭</h2>
+              <h2>{profileData?.results.nickname}</h2>
               <div className="flex flex-row">
                 <p className="text-subContent">팔로워</p>
-                <p className="font-bold">299</p>
+                <p className="font-bold ml-1">
+                  {profileData?.results.followers} 명
+                </p>
               </div>
             </div>
           </div>
