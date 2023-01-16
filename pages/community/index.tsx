@@ -2,6 +2,7 @@ import Community from "@components/pages/community/community";
 import client from "@lib/api";
 import { useQuery } from "@tanstack/react-query";
 import { BestPost, BranduBaseResponse } from "../../types/privacy";
+import Head from "next/head";
 
 function Index() {
   const getBestPost = () => {
@@ -15,9 +16,12 @@ function Index() {
   console.log(data?.results);
 
   return (
-    <div>
+    <>
+      <Head>
+        <title>커뮤니티</title>
+      </Head>
       <Community bestCommunity={data?.results!} />
-    </div>
+    </>
   );
 }
 

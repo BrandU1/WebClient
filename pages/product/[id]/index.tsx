@@ -17,6 +17,7 @@ import PickButton from "@components/pick/pickbutton";
 import Share from "@atoms/share";
 import three from "@components/product/three";
 import { HotDeal } from "../../../types/privacy";
+import Head from "next/head";
 
 export const getProduct = async (id: number) => {
   const response = await client.get(`products/${id}`);
@@ -175,204 +176,210 @@ function ProductDetail({ id, wish }: ProductDetailProps) {
   }
 
   return (
-    <div className="flex flex-col">
-      <title>{productResponse?.results.name}</title>
-      <div className="flex flex-row  m-auto px-3 mt-5">
-        <div className="imageList flex flex-col max-h-96 overflow-y-scroll">
-          {/* 상품 이미지 선택 */}
-          {productResponse?.results.images
-            .filter((image) => image.kind === "product")
-            .map((image, index) => {
-              return (
-                <div
-                  key={index}
-                  className={`flex mb-2.5 cursor-pointer  rounded-xl ${
-                    shownImage === index
-                      ? " border-main border-2"
-                      : "border-subContent border-[1px]"
-                  }`}
-                  onClick={() => setShownImage(index)}
-                >
-                  <div className="w-20 h-20 relative">
-                    <Image
-                      className="rounded-xl"
-                      src={productResponse?.results.images[index].image!}
-                      layout="fill"
-                      alt={productResponse?.results.images[index].image!}
-                    />
-                  </div>
-                </div>
-              );
-            })}
-        </div>
-        <div className="ml-2 relative">
-          {/* 상품 이미지 */}
-          <div className="w-96 h-96">
-            <Image
-              className={`rounded-xl ${showThree ? "hidden" : "block"}`}
-              src={productResponse?.results.images[shownImage]?.image!}
-              alt={productResponse?.results.images[shownImage]?.image!}
-              layout="fill"
-            />
-            <div
-              className={`sketchfab-embed-wrapper ${
-                showThree ? "block" : "hidden"
-              }`}
-            >
-              <iframe
-                title="BrandU Eco Back"
-                frameBorder="0"
-                allowFullScreen
-                allow="autoplay; fullscreen; xr-spatial-tracking"
-                xr-spatial-tracking
-                execution-while-out-of-viewport
-                execution-while-not-rendered
-                web-share
-                width="380"
-                height="400"
-                src="https://sketchfab.com/models/a0e466df5b7243b1819961651063c79d/embed"
-              ></iframe>
-            </div>
-          </div>
-        </div>
-        <div className="flex flex-col mx-5 w-fit h-fit">
-          {/* 상품 이름 */}
-          <div className="flex flex-row justify-between">
-            <p className="w-max text-base">{productResponse?.results.name}</p>
-            <Share
-              image={productResponse?.results.images[shownImage]?.image!}
-              name={productResponse?.results.name!}
-            />
-          </div>
-          {/* 상품 태그 */}
-          <div className="flex flex-row my-1 space-x-1">
-            {productResponse?.results.tags.map((tag, index) => {
-              return (
-                <span className="text-subContent text-xs cursor-pointer">
-                  #{tag.name}
-                </span>
-              );
-            })}
-          </div>
-          <div className="flex flex-row justify-between my-3">
-            {/* 뱃지 */}
-            <div className="badge flex flex-row space-x-3">
-              <Badge color={"red"} />
-              <Badge color={"yellow"} />
-            </div>
-            {/* 금액 부분 */}
-            <div className="flex flex-col">
-              <Price price={productResponse?.results.price! - 4000} />
-              <Price price={productResponse?.results.price!} isPrime />
-            </div>
-          </div>
-          <div
-            onClick={() => {
-              setShowThree(!showThree);
-            }}
-          >
-            {showThree ? (
-              <button className="border-main border-[1px] p-2 text-white bg-main rounded-xl ">
-                2D 이미지로 보기
-              </button>
-            ) : (
-              <button className="border-main border-[1px] p-2 text-white bg-main rounded-xl ">
-                3D 모델로 보기
-              </button>
-            )}
-          </div>
-
-          <div className="border-b-[1px] my-2 border-gray" />
-          {/* 색상 */}
-          <span className="text-xs">색상</span>
-          <div className="flex flex-row mt-2">
-            {productResponse?.results.options.map((option, index) => {
-              return (
-                <div
-                  className={`w-6 h-6 rounded-md border-[1px] ${
-                    selectedColor === index
-                      ? "border-main"
-                      : "border-subContent"
-                  }`}
-                  style={{ backgroundColor: `${option.color.hashcode}` }}
-                ></div>
-              );
-            })}
-          </div>
-          <div className="flex flex-col mt-5">
-            {/* 사이즈 */}
-            <span className="text-xs">사이즈</span>
-            <div className="flex flex-row space-x-[10px]">
-              {productResponse?.results.options.map((option, index) => {
+    <>
+      <Head>
+        <title>{productResponse?.results.name}</title>
+      </Head>
+      <div className="flex flex-col">
+        <div className="flex flex-row  m-auto px-3 mt-5">
+          <div className="imageList flex flex-col max-h-96 overflow-y-scroll">
+            {/* 상품 이미지 선택 */}
+            {productResponse?.results.images
+              .filter((image) => image.kind === "product")
+              .map((image, index) => {
                 return (
-                  <span className="mt-2 font-bold text-xs text-subContent border border-gray px-2 py-1 rounded-xl border-main border-[1px]">
-                    {option.size}
+                  <div
+                    key={index}
+                    className={`flex mb-2.5 cursor-pointer  rounded-xl ${
+                      shownImage === index
+                        ? " border-main border-2"
+                        : "border-subContent border-[1px]"
+                    }`}
+                    onClick={() => setShownImage(index)}
+                  >
+                    <div className="w-20 h-20 relative">
+                      <Image
+                        className="rounded-xl"
+                        src={productResponse?.results.images[index].image!}
+                        layout="fill"
+                        alt={productResponse?.results.images[index].image!}
+                      />
+                    </div>
+                  </div>
+                );
+              })}
+          </div>
+          <div className="ml-2 relative">
+            {/* 상품 이미지 */}
+            <div className="w-96 h-96">
+              <Image
+                className={`rounded-xl ${showThree ? "hidden" : "block"}`}
+                src={productResponse?.results.images[shownImage]?.image!}
+                alt={productResponse?.results.images[shownImage]?.image!}
+                layout="fill"
+              />
+              <div
+                className={`sketchfab-embed-wrapper ${
+                  showThree ? "block" : "hidden"
+                }`}
+              >
+                <iframe
+                  title="BrandU Eco Back"
+                  frameBorder="0"
+                  allowFullScreen
+                  allow="autoplay; fullscreen; xr-spatial-tracking"
+                  xr-spatial-tracking
+                  execution-while-out-of-viewport
+                  execution-while-not-rendered
+                  web-share
+                  width="380"
+                  height="400"
+                  src="https://sketchfab.com/models/a0e466df5b7243b1819961651063c79d/embed"
+                ></iframe>
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-col mx-5 w-fit h-fit">
+            {/* 상품 이름 */}
+            <div className="flex flex-row justify-between">
+              <p className="w-max text-base">{productResponse?.results.name}</p>
+              <Share
+                image={productResponse?.results.images[shownImage]?.image!}
+                name={productResponse?.results.name!}
+              />
+            </div>
+            {/* 상품 태그 */}
+            <div className="flex flex-row my-1 space-x-1">
+              {productResponse?.results.tags.map((tag, index) => {
+                return (
+                  <span className="text-subContent text-xs cursor-pointer">
+                    #{tag.name}
                   </span>
                 );
               })}
             </div>
-          </div>
-          <div className="amount mt-[10px]">
-            <span className="text-xs">수량</span>
-            <div className="mt-[10px] border border-main w-fit h-fit rounded-xl flex items-center py-[5px]">
-              <Counter
-                onClick={() => {
-                  if (amount > 1) {
-                    setAmount((prev) => prev - 1);
-                  }
-                }}
-                value={amount}
-                onClick1={() => {
-                  setAmount((prev) => prev + 1);
-                }}
-              />
+            <div className="flex flex-row justify-between my-3">
+              {/* 뱃지 */}
+              <div className="badge flex flex-row space-x-3">
+                <Badge color={"red"} />
+                <Badge color={"yellow"} />
+              </div>
+              {/* 금액 부분 */}
+              <div className="flex flex-col">
+                <Price price={productResponse?.results.price! - 4000} />
+                <Price price={productResponse?.results.price!} isPrime />
+              </div>
             </div>
-          </div>
-          <div className="flex flex-col mt-5">
-            <div className="flex flex-row space-x-[10px]">
-              <div
-                className="w-11 h-11"
-                // onClick={() => {
-                //   setItemWish(!wish);
-                // }}
-              >
-                <PickButton
-                  id={productResponse?.results.id!}
-                  wish={hotDealData?.results[id - 1].is_wish!}
-                  li_width={24}
-                  li_height={24}
+            <div
+              onClick={() => {
+                setShowThree(!showThree);
+              }}
+            >
+              {showThree ? (
+                <button className="border-main border-[1px] p-2 text-white bg-main rounded-xl ">
+                  2D 이미지로 보기
+                </button>
+              ) : (
+                <button className="border-main border-[1px] p-2 text-white bg-main rounded-xl ">
+                  3D 모델로 보기
+                </button>
+              )}
+            </div>
+
+            <div className="border-b-[1px] my-2 border-gray" />
+            {/* 색상 */}
+            <span className="text-xs">색상</span>
+            <div className="flex flex-row mt-2">
+              {productResponse?.results.options.map((option, index) => {
+                return (
+                  <div
+                    className={`w-6 h-6 rounded-md border-[1px] ${
+                      selectedColor === index
+                        ? "border-main"
+                        : "border-subContent"
+                    }`}
+                    style={{ backgroundColor: `${option.color.hashcode}` }}
+                  ></div>
+                );
+              })}
+            </div>
+            <div className="flex flex-col mt-5">
+              {/* 사이즈 */}
+              <span className="text-xs">사이즈</span>
+              <div className="flex flex-row space-x-[10px]">
+                {productResponse?.results.options.map((option, index) => {
+                  return (
+                    <span className="mt-2 font-bold text-xs text-subContent border border-gray px-2 py-1 rounded-xl border-main border-[1px]">
+                      {option.size}
+                    </span>
+                  );
+                })}
+              </div>
+            </div>
+            <div className="amount mt-[10px]">
+              <span className="text-xs">수량</span>
+              <div className="mt-[10px] border border-main w-fit h-fit rounded-xl flex items-center py-[5px]">
+                <Counter
+                  onClick={() => {
+                    if (amount > 1) {
+                      setAmount((prev) => prev - 1);
+                    }
+                  }}
+                  value={amount}
+                  onClick1={() => {
+                    setAmount((prev) => prev + 1);
+                  }}
                 />
               </div>
-              <button
-                className="w-32 h-11 bg-main rounded-xl flex flex-row justify-center items-center"
-                onClick={createCustomProduct}
-              >
-                <span className="text-white font-bold text-sm">바로 구매</span>
-              </button>
-              <button
-                className="w-32 h-11 bg-main rounded-xl flex flex-row justify-center items-center"
-                onClick={onClick}
-              >
-                <span className="text-white font-bold text-sm">
-                  커스텀 하기
-                </span>
-              </button>
+            </div>
+            <div className="flex flex-col mt-5">
+              <div className="flex flex-row space-x-[10px]">
+                <div
+                  className="w-11 h-11"
+                  // onClick={() => {
+                  //   setItemWish(!wish);
+                  // }}
+                >
+                  <PickButton
+                    id={productResponse?.results.id!}
+                    wish={hotDealData?.results[id - 1].is_wish!}
+                    li_width={24}
+                    li_height={24}
+                  />
+                </div>
+                <button
+                  className="w-32 h-11 bg-main rounded-xl flex flex-row justify-center items-center"
+                  onClick={createCustomProduct}
+                >
+                  <span className="text-white font-bold text-sm">
+                    바로 구매
+                  </span>
+                </button>
+                <button
+                  className="w-32 h-11 bg-main rounded-xl flex flex-row justify-center items-center"
+                  onClick={onClick}
+                >
+                  <span className="text-white font-bold text-sm">
+                    커스텀 하기
+                  </span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
+        {/* 상품 네비게이션 바 */}
+        <ProductNavigationBar />
+        {/* 상품 디테일 내용 */}
+        <ProductDetailBox
+          mainImage={
+            productResponse?.results.images
+              .filter((image) => image.kind === "detail")
+              .map((image) => image.image) ?? []
+          }
+          reviews={reviewsResponse?.results ?? []}
+        />
       </div>
-      {/* 상품 네비게이션 바 */}
-      <ProductNavigationBar />
-      {/* 상품 디테일 내용 */}
-      <ProductDetailBox
-        mainImage={
-          productResponse?.results.images
-            .filter((image) => image.kind === "detail")
-            .map((image) => image.image) ?? []
-        }
-        reviews={reviewsResponse?.results ?? []}
-      />
-    </div>
+    </>
   );
 }
 

@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { BranduBaseResponse } from "../../types/privacy";
 import Loading from "@common/loading";
 import { ProductInterface } from "../../types/product";
+import Head from "next/head";
 
 export interface CustomProduct {
   id: number;
@@ -36,9 +37,12 @@ function Index() {
     );
 
   return (
-    <div>
+    <>
+      <Head>
+        <title>장바구니</title>
+      </Head>
       <BasketList basketList={data?.results!} />
-    </div>
+    </>
   );
 }
 

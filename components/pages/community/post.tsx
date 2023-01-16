@@ -26,6 +26,8 @@ function Post({ data, recommend }: Post) {
   // 유저 정보
   const userInfo = useRecoilValue(userData);
 
+  console.log(userInfo);
+
   // 버튼 상태
   const [btnStat, setBtnStat] = useState<string>("댓글 달기");
   const onKeyPress = (e: any) => {
@@ -126,13 +128,13 @@ function Post({ data, recommend }: Post) {
       <div className="reply mt-5">
         <div className="summary border-b border-gray pb-5 text-sm flex flex-row text-subContent">
           <p>좋아요</p>
-          <p className="font-bold">3</p>
+          <p className="font-bold">{data?.likes}</p>
           <p className="ml-2">스크랩</p>
-          <p className="font-bold">1</p>
+          <p className="font-bold">{data?.scraps}</p>
           <p className="ml-2">댓글</p>
-          <p className="font-bold">1</p>
+          <p className="font-bold">{data?.comments}</p>
           <p className="ml-2">조회</p>
-          <p className="font-bold">422</p>
+          <p className="font-bold">{data?.hits}</p>
         </div>
         <div className="mt-3">
           {recommend?.map((recommend, index) => {

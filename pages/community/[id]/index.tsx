@@ -10,6 +10,7 @@ import {
 } from "../../../types/privacy";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import Head from "next/head";
 
 function PostPage() {
   const router = useRouter();
@@ -39,13 +40,17 @@ function PostPage() {
   >(["recommend", id], getRecommend);
 
   return (
-    <div className="flex flex-row mt-5">
-      <div className="flex flex-col">
-        <Post recommend={recommend?.results!} data={data?.results!} />
-        {/*<Recommend />*/}
+    <>
+      <Head>
+        <title>{data?.results.title}</title>
+      </Head>
+      <div className="flex flex-row mt-5">
+        <div className="flex flex-col">
+          <Post recommend={recommend?.results!} data={data?.results!} />
+        </div>
+        <SidePost />
       </div>
-      <SidePost />
-    </div>
+    </>
   );
 }
 export async function getServerSideProps() {

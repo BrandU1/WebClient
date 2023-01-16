@@ -2,6 +2,7 @@ import Store from "@components/pages/store/store";
 import client from "@lib/api";
 import { useQuery } from "@tanstack/react-query";
 import { BranduBaseResponse, HotDeal } from "../../types/privacy";
+import Head from "next/head";
 
 function Index() {
   const getStore = () => {
@@ -13,9 +14,14 @@ function Index() {
   );
 
   return (
-    <div>
-      <Store store={data?.results!} />
-    </div>
+    <>
+      <Head>
+        <title>스토어</title>
+      </Head>
+      <div>
+        <Store store={data?.results!} />
+      </div>
+    </>
   );
 }
 
