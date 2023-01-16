@@ -411,7 +411,23 @@ function Nav() {
                 </Link>
               </div>
               <div className={`${token ? "block" : "hidden"} cursor-pointer`}>
-                <ScrapIcon />
+                <Link href="/scrap">
+                  {path.includes("scrap") ? (
+                    <ScrapIcon
+                      color="none"
+                      width={20}
+                      height={19}
+                      stroke="#0CABA8"
+                    />
+                  ) : (
+                    <ScrapIcon
+                      color="none"
+                      width={20}
+                      height={19}
+                      stroke="#767676"
+                    />
+                  )}
+                </Link>
               </div>
               <div
                 ref={outside}
