@@ -36,6 +36,7 @@ function Product({ title, subTitle, products }: ProductProps) {
                   pathname: `/product/${item.id}`,
                   query: {
                     index: item?.id,
+                    wish: item?.is_wish,
                   },
                 }}
                 as={`/product/${item.id}`}
