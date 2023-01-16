@@ -34,9 +34,9 @@ function Search({ searchResult }: SearchProps) {
             </span>
             개의 검색 결과
           </p>
-          <p className="text-sm">
-            추천순 | 판매량순 | 낮은 가격순 | 높은 가격순
-          </p>
+          {/*<p className="text-sm">*/}
+          {/*  추천순 | 판매량순 | 낮은 가격순 | 높은 가격순*/}
+          {/*</p>*/}
         </div>
         {searchResult?.products?.results?.length != 0 ? (
           <div className="list grid grid-cols-5 gap-x-4">
@@ -121,9 +121,8 @@ function Search({ searchResult }: SearchProps) {
                       as={`/community/${item.id}`}
                     >
                       <div className="h-60 relative">
-                        <ImgAtom
-                          exist={null}
-                          src={item.backdrop_image}
+                        <Image
+                          src={item.backdrop_image || ""}
                           width={156}
                           height={200}
                           alt={"searchResult"}

@@ -58,9 +58,9 @@ function ProductCustom({ id }: ProductCustomProps): ReactElement {
       queryFn: () => getProduct(id),
     });
 
-  const goBasket = (id: any) => {
-    client.post(`accounts/baskets/${id}`).then((res) => res.data);
-  };
+  // const goBasket = (id: any) => {
+  //   client.post(`accounts/baskets/${id}`).then((res) => res.data);
+  // };
 
   const createCustomProduct = async () => {
     const response = await client.post("products/customs", {
@@ -92,8 +92,6 @@ function ProductCustom({ id }: ProductCustomProps): ReactElement {
   const handleSelectClose = () => {
     setSelectOpen(false);
   };
-
-  console.log(images);
 
   if (productLoading) return <div>loading...</div>;
 
@@ -221,7 +219,7 @@ function ProductCustom({ id }: ProductCustomProps): ReactElement {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query;
-  const queryClient = new QueryClient();
+  // const queryClient = new QueryClient();
 
   // await queryClient.prefetchQuery(["product", id], () =>
   //   getProduct(Number(id))
@@ -229,7 +227,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   return {
     props: {
-      dehydratedState: dehydrate(queryClient),
+      // dehydratedState: dehydrate(queryClient),
       id: Number(id),
     },
   };

@@ -30,7 +30,7 @@ function SidePost({ data }: Side) {
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(["follows"]);
+        queryClient.invalidateQueries(["edit"]);
         getFollows(true);
       },
     }
@@ -67,7 +67,7 @@ function SidePost({ data }: Side) {
               <div className="flex flex-row">
                 <p className="text-subContent">팔로워</p>
                 <p className="font-bold ml-1">
-                  {profileData?.results.followers} 명
+                  {profileData?.results.followings} 명
                 </p>
               </div>
             </div>
@@ -75,12 +75,25 @@ function SidePost({ data }: Side) {
         </div>
         <div className="button flex mt-5 justify-between">
           <button
+            onClick={() => {
+              mutation.mutate(data?.profile);
+            }}
             className={`h-11 w-full text-sm rounded-xl mr-2 ${
               follows ? "bg-gray text-black" : "bg-main text-white"
             }`}
           >
             팔로우
           </button>
+          {/*<button*/}
+          {/*  onClick={() => {*/}
+          {/*    mutation.mutate(data?.profile);*/}
+          {/*  }}*/}
+          {/*  className={`h-11 w-full text-sm rounded-xl mr-2 ${*/}
+          {/*    follows ? "bg-gray text-black" : "bg-main text-white"*/}
+          {/*  }`}*/}
+          {/*>*/}
+          {/*  팔로우*/}
+          {/*</button>*/}
         </div>
       </div>
       <div className="flex flex-col items-center mt-14 space-y-10">
