@@ -32,7 +32,6 @@ interface ProductCount {
 }
 
 function BasketList({ basketList }: BasketListProps) {
-  const router = useRouter();
   const [basket, setBasket] = useRecoilState(basketPurchase);
   const [checkList, setCheckList] = useRecoilState(basketCheckedList);
   const price = useRecoilValue(totalPrice);
@@ -202,11 +201,6 @@ function BasketList({ basketList }: BasketListProps) {
                     </div>
 
                     <div className="w-[120px] h-[120px] relative  ">
-                      {/*<Image*/}
-                      {/*  className="rounded-lg"*/}
-                      {/*  src={"/custom/test.svg"}*/}
-                      {/*  layout="fill"*/}
-                      {/*  alt="productImage"*/}
                       <Image
                         className="rounded-lg"
                         src={res.custom_product.product.backdrop_image}
@@ -231,7 +225,7 @@ function BasketList({ basketList }: BasketListProps) {
                         </div>
                         <div
                           onClick={() =>
-                            deleteBasket.mutate(res.custom_product.product.id)
+                            deleteBasket.mutate(res.custom_product.id)
                           }
                         >
                           <CloseIcon />

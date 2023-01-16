@@ -1,12 +1,14 @@
 import { Scrollbars } from "react-custom-scrollbars";
 import Image from "next/image";
 import ModalFrame from "@common/modalframe";
-import { useRef, useState } from "react";
+import { Dispatch, SetStateAction, useRef, useState } from "react";
 import useBranduQuery from "@hooks/useBranduQuery";
 import client from "@lib/api";
 
 interface existModalProps {
   handleClose: () => void;
+  images: string[];
+  setImages: Dispatch<SetStateAction<any[]>>;
 }
 
 interface CustomImage {
@@ -20,7 +22,7 @@ const getCustomImage = async () => {
   return response.data;
 };
 
-function ExistModal({ handleClose }: existModalProps) {
+function ExistModal({ handleClose, setImages, images }: existModalProps) {
   const [cursor, setCursor] = useState<number>(0);
   const secondEl = useRef<HTMLDivElement>(null);
   const handleSecondModal = (e: any) => {
@@ -28,11 +30,17 @@ function ExistModal({ handleClose }: existModalProps) {
       handleClose();
     }
   };
+  const [image, setImage] = useState<string>("");
 
   const { data, isLoading, isError } = useBranduQuery<CustomImage[]>({
     queryKey: ["custom-image"],
     queryFn: getCustomImage,
   });
+
+  const handleImage = (image: string) => {
+    setImages([...images, image]);
+    handleClose();
+  };
 
   return (
     <ModalFrame
@@ -57,6 +65,7 @@ function ExistModal({ handleClose }: existModalProps) {
                         }`}
                         onClick={() => {
                           setCursor(idx);
+                          setImage(image.image ?? "");
                         }}
                       >
                         <Image
@@ -74,7 +83,10 @@ function ExistModal({ handleClose }: existModalProps) {
             </Scrollbars>
           </div>
           <div className="w-[338px] m-auto flex flex-row justify-between mt-5">
-            <button className="border rounded-xl bg-main w-full h-[45px] text-white font-bold tet-sm flex justify-center items-center">
+            <button
+              onClick={() => handleImage(image)}
+              className="border rounded-xl bg-main w-full h-[45px] text-white font-bold tet-sm flex justify-center items-center"
+            >
               추가하기
             </button>
           </div>
