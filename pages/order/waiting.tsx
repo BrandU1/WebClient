@@ -2,9 +2,10 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 
 import CircularProgress from "@mui/material/CircularProgress";
-import {dehydrate, QueryClient, useMutation} from "@tanstack/react-query";
+import { dehydrate, QueryClient, useMutation } from "@tanstack/react-query";
 import client from "@lib/api";
-import {GetServerSideProps} from "next";
+import { GetServerSideProps } from "next";
+import Head from "next/head";
 
 interface ConfirmOrder {
   orderId: string;
@@ -40,19 +41,23 @@ function Waiting() {
     }
   }, [router]);
   return (
-    <div className="flex flex-col justify-center items-center h-[55vh]">
-      <h2 className="mb-3 text-lg font-bold text-main">
-        결제가 진행중입니다. 조금만 기다려주세요.
-      </h2>
-      <CircularProgress size={50} sx={{ color: "#0CABA8" }} />
-    </div>
+    <>
+      <Head>
+        <title>주문 및 결제</title>
+      </Head>
+      <div className="flex flex-col justify-center items-center h-[55vh]">
+        <h2 className="mb-3 text-lg font-bold text-main">
+          결제가 진행중입니다. 조금만 기다려주세요.
+        </h2>
+        <CircularProgress size={50} sx={{ color: "#0CABA8" }} />
+      </div>
+    </>
   );
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
-    props: {
-    },
+    props: {},
   };
 };
 

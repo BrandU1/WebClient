@@ -5,6 +5,8 @@ import { FaqInterface, MainInfoInterface } from "../../../types/service";
 import { useRouter } from "next/router";
 import MainInfoComp from "@components/pages/service/maininfo";
 import FaqComp from "@components/pages/service/faq";
+import Head from "next/head";
+import Service from "@components/pages/service";
 
 function FaqPage() {
   const getFaq = () => {
@@ -19,9 +21,14 @@ function FaqPage() {
   }
 
   return (
-    <div>
-      <FaqComp data={faqData?.results!} />
-    </div>
+    <>
+      <Head>
+        <title>자주 묻는 질문</title>
+      </Head>
+      <div>
+        <FaqComp data={faqData?.results!} />
+      </div>
+    </>
   );
 }
 

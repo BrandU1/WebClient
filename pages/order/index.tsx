@@ -15,6 +15,7 @@ import client from "@lib/api";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import Head from "next/head";
 
 export interface PriceBarPrint {
   id: number;
@@ -74,30 +75,35 @@ function OrderPage() {
   if (isLoading) return <div>로딩중</div>;
 
   return (
-    <div className="max-w-4xl m-auto flex flex-row space-x-10">
-      <div className="flex flex-col w-[70%]">
-        <p className="font-bold text-xl my-5">주문 및 결제</p>
-        <OrderList
-          baskets={baskets!}
-          addresses={addresses?.results!}
-          setAddress={setAddress}
-          profileData={profileData?.results!}
-        />
+    <>
+      <Head>
+        <title>주문 및 결제</title>
+      </Head>
+      <div className="max-w-4xl m-auto flex flex-row space-x-10">
+        <div className="flex flex-col w-[70%]">
+          <p className="font-bold text-xl my-5">주문 및 결제</p>
+          <OrderList
+            baskets={baskets!}
+            addresses={addresses?.results!}
+            setAddress={setAddress}
+            profileData={profileData?.results!}
+          />
+        </div>
+        <div className="price w-[30%]">
+          <PriceBar printList={priceBarPrint}>
+            <button
+              className="w-56 h-11 bg-main rounded-xl text-white font-bold text-base flex justify-center items-center m-auto mb-2 disabled:opacity-50"
+              disabled={
+                profileData?.results.name == (null || "") ||
+                profileData?.results.phone_number == (null || "")
+              }
+            >
+              <Link href="/order/pay">결제하기</Link>
+            </button>
+          </PriceBar>
+        </div>
       </div>
-      <div className="price w-[30%]">
-        <PriceBar printList={priceBarPrint}>
-          <button
-            className="w-56 h-11 bg-main rounded-xl text-white font-bold text-base flex justify-center items-center m-auto mb-2 disabled:opacity-50"
-            disabled={
-              profileData?.results.name == (null || "") ||
-              profileData?.results.phone_number == (null || "")
-            }
-          >
-            <Link href="/order/pay">결제하기</Link>
-          </button>
-        </PriceBar>
-      </div>
-    </div>
+    </>
   );
 }
 

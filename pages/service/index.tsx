@@ -2,6 +2,7 @@ import Service from "@components/pages/service";
 import client from "@lib/api";
 import { useQuery } from "@tanstack/react-query";
 import { BranduBaseResponse, Inquiry } from "../../types/privacy";
+import Head from "next/head";
 
 function ServicePage() {
   const getInquiry = () => {
@@ -14,9 +15,14 @@ function ServicePage() {
   );
 
   return (
-    <div className="max-w-4xl m-auto">
-      <Service inquiries={data?.results!} />
-    </div>
+    <>
+      <Head>
+        <title>고객센터</title>
+      </Head>
+      <div className="max-w-4xl m-auto">
+        <Service inquiries={data?.results!} />
+      </div>
+    </>
   );
 }
 export default ServicePage;

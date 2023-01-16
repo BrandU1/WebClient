@@ -4,6 +4,7 @@ import AddressComp from "@components/pages/mypage/addresscomp";
 import { AddressInterface } from "../../types/privacy";
 import useBranduQuery from "@hooks/useBranduQuery";
 import { getAddress } from "@lib/fetches";
+import Head from "next/head";
 
 function Address() {
   const { data, isLoading } = useBranduQuery<AddressInterface[]>({
@@ -12,15 +13,20 @@ function Address() {
   });
 
   return (
-    <div className="m-auto">
-      <TopInfo />
-      <div className="max-w-4xl m-auto">
-        <div className="flex flex-row">
-          <SideTab num={3} />
-          <AddressComp address={data?.results!} />
+    <>
+      <Head>
+        <title>배송지 관리</title>
+      </Head>
+      <div className="m-auto">
+        <TopInfo />
+        <div className="max-w-4xl m-auto">
+          <div className="flex flex-row">
+            <SideTab num={3} />
+            <AddressComp address={data?.results!} />
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
