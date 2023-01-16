@@ -19,7 +19,7 @@ function PickButton({ id, wish, li_width, li_height }: pickProp) {
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(["hotDeal", "pickList"]);
+        queryClient.invalidateQueries(["hotDeal"]);
         handleAlertOpen("찜한 상품", true, "pick");
       },
     }
@@ -33,7 +33,7 @@ function PickButton({ id, wish, li_width, li_height }: pickProp) {
     },
     {
       onSuccess: async () => {
-        await queryClient.invalidateQueries(["hotDeal", "pickList"]);
+        await queryClient.invalidateQueries(["hotDeal"]);
       },
     }
   );
