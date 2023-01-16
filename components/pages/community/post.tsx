@@ -7,6 +7,7 @@ import { Community, RecommendComment } from "../../../types/privacy";
 import { useRecoilValue } from "recoil";
 import { Link } from "react-scroll";
 import { userData } from "../../../recoil/user";
+import useUserInfo from "@hooks/defaultValue";
 
 interface Post {
   data: Community;
@@ -24,9 +25,9 @@ function Post({ data, recommend }: Post) {
   const [recommendId, setRecommendId] = useState<number>(-1);
 
   // 유저 정보
-  const userInfo = useRecoilValue(userData);
+  const userInfo = useUserInfo();
 
-  console.log(userInfo);
+  console.log(userInfo.myInfo);
 
   // 버튼 상태
   const [btnStat, setBtnStat] = useState<string>("댓글 달기");
@@ -151,7 +152,7 @@ function Post({ data, recommend }: Post) {
                     </div>
                   </div>
 
-                  {recommend.profile === userInfo.user.id && (
+                  {recommend.profile === null && (
                     <div className="cursor-pointer flex space-x-2">
                       <p
                         onClick={() => deleteRecommend.mutate(recommend.id)}

@@ -48,7 +48,9 @@ function PostPage() {
         <div className="flex flex-col">
           <Post recommend={recommend?.results!} data={data?.results!} />
         </div>
-        <SidePost />
+        <div className="ml-14">
+          <SidePost />
+        </div>
       </div>
     </>
   );
