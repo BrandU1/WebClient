@@ -51,8 +51,8 @@ function Category({ onClose }: CategoryProps) {
                   <div key={index} className="text-center pt-4 ">
                     <div className="h-[100px] w-[100px] bg-white flex justify-center items-center rounded-lg">
                       <ImgAtom
-                        exist={subItem.backdrop_image}
-                        src={subItem.backdrop_image}
+                        exist={"/dummy/bag.png"}
+                        src={"/dummy/bag.png"}
                         width={100}
                         height={100}
                         alt={"product"}

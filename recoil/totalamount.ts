@@ -60,8 +60,6 @@ export const totalPrice = selector<OrderPrice | undefined>({
   get: ({ get }) => {
     const purchaseList = get(basketPurchase);
     const checkedList = get(basketCheckedList);
-    console.log(purchaseList);
-    console.log(checkedList);
     const price = purchaseList
       .filter((basket) =>
         checkedList.includes(basket.custom_product.product.id)
@@ -70,6 +68,7 @@ export const totalPrice = selector<OrderPrice | undefined>({
         (acc, cur) => acc + cur.custom_product.product.price * cur.amount,
         0
       );
+
     return {
       orderPrice: price,
       totalPrice: price + 3000,
