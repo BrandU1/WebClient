@@ -1,10 +1,20 @@
 import Image from "next/image";
+import * as React from "react";
 import { useRef, useState } from "react";
 import NewImgModal from "@components/pages/custom/newimgmodal";
 import ExistModal from "@components/pages/custom/existmodal";
-import * as React from "react";
 
-function ImageSelect() {
+interface ImageSelectProps {
+  images: string[];
+  setImages: React.Dispatch<React.SetStateAction<string[]>>;
+  handleSelectClose: () => void;
+}
+
+function ImageSelect({
+  images,
+  setImages,
+  handleSelectClose,
+}: ImageSelectProps) {
   const [newModalOpen, setNewModalOpen] = useState<boolean>(false);
   const [existModalOpen, setExistModalOpen] = useState<boolean>(false);
 
@@ -17,6 +27,7 @@ function ImageSelect() {
   const handleSecondClose = () => {
     setExistModalOpen(false);
     setNewModalOpen(false);
+    handleSelectClose();
   };
 
   return (
@@ -52,7 +63,13 @@ function ImageSelect() {
         </div>
       </div>
       {newModalOpen && <NewImgModal handleClose={handleSecondClose} />}
-      {existModalOpen && <ExistModal handleClose={handleSecondClose} />}
+      {existModalOpen && (
+        <ExistModal
+          images={images}
+          handleClose={handleSecondClose}
+          setImages={setImages}
+        />
+      )}
     </div>
   );
 }

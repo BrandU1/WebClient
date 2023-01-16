@@ -158,12 +158,12 @@ const Canvas = ({ backgroundImage, width, height, images }: CanvasProps) => {
       if (usedImages.includes(index)) {
         return;
       }
-      // fabric.Image.fabric.Image.fromURL(backgroundImage, (image) => {
-      //   setUsedImages((prev) => [...prev, index]);
-      //   image.scale(1);
-      //   canvas!.add(image);
-      //   canvas!.renderAll();
-      // });
+      fabric.Image.fromURL(src, (image) => {
+        setUsedImages((prev) => [...prev, index]);
+        image.scale(0.3);
+        canvas!.add(image);
+        canvas!.renderAll();
+      });
     });
   }, [images, backgroundImage]);
 
