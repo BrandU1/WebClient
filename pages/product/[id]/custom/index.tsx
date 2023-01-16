@@ -58,10 +58,6 @@ function ProductCustom({ id }: ProductCustomProps): ReactElement {
       queryFn: () => getProduct(id),
     });
 
-  // const goBasket = (id: any) => {
-  //   client.post(`accounts/baskets/${id}`).then((res) => res.data);
-  // };
-
   const createCustomProduct = async () => {
     const response = await client.post("products/customs", {
       product: id,
