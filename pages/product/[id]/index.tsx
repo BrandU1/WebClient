@@ -15,9 +15,7 @@ import { useRecoilState } from "recoil";
 import { isLoginModalOpen } from "../../../recoil/base";
 import PickButton from "@components/pick/pickbutton";
 import Share from "@atoms/share";
-import three from "@components/product/three";
 import { HotDeal } from "../../../types/privacy";
-import Head from "next/head";
 
 export const getProduct = async (id: number) => {
   const response = await client.get(`products/${id}`);
@@ -63,6 +61,7 @@ export interface Product {
     name: string;
     logo: string;
   };
+  default_svg: string;
 }
 
 export interface Review {
@@ -144,7 +143,7 @@ function ProductDetail({ id, wish }: ProductDetailProps) {
   const createCustomProduct = async () => {
     const response = await client.post("products/customs", {
       product: id,
-      image: "custom image none",
+      image: productResponse?.results.default_svg ?? "",
     });
     if (response.status === 201) {
       await router.push("/basket");
