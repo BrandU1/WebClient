@@ -15,7 +15,6 @@ import { useRecoilState } from "recoil";
 import { isLoginModalOpen } from "../../../recoil/base";
 import PickButton from "@components/pick/pickbutton";
 import Share from "@atoms/share";
-import three from "@components/product/three";
 import { HotDeal } from "../../../types/privacy";
 import Head from "next/head";
 

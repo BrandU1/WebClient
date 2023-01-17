@@ -128,14 +128,14 @@ function Post({ data, recommend }: Post) {
           className="rounded-2xl"
         />
         <div className="mt-2 flex justify-between px-2">
-          <h2 className="font-bold text-lg">{data?.title}</h2>
+          <p className="font-bold text-lg">{data?.title}</p>
           <Share image={"/dummy/cat.png"} name={data?.title} />
         </div>
         <div className="flex flex-row items-center mt-5 px-2">
           <div className="w-9 h-9 bg-gray rounded-xl" />
           <div className="flex flex-col ml-2 text-xs">
-            <h2>{profileData?.results.nickname}</h2>
-            <h2 className="text-subContent">2022.12.21(수)</h2>
+            <p>{profileData?.results.nickname}</p>
+            <p className="text-subContent">2022.12.21(수)</p>
           </div>
         </div>
       </div>

@@ -20,7 +20,7 @@ function Community({ bestCommunity }: bestCommunityProps) {
           <div className="flex justify-between items-center">
             <p>이번주 브랜뉴 인기게시글</p>
           </div>
-          <h2 className="font-bold text-lg">TOP 10</h2>
+          <p className="font-bold text-lg">TOP 10</p>
           <div className="grid grid-cols-5 gap-y-5 gap-x-2 mt-5">
             {bestCommunity?.map((post, index) => {
               return (

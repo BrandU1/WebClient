@@ -19,10 +19,8 @@ function Recommend() {
               <div className="user flex flex-row mt-5">
                 <div className="w-9 h-9 bg-gray rounded-xl" />
                 <div className="flex flex-col ml-2">
-                  <h2 className="text-[12px] ml-0.5">김이삭</h2>
-                  <h2 className="text-[12px] text-subContent">
-                    2022.12.20(화)
-                  </h2>
+                  <p className="text-[12px] ml-0.5">김이삭</p>
+                  <p className="text-[12px] text-subContent">2022.12.20(화)</p>
                 </div>
               </div>
             </div>

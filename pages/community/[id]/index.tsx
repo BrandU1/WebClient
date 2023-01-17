@@ -18,7 +18,7 @@ function PostPage() {
     if (router.isReady) {
     }
   }, [router.isReady]);
-  const id = router.query.id;
+  const id = +router.query.id!;
 
   const getEdit = () => {
     return client.get(`communities/posts/${id}`).then((res) => res.data);
@@ -34,6 +34,8 @@ function PostPage() {
     ["edit", id],
     getEdit
   );
+
+  console.log(data);
 
   const { data: recommend, isLoading: recommendLoading } = useQuery<
     BranduBaseResponse<RecommendComment[]>
