@@ -153,6 +153,7 @@ function Post({ data, recommend }: Post) {
           <p className="ml-2">조회</p>
           <p className="font-bold">{data?.hits}</p>
         </div>
+        {/*{console.log(recommend)}*/}
         <div className="mt-3">
           {recommend?.map((recommend, index) => {
             return (
@@ -161,14 +162,16 @@ function Post({ data, recommend }: Post) {
                   <div className="flex">
                     <div className="w-9 h-9 bg-gray rounded-xl mr-2" />
                     <div className="flex flex-col">
-                      <h2 className="text-[12px]">{recommend?.profile}</h2>
+                      <h2 className="text-[12px]">
+                        {recommend.profile.nickname}
+                      </h2>
                       <p className={`text-[12px] text-subContent`}>
                         {recommend.comment}
                       </p>
                     </div>
                   </div>
 
-                  {recommend.profile === myInfo?.results.id ? (
+                  {recommend.profile.id === myInfo?.results.id ? (
                     <>
                       <div className="space-y-5">
                         <div className="flex space-x-2 cursor-pointer">
