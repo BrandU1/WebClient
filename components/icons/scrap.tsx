@@ -12,19 +12,6 @@ interface ScrapProps {
 }
 
 function ScrapIcon({ color, width, height, stroke, id }: ScrapProps) {
-  // const queryClient = useQueryClient();
-  //
-  // const scrap = useMutation(
-  //   (id: number) => {
-  //     return client.post(`accounts/scraps/${id}`);
-  //   },
-  //   {
-  //     onSuccess: () => {
-  //       queryClient.invalidateQueries(["scrap"]);
-  //     },
-  //   }
-  // );
-
   return (
     <div>
       <svg
