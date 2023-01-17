@@ -6,7 +6,6 @@ if (
     `${process.env.PWD}/node_modules/canvas/build/Release:`
   )
 ) {
-  정;
   process.env.LD_LIBRARY_PATH = `${
     process.env.PWD
   }/node_modules/canvas/build/Release:${process.env.LD_LIBRARY_PATH || ""}`;
