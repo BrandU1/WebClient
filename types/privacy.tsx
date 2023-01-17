@@ -174,9 +174,14 @@ export interface FollowingProfile {
 
 export interface Community {
   backdrop_image: string;
+  comments: number;
   content: string;
+  created: string;
+  hits: number;
   id: number;
+  likes: number;
   profile: number;
+  scraps: number;
   title: string;
 }
 export interface BestPost {
@@ -187,9 +192,15 @@ export interface BestPost {
 }
 export interface RecommendComment {
   id: number;
-  profile: number;
+  profile: RecommendProfile;
   comment: string;
   created: string;
+}
+export interface RecommendProfile {
+  id: number;
+  name: string;
+  nickname: string;
+  profile_image: string;
 }
 export interface infiniteScroll {
   pageParams: [];
@@ -200,4 +211,19 @@ export interface infinitePost {
   next: string;
   previous: string;
   results: Community[];
+}
+
+export interface communityProfile {
+  id: number;
+  name?: string;
+  backdrop_image?: string;
+  nickname?: string;
+  email?: string;
+  description?: string;
+  phone_number?: string;
+  profile_image?: string;
+  social_link?: string;
+  followers: number;
+  followings: number;
+  platforms: Platform[];
 }

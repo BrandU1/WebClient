@@ -2,11 +2,17 @@ import Image from "next/image";
 import { useState } from "react";
 import Share from "@atoms/share";
 import client from "@lib/api";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Community, RecommendComment } from "../../../types/privacy";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  BranduBaseResponse,
+  Community,
+  RecommendComment,
+  UserInterface,
+} from "../../../types/privacy";
 import { useRecoilValue } from "recoil";
 import { Link } from "react-scroll";
 import { userData } from "../../../recoil/user";
+import useUserInfo from "@hooks/defaultValue";
 
 interface Post {
   data: Community;
@@ -24,7 +30,20 @@ function Post({ data, recommend }: Post) {
   const [recommendId, setRecommendId] = useState<number>(-1);
 
   // 유저 정보
-  const userInfo = useRecoilValue(userData);
+  const getUserInfo = () => {
+    return client.get(`/accounts/me`).then((res) => res.data);
+  };
+  const { data: myInfo, isLoading: myInfoLoading } = useQuery<
+    BranduBaseResponse<UserInterface>
+  >(["myInfo"], getUserInfo);
+
+  const getProfile = () => {
+    return client.get(`accounts/${data.profile}`).then((res) => res.data);
+  };
+
+  const { data: profileData, isLoading } = useQuery<
+    BranduBaseResponse<UserInterface>
+  >(["postProfile", data?.profile], getProfile);
 
   // 버튼 상태
   const [btnStat, setBtnStat] = useState<string>("댓글 달기");
@@ -109,14 +128,14 @@ function Post({ data, recommend }: Post) {
           className="rounded-2xl"
         />
         <div className="mt-2 flex justify-between px-2">
-          <h2 className="font-bold text-lg">{data?.title}</h2>
+          <p className="font-bold text-lg">{data?.title}</p>
           <Share image={"/dummy/cat.png"} name={data?.title} />
         </div>
         <div className="flex flex-row items-center mt-5 px-2">
           <div className="w-9 h-9 bg-gray rounded-xl" />
           <div className="flex flex-col ml-2 text-xs">
-            <h2>김이삭</h2>
-            <h2 className="text-subContent">2022.12.21(수)</h2>
+            <p>{profileData?.results.nickname}</p>
+            <p className="text-subContent">2022.12.21(수)</p>
           </div>
         </div>
       </div>
@@ -126,14 +145,15 @@ function Post({ data, recommend }: Post) {
       <div className="reply mt-5">
         <div className="summary border-b border-gray pb-5 text-sm flex flex-row text-subContent">
           <p>좋아요</p>
-          <p className="font-bold">3</p>
+          <p className="font-bold">{data?.likes}</p>
           <p className="ml-2">스크랩</p>
-          <p className="font-bold">1</p>
+          <p className="font-bold">{data?.scraps}</p>
           <p className="ml-2">댓글</p>
-          <p className="font-bold">1</p>
+          <p className="font-bold">{data?.comments}</p>
           <p className="ml-2">조회</p>
-          <p className="font-bold">422</p>
+          <p className="font-bold">{data?.hits}</p>
         </div>
+        {/*{console.log(recommend)}*/}
         <div className="mt-3">
           {recommend?.map((recommend, index) => {
             return (
@@ -142,40 +162,54 @@ function Post({ data, recommend }: Post) {
                   <div className="flex">
                     <div className="w-9 h-9 bg-gray rounded-xl mr-2" />
                     <div className="flex flex-col">
-                      <h2 className="text-[12px]">{recommend?.profile}</h2>
+                      <h2 className="text-[12px]">
+                        {recommend.profile.nickname}
+                      </h2>
                       <p className={`text-[12px] text-subContent`}>
                         {recommend.comment}
                       </p>
                     </div>
                   </div>
 
-                  {recommend.profile === userInfo.user.id && (
-                    <div className="cursor-pointer flex space-x-2">
-                      <p
-                        onClick={() => deleteRecommend.mutate(recommend.id)}
-                        className="text-red text-xs"
-                      >
-                        삭제
-                      </p>
-                      <p className="text-xs">/</p>
-                      <Link
-                        to={String("commentScroll")}
-                        offset={-320}
-                        spy
-                        smooth
-                      >
-                        <p
-                          onClick={() => {
-                            setText(recommend.comment);
-                            setBtnStat("댓글 수정");
-                            setModify(true);
-                            setRecommendId(recommend.id);
-                          }}
-                          className="text-main text-xs"
-                        >
-                          수정
-                        </p>
-                      </Link>
+                  {recommend.profile.id === myInfo?.results.id ? (
+                    <>
+                      <div className="space-y-5">
+                        <div className="flex space-x-2 cursor-pointer">
+                          <p
+                            onClick={() => deleteRecommend.mutate(recommend.id)}
+                            className="text-red text-xs"
+                          >
+                            삭제
+                          </p>
+                          <p className="text-xs">/</p>
+                          <Link
+                            to={String("commentScroll")}
+                            offset={-320}
+                            spy
+                            smooth
+                          >
+                            <p
+                              onClick={() => {
+                                setText(recommend.comment);
+                                setBtnStat("댓글 수정");
+                                setModify(true);
+                                setRecommendId(recommend.id);
+                              }}
+                              className="text-main text-xs"
+                            >
+                              수정
+                            </p>
+                          </Link>
+                        </div>
+
+                        <div className="text-xs text-subContent">
+                          {recommend.created.slice(0, 10)}
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="text-xs text-subContent mt-8">
+                      {recommend.created.slice(0, 10)}
                     </div>
                   )}
                 </div>

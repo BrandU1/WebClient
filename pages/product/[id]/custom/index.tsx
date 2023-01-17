@@ -6,7 +6,7 @@ import Canvas from "@components/ImageCustom/canvas";
 import ImageSelect from "@components/pages/custom/imageselect";
 import client from "@lib/api";
 import { GetServerSideProps } from "next";
-import { dehydrate, QueryClient } from "@tanstack/react-query";
+import { dehydrate, QueryClient, useQuery } from "@tanstack/react-query";
 import useBranduQuery from "@hooks/useBranduQuery";
 import { getProduct } from "../index";
 import CustomIcon from "@components/pages/product/customicon";
@@ -14,6 +14,8 @@ import PickButton from "@components/pick/pickbutton";
 import { useRecoilState } from "recoil";
 import { canvasImage } from "../../../../recoil/canvas";
 import { useRouter } from "next/router";
+import Head from "next/head";
+import { BranduBaseResponse } from "../../../../types/privacy";
 
 export enum CanvasState {
   DRAG = "DRAG",
@@ -51,15 +53,19 @@ interface ProductCustomProps {
 
 function ProductCustom({ id }: ProductCustomProps): ReactElement {
   const router = useRouter();
-  const { data: productResponse, isLoading: productLoading } =
-    useBranduQuery<Product>({
-      queryKey: ["product", id],
-      queryFn: () => getProduct(id),
-    });
+  const idx = router.query.id;
+  // const { data: productResponse, isLoading: productLoading } =
+  //   useBranduQuery<Product>({
+  //     queryKey: ["product", id],
+  //     queryFn: () => getProduct(id),
+  //   });
 
-  const goBasket = (id: any) => {
-    client.post(`accounts/baskets/${id}`).then((res) => res.data);
+  const getProducts = async () => {
+    return client.get(`products/${idx}`).then((res) => res.data);
   };
+  const { data: productResponse, isLoading: productLoading } = useQuery<
+    BranduBaseResponse<Product>
+  >(["product", id], getProducts);
 
   const createCustomProduct = async () => {
     const response = await client.post("products/customs", {
@@ -70,6 +76,8 @@ function ProductCustom({ id }: ProductCustomProps): ReactElement {
       await router.push("/basket");
     }
   };
+
+  console.log(productResponse, "test");
 
   const [customImage, _] = useRecoilState(canvasImage);
 
@@ -96,6 +104,9 @@ function ProductCustom({ id }: ProductCustomProps): ReactElement {
 
   return (
     <>
+      <Head>
+        <title>{productResponse?.results.name}</title>
+      </Head>
       <div className="flex flex-col justify-center items-center">
         <CustomIcon handleSelect={handleSelectOpen} />
         <div className="w-screen h-[1px] bg-gray" />
@@ -215,7 +226,7 @@ function ProductCustom({ id }: ProductCustomProps): ReactElement {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query;
-  const queryClient = new QueryClient();
+  // const queryClient = new QueryClient();
 
   // await queryClient.prefetchQuery(["product", id], () =>
   //   getProduct(Number(id))
@@ -223,7 +234,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   return {
     props: {
-      dehydratedState: dehydrate(queryClient),
+      // dehydratedState: dehydrate(queryClient),
       id: Number(id),
     },
   };

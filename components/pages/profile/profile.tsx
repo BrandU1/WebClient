@@ -2,12 +2,33 @@ import Image from "next/image";
 import ScrapButton from "@common/scrapbutton";
 import client from "@lib/api";
 import { useQuery } from "@tanstack/react-query";
-import { BranduBaseResponse, FollowList } from "../../../types/privacy";
+import {
+  BranduBaseResponse,
+  communityProfile,
+  FollowList,
+} from "../../../types/privacy";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
+import ImgAtom from "@atoms/imgatom";
+import FollowBtn from "@common/followbtn";
 
 function Profile() {
   const router = useRouter();
+  useEffect(() => {
+    if (router.isReady) {
+    }
+  }, [router.isReady]);
+  const id = +router.query.id!;
+
+  const getProfile = () => {
+    return client.get(`accounts/${id}`).then((res) => res.data);
+  };
+
+  const { data: profileData, isLoading: profileLoading } = useQuery<
+    BranduBaseResponse<communityProfile>
+  >(["postProfile", id], getProfile);
+
   const getFollow = () => {
     return client.get("accounts/follows").then((res) => res.data);
   };
@@ -25,11 +46,12 @@ function Profile() {
       <div className="profileInfo relative">
         <div className="w-full h-52 rounded-xl bg-gray" />
         <div className="w-24 h-24 rounded-xl bg-subContent flex justify-center items-center absolute top-36 left-6">
-          <Image
-            src={"/logo/profile.svg"}
-            alt={"profile"}
-            width={40}
-            height={44}
+          <ImgAtom
+            exist={profileData?.results.profile_image!}
+            src={profileData?.results.profile_image!}
+            width={160}
+            height={160}
+            alt={profileData?.results.nickname!}
           />
         </div>
         <div className="flex flex-row justify-end mt-6 text-sm items-center">
@@ -45,7 +67,7 @@ function Profile() {
             }}
           >
             <p className="mr-0.5">팔로워</p>
-            <p className="font-bold">{data?.results.follower.length}</p>
+            <p className="font-bold">{profileData?.results.followers}</p>
           </div>
           <p className="mx-1">|</p>
           <div
@@ -60,18 +82,20 @@ function Profile() {
             }}
           >
             <p className="mr-0.5">팔로잉</p>
-            <p className="font-bold">{data?.results.following.length}</p>
+            <p className="font-bold">{profileData?.results.followings}</p>
           </div>
+
+          {/*<FollowBtn following={id} height={7} weight={14} />*/}
 
           <button className="bg-main text-white w-14 h-7 rounded-xl ml-2">
             팔로우
           </button>
         </div>
         <div className="px-7">
-          <h2 className="font-bold text-lg">김이삭</h2>
-          <h2>@2_sac</h2>
+          <h2 className="font-bold text-lg">{profileData?.results.nickname}</h2>
+          <h2>{profileData?.results.email}</h2>
           <h2 className="mt-2 text-subContent">
-            집 꾸미기를 좋아하는 사람입니다.
+            {profileData?.results.description}
           </h2>
         </div>
       </div>

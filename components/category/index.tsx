@@ -29,6 +29,7 @@ function Category({ onClose }: CategoryProps) {
     ["category"],
     getCategories
   );
+
   if (isLoading) {
     return (
       <div className="flex justify-center">
