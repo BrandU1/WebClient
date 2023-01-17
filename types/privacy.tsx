@@ -192,9 +192,15 @@ export interface BestPost {
 }
 export interface RecommendComment {
   id: number;
-  profile: number;
+  profile: RecommendProfile;
   comment: string;
   created: string;
+}
+export interface RecommendProfile {
+  id: number;
+  name: string;
+  nickname: string;
+  profile_image: string;
 }
 export interface infiniteScroll {
   pageParams: [];

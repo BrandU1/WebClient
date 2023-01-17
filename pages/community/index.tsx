@@ -13,8 +13,6 @@ function Index() {
     getBestPost
   );
 
-  console.log(data?.results);
-
   return (
     <>
       <Head>

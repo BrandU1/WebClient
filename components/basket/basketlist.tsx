@@ -14,7 +14,6 @@ import Pricebar from "@components/pages/order/pricebar";
 import { PriceBarPrint } from "../../pages/order";
 import Link from "next/link";
 import { Basket } from "../../pages/basket";
-import Image from "next/image";
 
 interface BasketListProps {
   basketList: Basket[];
@@ -200,12 +199,14 @@ function BasketList({ basketList }: BasketListProps) {
                     </div>
 
                     <div className="w-[120px] h-[120px] relative  ">
-                      <Image
-                        className="rounded-lg"
-                        src={res.custom_product.product.backdrop_image}
-                        layout="fill"
-                        alt="productImage"
-                      />
+                      <div
+                        className="rounded-lg w-[120px] h-[120px]"
+                        dangerouslySetInnerHTML={{
+                          __html: `<svg style="width: 120px; height: 120px;" ${
+                            res.custom_product.image.split("<svg")[1]
+                          }`,
+                        }}
+                      ></div>
                     </div>
                     <div>
                       <div className="flex items-start space-x-80">

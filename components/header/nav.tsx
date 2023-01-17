@@ -414,6 +414,7 @@ function Nav() {
                 <Link href="/scrap">
                   {path.includes("scrap") ? (
                     <ScrapIcon
+                      id={0}
                       color="none"
                       width={20}
                       height={19}
@@ -421,6 +422,7 @@ function Nav() {
                     />
                   ) : (
                     <ScrapIcon
+                      id={0}
                       color="none"
                       width={20}
                       height={19}

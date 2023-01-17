@@ -158,26 +158,26 @@ function ProductCustom({ id }: ProductCustomProps): ReactElement {
             </div>
             {/* 색상 및 사이즈 대신 커스터마이징 관련 프로세스로 처리 */}
             <div className="border border-t-0 w-[314px] my-[22px] border-gray" />
-            <div className="color flex flex-col mb-[10px]">
-              <span className="text-xs mb-[10px]">색상</span>
-            </div>
-            <div className="size flex flex-col mb-[10px]">
-              <span className="text-xs mb-[10px]">사이즈</span>
-              <div className="space-x-[10px]">
-                <button className="px-[7px] py-[3px] border rounded-xl text-sm text-subContent">
-                  XL
-                </button>
-                <button className="px-[7px] py-[3px] border rounded-xl text-sm text-subContent">
-                  L
-                </button>
-                <button className="px-[7px] py-[3px] border rounded-xl text-sm text-subContent">
-                  M
-                </button>
-                <button className="px-[7px] py-[3px] border rounded-xl text-sm text-subContent">
-                  S
-                </button>
-              </div>
-            </div>
+            {/*<div className="color flex flex-col mb-[10px]">*/}
+            {/*  <span className="text-xs mb-[10px]">색상</span>*/}
+            {/*</div>*/}
+            {/*<div className="size flex flex-col mb-[10px]">*/}
+            {/*  <span className="text-xs mb-[10px]">사이즈</span>*/}
+            {/*  <div className="space-x-[10px]">*/}
+            {/*    <button className="px-[7px] py-[3px] border rounded-xl text-sm text-subContent">*/}
+            {/*      XL*/}
+            {/*    </button>*/}
+            {/*    <button className="px-[7px] py-[3px] border rounded-xl text-sm text-subContent">*/}
+            {/*      L*/}
+            {/*    </button>*/}
+            {/*    <button className="px-[7px] py-[3px] border rounded-xl text-sm text-subContent">*/}
+            {/*      M*/}
+            {/*    </button>*/}
+            {/*    <button className="px-[7px] py-[3px] border rounded-xl text-sm text-subContent">*/}
+            {/*      S*/}
+            {/*    </button>*/}
+            {/*  </div>*/}
+            {/*</div>*/}
             <div className="flex flex-row mt-5 space-x-[10px] items-center">
               <div className="w-11 h-11">
                 <PickButton

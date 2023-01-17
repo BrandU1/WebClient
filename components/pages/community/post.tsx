@@ -128,14 +128,14 @@ function Post({ data, recommend }: Post) {
           className="rounded-2xl"
         />
         <div className="mt-2 flex justify-between px-2">
-          <h2 className="font-bold text-lg">{data?.title}</h2>
+          <p className="font-bold text-lg">{data?.title}</p>
           <Share image={"/dummy/cat.png"} name={data?.title} />
         </div>
         <div className="flex flex-row items-center mt-5 px-2">
           <div className="w-9 h-9 bg-gray rounded-xl" />
           <div className="flex flex-col ml-2 text-xs">
-            <h2>{profileData?.results.nickname}</h2>
-            <h2 className="text-subContent">2022.12.21(수)</h2>
+            <p>{profileData?.results.nickname}</p>
+            <p className="text-subContent">2022.12.21(수)</p>
           </div>
         </div>
       </div>
@@ -153,6 +153,7 @@ function Post({ data, recommend }: Post) {
           <p className="ml-2">조회</p>
           <p className="font-bold">{data?.hits}</p>
         </div>
+        {/*{console.log(recommend)}*/}
         <div className="mt-3">
           {recommend?.map((recommend, index) => {
             return (
@@ -161,14 +162,16 @@ function Post({ data, recommend }: Post) {
                   <div className="flex">
                     <div className="w-9 h-9 bg-gray rounded-xl mr-2" />
                     <div className="flex flex-col">
-                      <h2 className="text-[12px]">{recommend?.profile}</h2>
+                      <h2 className="text-[12px]">
+                        {recommend.profile.nickname}
+                      </h2>
                       <p className={`text-[12px] text-subContent`}>
                         {recommend.comment}
                       </p>
                     </div>
                   </div>
 
-                  {recommend.profile === myInfo?.results.id ? (
+                  {recommend.profile.id === myInfo?.results.id ? (
                     <>
                       <div className="space-y-5">
                         <div className="flex space-x-2 cursor-pointer">
