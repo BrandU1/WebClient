@@ -15,7 +15,12 @@ import {
 import Link from "next/link";
 import FollowBtn from "@common/followbtn";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { myPostLikeList, PostLikedListAtom } from "../../../recoil/postlike";
+import {
+  myPostLikeList,
+  myScrapList,
+  PostLikedListAtom,
+  PostScrapListAtom,
+} from "../../../recoil/postlike";
 
 interface Side {
   data: Community;
@@ -76,6 +81,27 @@ function SidePost({ data }: Side) {
     }
   });
 
+  // 스크랩 좋아요
+
+  const [scrapList, setScrapList] =
+    useRecoilState<myScrapList>(PostScrapListAtom);
+
+  const handlePostScrap = useMutation((id: number) => {
+    //스크랩 취소
+    if (scrapList.postScraps.includes(id)) {
+      const temp = { ...scrapList };
+      temp.postScraps = temp.postScraps.filter((list) => list !== id);
+      setScrapList(temp);
+      return client.delete(`/accounts/scraps/${id}`);
+    } else {
+      // 스크랩 좋아요
+      const temp = { ...scrapList };
+      temp.postScraps = [...temp.postScraps, id];
+      setScrapList(temp);
+      return client.post(`/accounts/scraps/${id}`, id);
+    }
+  });
+
   return (
     <div className="w-[214px] flex flex-col sticky top-40">
       <div className="flex flex-col border border-main rounded-xl h-[137px] p-5">
@@ -122,12 +148,18 @@ function SidePost({ data }: Side) {
             border="#fff"
           />
         </div>
-        <div className="border rounded-full w-14 h-14 border-gray shadow-2xl flex justify-center items-center">
+        <div
+          onClick={() => handlePostScrap.mutate(data?.id)}
+          className="border rounded-full w-14 h-14 border-gray shadow-2xl flex justify-center items-center"
+        >
           <ScrapIcon
-            color={`${false ? "#0CABA8" : "#DFDFE0"}`}
+            color={`${
+              scrapList.postScraps.includes(data?.id) ? "#0CABA8" : "#DFDFE0"
+            }`}
             width={28}
             height={32}
             stroke={"none"}
+            id={data?.id}
           />
         </div>
       </div>
