@@ -13,7 +13,6 @@ interface bestCommunityProps {
 }
 
 function Community({ bestCommunity }: bestCommunityProps) {
-  console.log(bestCommunity);
   return (
     <>
       <div className="flex flex-col mt-10">

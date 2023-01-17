@@ -85,7 +85,7 @@ function Profile() {
             <p className="font-bold">{profileData?.results.followings}</p>
           </div>
 
-          <FollowBtn following={id} height={7} weight={14} />
+          {/*<FollowBtn following={id} height={7} weight={14} />*/}
 
           <button className="bg-main text-white w-14 h-7 rounded-xl ml-2">
             팔로우

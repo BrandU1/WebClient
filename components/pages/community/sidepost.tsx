@@ -63,40 +63,18 @@ function SidePost({ data }: Side) {
   const handlePostLike = useMutation((id: number) => {
     //게시물 좋아요 취소
     if (likedList.postLiked.includes(id)) {
-      return client.delete(`/communities/posts/${id}/like`);
       const temp = { ...likedList };
       temp.postLiked = temp.postLiked.filter((list) => list !== id);
       setLikedList(temp);
+      return client.delete(`/communities/posts/${id}/like`);
     } else {
       // 게시물 좋아요
-      return client.post(`/communities/posts/${id}/like`, id);
       const temp = { ...likedList };
       temp.postLiked = [...temp.postLiked, id];
       setLikedList(temp);
+      return client.post(`/communities/posts/${id}/like`, id);
     }
   });
-
-  // const postLike = useMutation({
-  //   mutationFn: () =>
-  //       client.post(`/communities/posts/${data?.id}/like`, data?.id),
-  //   onSuccess: async () => {
-  //     const temp = { ...likedList };
-  //     temp.postLiked = [...temp.postLiked, data?.id];
-  //     setLikedList(temp);
-  //   },
-  //   onError: (error) => {},
-  //   onSettled: () => {},
-  // });
-  // const postUnlike = useMutation({
-  //   mutationFn: () => client.delete(`/communities/posts/${data?.id}/like`),
-  //   onSuccess: async () => {
-  //     const temp = { ...likedList };
-  //     temp.postLiked = temp.postLiked.filter((list) => list !== data?.id);
-  //     setLikedList(temp);
-  //   },
-  //   onError: (error) => {},
-  //   onSettled: () => {},
-  // });
 
   return (
     <div className="w-[214px] flex flex-col sticky top-40">
