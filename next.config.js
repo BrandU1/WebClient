@@ -18,6 +18,9 @@ const nextConfig = {
     domains: ["brandu-bucket.s3.ap-northeast-2.amazonaws.com"],
     unoptimized: true,
   },
+  experimental: {
+    serverComponentsExternalPackages: ["fabric"],
+  },
 };
 
 module.exports = nextConfig;
