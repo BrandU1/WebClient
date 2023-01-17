@@ -70,7 +70,7 @@ function Edit() {
           const editor = quillRef.current?.getEditor();
           const range = editor?.getSelection();
           editor?.insertEmbed(range.index, "image", imgUrl);
-          // const range = quillRef.current?.getEditor().getSelection()?.index;
+          // const range = quillRef.current?.getEditor().getSelection()?.index.tsx;
           //  if (range !== null && range !== undefined) {
           //    let quill = quillRef.current?.getEditor();
           //    quill?.setSelection(range, 1);
