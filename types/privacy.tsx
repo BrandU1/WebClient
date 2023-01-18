@@ -40,6 +40,7 @@ export interface UserInterface {
   profile_image?: string;
   social_link?: string;
   platforms: Platform[];
+  point: number;
 }
 
 export interface Platform {
@@ -105,12 +106,14 @@ export interface SearchBase {
   posts: searchPost;
   products: searchProduct;
 }
+
 export interface searchPost {
   count: number;
   next: number;
   previous: number;
   results: searchPost[];
 }
+
 export interface searchPost {
   id: number;
   title: string;
@@ -118,6 +121,7 @@ export interface searchPost {
   profile: number;
   created: string;
 }
+
 export interface searchProduct {
   count: number;
   next: number;
@@ -143,6 +147,7 @@ export interface Point {
   point: number;
   point_history: PointHistory[];
 }
+
 export interface PointHistory {
   id: number;
   memo: string;
@@ -150,11 +155,13 @@ export interface PointHistory {
   is_use: boolean;
   created: string;
 }
+
 export interface Categories {
   id: number;
   name: string;
   sub_categories: SubCategories[];
 }
+
 export interface SubCategories {
   id: number;
   name: string;
@@ -184,28 +191,33 @@ export interface Community {
   scraps: number;
   title: string;
 }
+
 export interface BestPost {
   backdrop_image: string;
   id: number;
   likes_count: number;
   title: string;
 }
+
 export interface RecommendComment {
   id: number;
   profile: RecommendProfile;
   comment: string;
   created: string;
 }
+
 export interface RecommendProfile {
   id: number;
   name: string;
   nickname: string;
   profile_image: string;
 }
+
 export interface infiniteScroll {
   pageParams: [];
   pages: infinitePost[];
 }
+
 export interface infinitePost {
   count: number;
   next: string;

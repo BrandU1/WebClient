@@ -1,19 +1,9 @@
 import { atom, selector } from "recoil";
-import { Point, UserInterface } from "../types/privacy";
-import { recoilPersist } from "recoil-persist";
+import { UserInterface } from "../types/privacy";
 
 interface UserRecoilState {
   user: UserInterface;
-  point: Point;
 }
-
-export const userPoint = atom<Point>({
-  key: "getUserPoint",
-  default: {
-    point: 0,
-    point_history: [],
-  },
-});
 
 export const userInfo = atom<UserInterface>({
   key: "getUserInfo",
@@ -25,6 +15,7 @@ export const userInfo = atom<UserInterface>({
     phone_number: "",
     profile_image: "",
     social_link: "",
+    point: 0,
     platforms: [],
   },
 });
@@ -32,12 +23,10 @@ export const userInfo = atom<UserInterface>({
 export const userData = selector<UserRecoilState>({
   key: "userDataState",
   get: ({ get }) => {
-    const point = get(userPoint);
     const info = get(userInfo);
 
     return {
       user: info,
-      point: point,
     };
   },
 });

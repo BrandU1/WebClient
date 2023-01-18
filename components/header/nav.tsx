@@ -6,7 +6,7 @@ import HamburgerIcon from "@icons/hamburger";
 import ProfileIcon from "@icons//profile";
 import BranduIcon from "@icons/brandu";
 import CloseIcon from "@icons/close";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import LoginModal from "@components/login";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -20,9 +20,18 @@ import { isLoginModalOpen } from "../../recoil/base";
 import { ToastState, ToastStateAtom } from "../../recoil/toast";
 import { AlertToast } from "@atoms/alerttoast";
 import useUserInfo from "@hooks/defaultValue";
+import { userInfo } from "../../recoil/user";
 
 function Nav() {
-  useUserInfo();
+  const [info, setInfo] = useRecoilState(userInfo);
+  const { myInfo } = useUserInfo();
+
+  useMemo(() => {
+    if (myInfo) {
+      setInfo(myInfo);
+    }
+  }, [myInfo]);
+
   const [focused, setFocused] = useState<boolean>(false);
   const closeSearch = () => setFocused(false);
 
@@ -208,7 +217,7 @@ function Nav() {
 
   //alert 5초
   useEffect(() => {
-    if (toast.alert == true) {
+    if (toast.alert) {
       const timer = setTimeout(() => {
         const temp = { ...toast };
         temp.alert = false;

@@ -69,6 +69,7 @@ export interface OrderCreate {
 function PayPage() {
   const orderData = useRecoilValue(newOrder);
   const userPoint = useRecoilValue(userData);
+  console.log(userPoint);
 
   const [priceBarPrint, setPriceBarPrint] = useState<PriceBarPrint[]>([]);
   const { register, handleSubmit, setValue, watch, reset } =
@@ -93,7 +94,7 @@ function PayPage() {
 
   /* 포인트 전액 사용 */
   const useAllPoint = () => {
-    setValue("point", userPoint.point.point);
+    setValue("point", userPoint.user.point);
     alert(watch("point") + " Point");
   };
 
@@ -210,7 +211,7 @@ function PayPage() {
                     autoComplete="off"
                     {...register("point", {
                       required: true,
-                      validate: (value) => value <= userPoint.point.point,
+                      validate: (value) => value <= userPoint.user.point,
                     })}
                   />
                   <button
@@ -225,7 +226,7 @@ function PayPage() {
                     사용가능한 포인트
                   </span>
                   <span className="text-main font-bold flex items-center">
-                    {userPoint.point.point.toLocaleString() || "0"} BP
+                    {userPoint.user.point.toLocaleString() || "0"} BP
                   </span>
                 </div>
               </div>
