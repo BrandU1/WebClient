@@ -40,6 +40,8 @@ function Success() {
     queryFn: () => getOrder(id as string),
   });
 
+  console.log(data);
+
   const finalPrice =
     data?.results.order.price! - data?.results.order.used_point!;
 

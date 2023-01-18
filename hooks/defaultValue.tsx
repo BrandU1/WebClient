@@ -1,51 +1,37 @@
-import { useEffect } from "react";
+import { useMemo, useState } from "react";
 import client from "@lib/api";
-import { useRecoilState } from "recoil";
-import { userInfo, userPoint } from "../recoil/user";
-import { useQuery } from "@tanstack/react-query";
-import { BranduBaseResponse, UserInterface } from "../types/privacy";
+import { UserInterface } from "../types/privacy";
 
-const useUserInfo = () => {
-  const [myPoint, setMyPoint] = useRecoilState(userPoint);
-  const [myInfo, setMyInfo] = useRecoilState(userInfo);
-
-  const fetchUserPoint = async () => {
-    try {
-      if (localStorage.getItem("accessToken")) {
-        const response = await client.get("/accounts/point");
-        setMyPoint(response.data);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+function useUserInfo() {
+  const [myInfo, setMyInfo] = useState<UserInterface>({
+    id: 0,
+    name: "",
+    nickname: "",
+    email: "",
+    phone_number: "",
+    profile_image: "",
+    social_link: "",
+    platforms: [],
+  });
 
   const fetchUserInfo = async () => {
     try {
-      if (localStorage.getItem("accessToken")) {
+      if (localStorage.getItem("access_token")) {
         const response = await client
           .get("accounts/me")
           .then((res) => res.data);
-        const { data, isLoading } = useQuery<BranduBaseResponse<UserInterface>>(
-          ["profile"],
-          response
-        );
-
-        setMyInfo(data?.results!);
-
-        console.log(data);
+        if (response?.results) {
+          setMyInfo(response.results);
+        }
       }
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
-  useEffect(() => {
-    fetchUserPoint().then();
+  useMemo(() => {
     fetchUserInfo().then();
   }, []);
 
-  return { myPoint, myInfo };
-};
+  return { myInfo };
+}
 
 export default useUserInfo;

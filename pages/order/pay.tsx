@@ -12,12 +12,14 @@ import MobilePay from "@icons/mobile-pay";
 import TransferPay from "@icons/transfer-pay";
 import Pricebar from "@components/pages/order/pricebar";
 import { PriceBarPrint } from "./index";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import client from "@lib/api";
 import { newOrder } from "../../recoil/order";
 import CheckBox from "@icons/checkBox";
-import { newUserData } from "../../recoil/user";
+import { userData } from "../../recoil/user";
 import Head from "next/head";
+import UseBranduQuery from "@hooks/useBranduQuery";
+import { Point } from "../../types/privacy";
 
 interface PaymentForm {
   point: number;
@@ -68,9 +70,7 @@ export interface OrderCreate {
 
 function PayPage() {
   const orderData = useRecoilValue(newOrder);
-  const userData = useRecoilValue(newUserData);
-
-  console.log(userData);
+  const userInfo = useRecoilValue(userData);
 
   const [priceBarPrint, setPriceBarPrint] = useState<PriceBarPrint[]>([]);
   const { register, handleSubmit, setValue, watch, reset } =
@@ -93,9 +93,17 @@ function PayPage() {
     },
   });
 
+  const getPoint = () => {
+    return client.get("accounts/point").then((res) => res.data);
+  };
+  const { data: userPoint, isLoading } = useQuery<Point>({
+    queryKey: ["point"],
+    queryFn: getPoint,
+  });
+
   /* 포인트 전액 사용 */
   const useAllPoint = () => {
-    setValue("point", userData.point);
+    setValue("point", userPoint?.point!);
     alert(watch("point") + " Point");
   };
 
@@ -159,7 +167,7 @@ function PayPage() {
       amount: (orderData?.orderPrice || 0) + 3000 - watch("point"),
       orderId: orderNumber,
       orderName: orderData?.name || "",
-      customerName: "박재현",
+      customerName: userInfo.user.name,
       useCardPoint: true,
       successUrl: `${document.location.origin}/order/waiting`,
       failUrl: `${document.location.origin}/order/waiting`,
@@ -212,7 +220,7 @@ function PayPage() {
                     autoComplete="off"
                     {...register("point", {
                       required: true,
-                      validate: (value) => value <= userData.point,
+                      validate: (value) => value <= userPoint?.point!,
                     })}
                   />
                   <button
@@ -227,7 +235,7 @@ function PayPage() {
                     사용가능한 포인트
                   </span>
                   <span className="text-main font-bold flex items-center">
-                    {userData.point.toLocaleString() || "0"} BP
+                    {userPoint?.point.toLocaleString() || "0"} BP
                   </span>
                 </div>
               </div>

@@ -1,55 +1,31 @@
 import { atom, selector } from "recoil";
-import { BranduBaseResponse, Point, UserInterface } from "../types/privacy";
-import { recoilPersist } from "recoil-persist";
-
-const { persistAtom } = recoilPersist();
+import { UserInterface } from "../types/privacy";
 
 interface UserRecoilState {
-  id: number;
-  name: string;
-  nickname: string;
-  profile_image: string;
-  point: number;
+  user: UserInterface;
 }
 
-export const userPoint = atom<Point | null>({
-  key: "userPoint",
-  default: null,
-  effects_UNSTABLE: [persistAtom],
-});
-
-export const userInfo = atom<UserInterface | null>({
-  key: "userInfo",
-  default: null,
-  effects_UNSTABLE: [persistAtom],
-});
-
-export const getUserPoint = selector<Point | null>({
-  key: "getUserPoint",
-  get: ({ get }) => {
-    return get(userPoint);
-  },
-});
-
-export const getUserInfo = selector<UserInterface | null>({
+export const userInfo = atom<UserInterface>({
   key: "getUserInfo",
-  get: ({ get }) => {
-    return get(userInfo);
+  default: {
+    id: 0,
+    name: "",
+    nickname: "",
+    email: "",
+    phone_number: "",
+    profile_image: "",
+    social_link: "",
+    platforms: [],
   },
 });
 
-export const newUserData = selector<UserRecoilState>({
-  key: "newUserData",
+export const userData = selector<UserRecoilState>({
+  key: "userDataState",
   get: ({ get }) => {
-    const point = get(getUserPoint);
-    const user = get(getUserInfo);
+    const info = get(userInfo);
 
     return {
-      id: user?.id || -1,
-      name: user?.name || "",
-      nickname: user?.nickname || "",
-      profile_image: user?.profile_image || "",
-      point: point?.point || 0,
+      user: info,
     };
   },
 });
