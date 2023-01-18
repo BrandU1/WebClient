@@ -6,11 +6,7 @@ import { useEffect, useState } from "react";
 import useBranduQuery from "@hooks/useBranduQuery";
 import { getAddress } from "@lib/fetches";
 import { selectedAddress } from "../../recoil/order";
-import {
-  AddressInterface,
-  BranduBaseResponse,
-  UserInterface,
-} from "../../types/privacy";
+import { AddressInterface, UserInterface } from "../../types/privacy";
 import client from "@lib/api";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";

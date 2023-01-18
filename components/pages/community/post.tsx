@@ -11,7 +11,6 @@ import {
 } from "../../../types/privacy";
 import { useRecoilValue } from "recoil";
 import { Link } from "react-scroll";
-import { userData } from "../../../recoil/user";
 import useUserInfo from "@hooks/defaultValue";
 
 interface Post {

@@ -32,6 +32,8 @@ const useUserInfo = () => {
         );
 
         setMyInfo(data?.results!);
+
+        console.log(data);
       }
     } catch (error) {
       console.log(error);

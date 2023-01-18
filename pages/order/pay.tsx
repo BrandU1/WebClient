@@ -16,7 +16,7 @@ import { useMutation } from "@tanstack/react-query";
 import client from "@lib/api";
 import { newOrder } from "../../recoil/order";
 import CheckBox from "@icons/checkBox";
-import { userData } from "../../recoil/user";
+import { newUserData } from "../../recoil/user";
 import Head from "next/head";
 
 interface PaymentForm {
@@ -68,7 +68,9 @@ export interface OrderCreate {
 
 function PayPage() {
   const orderData = useRecoilValue(newOrder);
-  const userPoint = useRecoilValue(userData);
+  const userData = useRecoilValue(newUserData);
+
+  console.log(userData);
 
   const [priceBarPrint, setPriceBarPrint] = useState<PriceBarPrint[]>([]);
   const { register, handleSubmit, setValue, watch, reset } =
@@ -93,7 +95,7 @@ function PayPage() {
 
   /* 포인트 전액 사용 */
   const useAllPoint = () => {
-    setValue("point", userPoint.point.point);
+    setValue("point", userData.point);
     alert(watch("point") + " Point");
   };
 
@@ -159,8 +161,8 @@ function PayPage() {
       orderName: orderData?.name || "",
       customerName: "박재현",
       useCardPoint: true,
-      successUrl: `${process.env.NEXT_PUBLIC_CLIENT_URL}/order/waiting`,
-      failUrl: `${process.env.NEXT_PUBLIC_CLIENT_URL}/order/waiting`,
+      successUrl: `${document.location.origin}/order/waiting`,
+      failUrl: `${document.location.origin}/order/waiting`,
     });
   };
 
@@ -210,7 +212,7 @@ function PayPage() {
                     autoComplete="off"
                     {...register("point", {
                       required: true,
-                      validate: (value) => value <= userPoint.point.point,
+                      validate: (value) => value <= userData.point,
                     })}
                   />
                   <button
@@ -225,7 +227,7 @@ function PayPage() {
                     사용가능한 포인트
                   </span>
                   <span className="text-main font-bold flex items-center">
-                    {userPoint.point.point.toLocaleString() || "0"} BP
+                    {userData.point.toLocaleString() || "0"} BP
                   </span>
                 </div>
               </div>
@@ -282,7 +284,7 @@ function PayPage() {
 
               <p className="text-xs text-subContent flex flex-col space-y-5 mx-5 mt-2">
                 개인정보 수집 이용 및 제 3자 제공 동의 <br />
-                <br /> 본인은 만 14세 이상이며, 주문 내용을 확인하였습니다.{" "}
+                <br /> 본인은 만 14세 이상이며, 주문 내용을 확인하였습니다.
                 <br />
                 <br />
                 (주)더미는 통신판매중개자로 거래 당사자가 아니므로, 판매자가

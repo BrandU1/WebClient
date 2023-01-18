@@ -209,8 +209,8 @@ function BasketList({ basketList }: BasketListProps) {
                       ></div>
                     </div>
                     <div>
-                      <div className="flex items-start space-x-80">
-                        <div className="w-24">
+                      <div className="flex items-start space-x-20">
+                        <div className="w-80">
                           <div>
                             <p className="text-subContent text-sm">
                               {res.custom_product.product.name}
