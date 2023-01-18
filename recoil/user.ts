@@ -15,7 +15,6 @@ export const userInfo = atom<UserInterface>({
     phone_number: "",
     profile_image: "",
     social_link: "",
-    point: 0,
     platforms: [],
   },
 });

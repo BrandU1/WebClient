@@ -42,6 +42,11 @@ function Success() {
 
   console.log(data);
 
+  const finalPrice =
+    data?.results.order.price! - data?.results.order.used_point!;
+
+  console.log(data);
+
   if (isLoading) {
     return <div></div>;
   }
@@ -60,9 +65,6 @@ function Success() {
         <div className="p-3 flex flex-col">
           <h2 className="text-[16px] ">주문내역</h2>
           {data?.results.products.map((product, index) => {
-            {
-              /* TODO: 이미지 URL 변경 */
-            }
             return (
               <div key={index}>
                 <div className="flex flex-row items-center my-2">
@@ -90,7 +92,9 @@ function Success() {
         <div className="p-3">
           <div className="flex items-center justify-between ">
             <span className="text-[#767676] text-sm">주문금액</span>
-            <span className="text-sm">{data?.results.order.price} 원</span>
+            <span className="text-sm">
+              {data?.results.order.price.toLocaleString()} 원
+            </span>
           </div>
           <div className="flex items-center justify-between mt-3">
             <span className="text-[#767676] text-sm">배송비</span>
@@ -98,15 +102,17 @@ function Success() {
           </div>
           <div className="flex items-center justify-between mt-3">
             <span className="text-[#767676] text-sm">쿠폰 사용</span>
-            <span className="text-sm">{data?.results.order.price} 원</span>
+            <span className="text-sm">0 원</span>
           </div>
           <div className="flex items-center justify-between mt-3">
             <span className="text-[#767676] text-sm">포인트 사용</span>
-            <span className="text-sm">{data?.results.order.price} 원</span>
+            <span className="text-sm">
+              {data?.results.order.used_point.toLocaleString()} 원
+            </span>
           </div>
           <div className="flex items-center justify-between mt-3">
             <span className="text-[#191919] text-[16px]">최종 결제 금액</span>
-            <span className="text-sm">{data?.results.order.price} 원</span>
+            <span className="text-sm">{finalPrice.toLocaleString()} 원</span>
           </div>
         </div>
         <div className="my-10 text-center">

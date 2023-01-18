@@ -1,9 +1,18 @@
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import client from "@lib/api";
 import { UserInterface } from "../types/privacy";
 
-const useUserInfo = () => {
-  const [myInfo, setMyInfo] = useState<UserInterface>();
+function useUserInfo() {
+  const [myInfo, setMyInfo] = useState<UserInterface>({
+    id: 0,
+    name: "",
+    nickname: "",
+    email: "",
+    phone_number: "",
+    profile_image: "",
+    social_link: "",
+    platforms: [],
+  });
 
   const fetchUserInfo = async () => {
     try {
@@ -18,11 +27,11 @@ const useUserInfo = () => {
     } catch (error) {}
   };
 
-  useEffect(() => {
+  useMemo(() => {
     fetchUserInfo().then();
   }, []);
 
   return { myInfo };
-};
+}
 
 export default useUserInfo;

@@ -40,7 +40,6 @@ export interface UserInterface {
   profile_image?: string;
   social_link?: string;
   platforms: Platform[];
-  point: number;
 }
 
 export interface Platform {
