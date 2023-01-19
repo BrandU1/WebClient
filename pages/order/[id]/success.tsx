@@ -4,7 +4,6 @@ import { useRouter } from "next/router";
 import { GetServerSideProps } from "next";
 import BranduLogo from "@icons/brandu-logo";
 import useBranduQuery from "@hooks/useBranduQuery";
-import Image from "next/image";
 import ImgAtom from "@atoms/imgatom";
 import Head from "next/head";
 import { OrderResponse } from "../../../types/privacy";
@@ -43,11 +42,7 @@ function Success() {
 
   // console.log(data?.results);
 
-<<<<<<< Updated upstream
   const finalPrice = data?.results.price! - data?.results.used_point!;
-=======
-  const finalPrice = data?.results.price!;
->>>>>>> Stashed changes
 
   if (isLoading) {
     return <div></div>;
@@ -66,30 +61,7 @@ function Success() {
         <div className="max-w-4xl m-auto border-b border-lightGary flex justify-center mt-[50px]"></div>
         <div className="p-3 flex flex-col">
           <h2 className="text-[16px] ">주문내역</h2>
-<<<<<<< Updated upstream
-          {data?.results.products.map((product, index) => {
-            return (
-              <div key={index}>
-                <div className="flex flex-row items-center my-2">
-                  {/*<div className="w-20 h-20 relative">*/}
-                  {/*  <ImgAtom*/}
-                  {/*    exist={product.product.image}*/}
-                  {/*    src={`https://brandu-server-bucket.s3.amazonaws.com/media/${product.product.image}`}*/}
-                  {/*    width={80}*/}
-                  {/*    height={80}*/}
-                  {/*    alt={product.product.product.name}*/}
-                  {/*  />*/}
-                  {/*</div>*/}
-                  <div className="ml-2 flex flex-col">
-                    <p className="text-[#767676] text-sm">
-                      {product.product.product.name}
-                    </p>
-                    <p className="text-[#191919] font-normal ">
-                      {product.product.product.price.toLocaleString()} 원
-                    </p>
-                  </div>
-                </div>
-=======
+
           {/*{data?.results.products.map((product, index) => {*/}
           {/*  return (*/}
           <div key={data?.results.id}>
@@ -106,7 +78,6 @@ function Success() {
                   height={80}
                   alt={String(data?.results.products[0].id)}
                 />
->>>>>>> Stashed changes
               </div>
               <div className="ml-2 flex flex-col">
                 <p className="text-[#767676] text-sm">{data?.results.name}</p>
@@ -139,11 +110,7 @@ function Success() {
           <div className="flex items-center justify-between mt-3">
             <span className="text-[#767676] text-sm">포인트 사용</span>
             <span className="text-sm">
-<<<<<<< Updated upstream
-              {data?.results.used_point.toLocaleString()} 원
-=======
               {data?.results.used_point.toLocaleString() ?? 0} 원
->>>>>>> Stashed changes
             </span>
           </div>
           <div className="flex items-center justify-between mt-3">
@@ -164,68 +131,6 @@ function Success() {
   );
 }
 
-<<<<<<< Updated upstream
-export interface OrderResponse {
-  address: {
-    address: string;
-    detail_address: string;
-    id: number;
-    is_main: boolean;
-    memo?: string;
-    name: string;
-    phone_number: string;
-    recipient: string;
-    road_name_address: string;
-    zip_code: string;
-  };
-  coupon?: string;
-  created: string;
-  id: number;
-  is_confirm: boolean;
-  is_payment_confirm: boolean;
-  method: string;
-  name: string;
-  order_number: string;
-  order_status: string;
-  payment: {
-    created: string;
-    id: number;
-    is_deleted: boolean;
-    method: string;
-    name: string;
-    order: number;
-    payment_key: string;
-    platform: string;
-    price: number;
-    recipient_url: string;
-    updated: string;
-  };
-  price: number;
-  products: {
-    count: number;
-    discount?: number;
-    id: number;
-    is_review_written: boolean;
-    option?: string;
-    order: number;
-    product: {
-      id: number;
-      image: string;
-      product: {
-        backdrop_image: string;
-        id: number;
-        is_wish: boolean;
-        name: string;
-        price: number;
-      };
-    };
-    profile: number;
-  }[];
-  used_point: number;
-}
-
-=======
->>>>>>> Stashed changes
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query;
   const queryClient = new QueryClient();
