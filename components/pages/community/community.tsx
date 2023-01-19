@@ -5,6 +5,7 @@ import InfiniteScroll from "@components/pages/community/infinityscroll";
 import client from "@lib/api";
 import UseBranduQuery from "@hooks/useBranduQuery";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 interface bestCommunityProps {
   bestCommunity: BestPost[];
@@ -12,16 +13,6 @@ interface bestCommunityProps {
 
 function Community({ bestCommunity }: bestCommunityProps) {
   const router = useRouter();
-  const getScrapped = () => {
-    return client.get("accounts/scraps").then((res) => res.data);
-  };
-  const { data: scrappedList, isLoading: scrapLoading } = UseBranduQuery<
-    scrapList[]
-  >({
-    queryKey: ["scrap"],
-    queryFn: getScrapped,
-  });
-  console.log(scrappedList?.results);
 
   return (
     <>
@@ -35,17 +26,7 @@ function Community({ bestCommunity }: bestCommunityProps) {
             {bestCommunity?.map((post, index) => {
               return (
                 <div className="relative">
-                  <div
-                    onClick={() => {
-                      router.push({
-                        pathname: `/community/${post.id}`,
-                        query: {
-                          is_scrapped: post.is_scrap ?? false,
-                          is_liked: post.is_like ?? false,
-                        },
-                      });
-                    }}
-                  >
+                  <Link key={post.id} href={`/community/${post.id}`}>
                     <div className=" w-[156px] h-[200px]">
                       <ImgAtom
                         exist={post.backdrop_image}
@@ -55,16 +36,16 @@ function Community({ bestCommunity }: bestCommunityProps) {
                         alt={"searchResult"}
                       />
                     </div>
-
-                    <div className="absolute rounded-xl bg-main text-white font-bold w-7 h-7 top-2 left-2 flex justify-center items-center">
-                      {index + 1}
-                    </div>
-                    <p className="text-sm mt-2 text-subContent">{post.title}</p>
+                  </Link>
+                  <div className="absolute rounded-xl bg-main text-white font-bold w-7 h-7 top-2 left-2 flex justify-center items-center">
+                    {index + 1}
                   </div>
-                  <div className="absolute top-40 left-[116px]">
+                  <p className="text-sm mt-2 text-subContent">{post.title}</p>
+
+                  <div className="absolute top-40 left-[116px] rounded-xl">
                     <ScrapButton
                       id={post.id}
-                      scrap={post.is_scrap ?? false}
+                      scrap={post?.is_scrap}
                       li_width={28}
                       li_height={30}
                     />

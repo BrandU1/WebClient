@@ -21,6 +21,8 @@ function ScrapButton({ id, scrap, li_width, li_height }: scrapProp) {
     },
     {
       onSuccess: () => {
+        queryClient.invalidateQueries(["edit", id]);
+        queryClient.invalidateQueries(["bestPost"]);
         queryClient.invalidateQueries(["scrap"]);
         handleAlertOpen("스크랩북", true, "scrap");
       },
@@ -35,10 +37,14 @@ function ScrapButton({ id, scrap, li_width, li_height }: scrapProp) {
     },
     {
       onSuccess: async () => {
+        await queryClient.invalidateQueries(["edit", id]);
+        await queryClient.invalidateQueries(["bestPost"]);
         await queryClient.invalidateQueries(["scrap"]);
       },
     }
   );
+
+  //alert
   const [toast, setToast] = useRecoilState<ToastState>(ToastStateAtom);
   const handleAlertOpen = (type: string, alert: boolean, path: string) => {
     const temp = { ...toast };
@@ -57,15 +63,13 @@ function ScrapButton({ id, scrap, li_width, li_height }: scrapProp) {
           mutation.mutate(id);
         }
       }}
-      className={`${
-        scrap ? "bg-main" : "bg-[#DFDFE0]"
-      } pickBtn w-full h-full rounded-xl flex justify-center items-center`}
+      className={`pickBtn w-full h-full rounded-full flex justify-center items-center`}
     >
       <ScrapIcon
-        color={`${scrap ? "#0CABA8" : "#D9D9D9CC"}`}
+        color={scrap ? "#0CABA8" : "#DFDFE0"}
         width={li_width}
         height={li_height}
-        stroke="#fff"
+        stroke={scrap ? "#0CABA8" : "#DFDFE0"}
       />
     </div>
   );

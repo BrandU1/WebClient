@@ -185,19 +185,21 @@ export interface Community {
   created: string;
   hits: number;
   id: number;
+  is_like: boolean;
   likes: number;
   profile: number;
+  is_scrap: boolean;
   scraps: number;
   title: string;
 }
 
 export interface BestPost {
   backdrop_image: string;
+  created: string;
   id: number;
-  likes_count: number;
+  profile: number;
   title: string;
-  is_scrap?: boolean;
-  is_like?: boolean;
+  is_scrap: boolean;
 }
 
 export interface RecommendComment {
