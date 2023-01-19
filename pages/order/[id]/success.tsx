@@ -40,12 +40,9 @@ function Success() {
     queryFn: () => getOrder(id as string),
   });
 
-  console.log(data);
+  // console.log(data?.results);
 
-  const finalPrice =
-    data?.results.order.price! - data?.results.order.used_point!;
-
-  console.log(data);
+  const finalPrice = data?.results.price! - data?.results.used_point!;
 
   if (isLoading) {
     return <div></div>;
@@ -68,19 +65,21 @@ function Success() {
             return (
               <div key={index}>
                 <div className="flex flex-row items-center my-2">
-                  <div className="w-20 h-20 relative">
-                    <ImgAtom
-                      exist={product.backdrop_image}
-                      src={`https://brandu-server-bucket.s3.amazonaws.com/media/${product.backdrop_image}`}
-                      width={80}
-                      height={80}
-                      alt={product.name}
-                    />
-                  </div>
+                  {/*<div className="w-20 h-20 relative">*/}
+                  {/*  <ImgAtom*/}
+                  {/*    exist={product.product.image}*/}
+                  {/*    src={`https://brandu-server-bucket.s3.amazonaws.com/media/${product.product.image}`}*/}
+                  {/*    width={80}*/}
+                  {/*    height={80}*/}
+                  {/*    alt={product.product.product.name}*/}
+                  {/*  />*/}
+                  {/*</div>*/}
                   <div className="ml-2 flex flex-col">
-                    <p className="text-[#767676] text-sm">{product.name}</p>
+                    <p className="text-[#767676] text-sm">
+                      {product.product.product.name}
+                    </p>
                     <p className="text-[#191919] font-normal ">
-                      {product.price.toLocaleString()} 원
+                      {product.product.product.price.toLocaleString()} 원
                     </p>
                   </div>
                 </div>
@@ -93,7 +92,7 @@ function Success() {
           <div className="flex items-center justify-between ">
             <span className="text-[#767676] text-sm">주문금액</span>
             <span className="text-sm">
-              {data?.results.order.price.toLocaleString()} 원
+              {data?.results.price.toLocaleString()} 원
             </span>
           </div>
           <div className="flex items-center justify-between mt-3">
@@ -107,7 +106,7 @@ function Success() {
           <div className="flex items-center justify-between mt-3">
             <span className="text-[#767676] text-sm">포인트 사용</span>
             <span className="text-sm">
-              {data?.results.order.used_point.toLocaleString()} 원
+              {data?.results.used_point.toLocaleString()} 원
             </span>
           </div>
           <div className="flex items-center justify-between mt-3">
@@ -129,24 +128,62 @@ function Success() {
 }
 
 export interface OrderResponse {
-  order: {
-    id: number;
-    order_number: string;
-    created: string;
-    recipient: string;
-    phone_number: string;
+  address: {
+    address: string;
     detail_address: string;
-    zip_code: string;
-    road_address: string;
-    price: number;
-    used_point: number;
-  };
-  products: {
     id: number;
+    is_main: boolean;
+    memo?: string;
     name: string;
-    backdrop_image: string;
+    phone_number: string;
+    recipient: string;
+    road_name_address: string;
+    zip_code: string;
+  };
+  coupon?: string;
+  created: string;
+  id: number;
+  is_confirm: boolean;
+  is_payment_confirm: boolean;
+  method: string;
+  name: string;
+  order_number: string;
+  order_status: string;
+  payment: {
+    created: string;
+    id: number;
+    is_deleted: boolean;
+    method: string;
+    name: string;
+    order: number;
+    payment_key: string;
+    platform: string;
     price: number;
+    recipient_url: string;
+    updated: string;
+  };
+  price: number;
+  products: {
+    count: number;
+    discount?: number;
+    id: number;
+    is_review_written: boolean;
+    option?: string;
+    order: number;
+    product: {
+      id: number;
+      image: string;
+      product: {
+        backdrop_image: string;
+        id: number;
+        is_wish: boolean;
+        name: string;
+        price: number;
+      };
+    };
+    profile: number;
   }[];
+  used_point: number;
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
