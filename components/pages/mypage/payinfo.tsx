@@ -105,7 +105,11 @@ function PayInfo({ order }: payProps) {
       >
         {data?.results.map((list, idx) => {
           return (
-            <div className="flex flex-row justify-between border-b border-gray pb-4 mt-5">
+            <div
+              className={`flex flex-row justify-between border-b border-gray pb-4 mt-5 ${
+                list.order_status === "결제 완료" ? "block" : "hidden"
+              }`}
+            >
               <div className="flex flex-row">
                 <div className="flex items-center flex-col">
                   <span>{list.created.slice(0, 10)} 주문</span>
