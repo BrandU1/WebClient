@@ -108,7 +108,7 @@ function Profile() {
               <div className="relative">
                 <div className="w-48 h-48 bg-[#F5F5F5] rounded-xl" />
                 <div className="absolute top-36 left-36">
-                  <ScrapButton width={14} height={18} />
+                  {/*<ScrapButton width={14} height={18} />*/}
                 </div>
                 <h2 className="text-subContent text-sm mt-2">
                   브랜뉴로 만들어가는 우리집 리뉴얼

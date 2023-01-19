@@ -222,7 +222,7 @@ function Nav() {
         const temp = { ...toast };
         temp.alert = false;
         setToast(temp);
-      }, 5000);
+      }, 2000);
       return () => {
         clearTimeout(timer);
       };
@@ -423,18 +423,16 @@ function Nav() {
                 <Link href="/scrap">
                   {path.includes("scrap") ? (
                     <ScrapIcon
-                      id={0}
                       color="none"
-                      width={20}
-                      height={19}
+                      width={30}
+                      height={30}
                       stroke="#0CABA8"
                     />
                   ) : (
                     <ScrapIcon
-                      id={0}
                       color="none"
-                      width={20}
-                      height={19}
+                      width={30}
+                      height={30}
                       stroke="#767676"
                     />
                   )}
