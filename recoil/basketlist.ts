@@ -16,7 +16,14 @@ interface customProps {
   category: number;
   view_count: number;
 }
-const { persistAtom } = recoilPersist();
+
+const sessionStorage =
+  typeof window !== "undefined" ? window.sessionStorage : undefined;
+
+const { persistAtom } = recoilPersist({
+  key: "recoil-persist",
+  storage: sessionStorage,
+});
 
 export const customRecoil = atom<customProps>({
   key: "basketList",

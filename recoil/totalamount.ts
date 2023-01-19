@@ -29,7 +29,14 @@ interface OrderPrice {
 //   storage: sessionStorage,
 // });
 
-const { persistAtom } = recoilPersist();
+// const { persistAtom } = recoilPersist();
+const sessionStorage =
+  typeof window !== "undefined" ? window.sessionStorage : undefined;
+
+const { persistAtom } = recoilPersist({
+  key: "recoil-persist",
+  storage: sessionStorage,
+});
 
 export const basketPurchase = atom<Basket[]>({
   key: "basketPurchase",
@@ -48,10 +55,9 @@ export const purchaseProducts = selector<Basket[]>({
   get: ({ get }) => {
     const basketPurchaseList = get(basketPurchase);
     const checkedList = get(basketCheckedList);
-    const purchaseProducts = basketPurchaseList.filter((item) =>
+    return basketPurchaseList.filter((item) =>
       checkedList.includes(item.custom_product.product.id)
     );
-    return purchaseProducts;
   },
 });
 

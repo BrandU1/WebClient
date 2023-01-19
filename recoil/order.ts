@@ -3,7 +3,13 @@ import { AddressInterface } from "../types/privacy";
 import { atom, selector } from "recoil";
 import { purchaseProducts } from "./totalamount";
 
-const { persistAtom } = recoilPersist();
+const sessionStorage =
+  typeof window !== "undefined" ? window.sessionStorage : undefined;
+
+const { persistAtom } = recoilPersist({
+  key: "recoil-persist",
+  storage: sessionStorage,
+});
 
 interface OrderRecoilState {
   name: string;
