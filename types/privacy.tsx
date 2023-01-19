@@ -168,14 +168,16 @@ export interface SubCategories {
 }
 
 export interface FollowList {
-  follower: FollowingProfile[];
-  following: FollowingProfile[];
+  follower: number;
+  followers: FollowingProfile[];
+  following: number;
+  followings: FollowingProfile[];
 }
 
 export interface FollowingProfile {
   id: number;
-  nickname: string;
-  social_link: string;
+  nickname?: string;
+  social_link?: string;
 }
 
 export interface Community {

@@ -28,7 +28,7 @@ function FollowComp({ tab, data }: FollowProp) {
             followTab === 0 ? "bg-main text-white" : "text-main"
           }`}
         >
-          <span>팔로워 ({data?.follower.length})</span>
+          <span>팔로워 ({data?.follower})</span>
         </button>
         <button
           onClick={() => setFollowTab(1)}
@@ -36,13 +36,13 @@ function FollowComp({ tab, data }: FollowProp) {
             followTab === 1 ? "bg-main text-white" : "text-main"
           }`}
         >
-          <span>팔로잉 ({data?.following.length})</span>
+          <span>팔로잉 ({data?.following})</span>
         </button>
       </div>
       {/*팔로워 리스트*/}
       <div className={`${followTab === 1 ? "hidden" : null}`}>
         <div className="mt-5 grid grid-cols-3 justify-between space-5">
-          {data?.follower.map((follower, index) => {
+          {data?.followers.map((follower, index) => {
             return (
               <div
                 className="flex flex-row justify-between mb-5 ml-5 "
@@ -66,7 +66,7 @@ function FollowComp({ tab, data }: FollowProp) {
       {/*팔로잉 리스트*/}
       <div className={`${followTab === 0 ? "hidden" : null}`}>
         <div className="mt-5 grid grid-cols-3 justify-between space-5">
-          {data?.following.map((following, index) => {
+          {data?.followings.map((following, index) => {
             return (
               <div
                 className="flex flex-row justify-between mb-5 ml-5 "
