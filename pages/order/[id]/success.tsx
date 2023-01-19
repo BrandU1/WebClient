@@ -7,6 +7,7 @@ import useBranduQuery from "@hooks/useBranduQuery";
 import Image from "next/image";
 import ImgAtom from "@atoms/imgatom";
 import Head from "next/head";
+import { OrderResponse } from "../../../types/privacy";
 
 interface Bucket {
   id: number;
@@ -42,7 +43,11 @@ function Success() {
 
   // console.log(data?.results);
 
+<<<<<<< Updated upstream
   const finalPrice = data?.results.price! - data?.results.used_point!;
+=======
+  const finalPrice = data?.results.price!;
+>>>>>>> Stashed changes
 
   if (isLoading) {
     return <div></div>;
@@ -61,6 +66,7 @@ function Success() {
         <div className="max-w-4xl m-auto border-b border-lightGary flex justify-center mt-[50px]"></div>
         <div className="p-3 flex flex-col">
           <h2 className="text-[16px] ">주문내역</h2>
+<<<<<<< Updated upstream
           {data?.results.products.map((product, index) => {
             return (
               <div key={index}>
@@ -83,9 +89,36 @@ function Success() {
                     </p>
                   </div>
                 </div>
+=======
+          {/*{data?.results.products.map((product, index) => {*/}
+          {/*  return (*/}
+          <div key={data?.results.id}>
+            <div className="flex flex-row items-center my-2">
+              <div className="w-20 h-20 relative">
+                <ImgAtom
+                  exist={
+                    data?.results.products[0].product.product.backdrop_image!
+                  }
+                  src={
+                    data?.results.products[0].product.product.backdrop_image!
+                  }
+                  width={80}
+                  height={80}
+                  alt={String(data?.results.products[0].id)}
+                />
+>>>>>>> Stashed changes
               </div>
-            );
-          })}
+              <div className="ml-2 flex flex-col">
+                <p className="text-[#767676] text-sm">{data?.results.name}</p>
+                <p className="text-[#191919] font-normal ">
+                  {data?.results.products[0].product.product.price.toLocaleString()}
+                  원
+                </p>
+              </div>
+            </div>
+          </div>
+          {/*  );*/}
+          {/*})}*/}
         </div>
         <div className="max-w-4xl m-auto border-b border-[#EDEDED] flex justify-center mt-1"></div>
         <div className="p-3">
@@ -101,12 +134,16 @@ function Success() {
           </div>
           <div className="flex items-center justify-between mt-3">
             <span className="text-[#767676] text-sm">쿠폰 사용</span>
-            <span className="text-sm">0 원</span>
+            <span className="text-sm">{data?.results.coupon ?? 0} 원</span>
           </div>
           <div className="flex items-center justify-between mt-3">
             <span className="text-[#767676] text-sm">포인트 사용</span>
             <span className="text-sm">
+<<<<<<< Updated upstream
               {data?.results.used_point.toLocaleString()} 원
+=======
+              {data?.results.used_point.toLocaleString() ?? 0} 원
+>>>>>>> Stashed changes
             </span>
           </div>
           <div className="flex items-center justify-between mt-3">
@@ -127,6 +164,7 @@ function Success() {
   );
 }
 
+<<<<<<< Updated upstream
 export interface OrderResponse {
   address: {
     address: string;
@@ -186,6 +224,8 @@ export interface OrderResponse {
   used_point: number;
 }
 
+=======
+>>>>>>> Stashed changes
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query;
   const queryClient = new QueryClient();

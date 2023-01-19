@@ -22,9 +22,9 @@ function Inquiry() {
           <button className="w-24 h-9 bg-white text-main text-sm border border-main rounded-xl flex justify-center items-center">
             배송조회
           </button>
-          <button className="w-24 h-9 bg-white text-main text-sm border border-main rounded-xl flex justify-center items-center">
-            주문취소
-          </button>
+          {/*<button className="w-24 h-9 bg-white text-main text-sm border border-main rounded-xl flex justify-center items-center">*/}
+          {/*  주문취소*/}
+          {/*</button>*/}
         </div>
       </div>
       <div className="orderer px-5 mt-5 border-b border-gray pb-4">

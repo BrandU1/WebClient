@@ -3,9 +3,10 @@ import Link from "next/link";
 
 interface tabProps {
   num: number;
+  setStateNums?: any;
 }
 
-function SideTab({ num }: tabProps) {
+function SideTab({ num, setStateNums }: tabProps) {
   const [tabNum, setTabNum] = useState<number>(num ?? 0);
   const [stateNum, setStateNum] = useState<number>(0);
   return (
@@ -27,6 +28,7 @@ function SideTab({ num }: tabProps) {
             className={`${stateNum == 0 && "text-main font-bold"}`}
             onClick={() => {
               setStateNum(0);
+              setStateNums(0);
             }}
           >
             전체
@@ -35,6 +37,7 @@ function SideTab({ num }: tabProps) {
             className={`${stateNum == 1 && "text-main font-bold"}`}
             onClick={() => {
               setStateNum(1);
+              setStateNums(1);
             }}
           >
             결제완료
@@ -43,6 +46,7 @@ function SideTab({ num }: tabProps) {
             className={`${stateNum == 2 && "text-main font-bold"}`}
             onClick={() => {
               setStateNum(2);
+              setStateNums(2);
             }}
           >
             배송 중
@@ -51,6 +55,7 @@ function SideTab({ num }: tabProps) {
             className={`${stateNum == 3 && "text-main font-bold"}`}
             onClick={() => {
               setStateNum(3);
+              setStateNums(3);
             }}
           >
             배송완료
@@ -59,6 +64,7 @@ function SideTab({ num }: tabProps) {
             className={`${stateNum == 4 && "text-main font-bold"}`}
             onClick={() => {
               setStateNum(4);
+              setStateNums(4);
             }}
           >
             구매확정
