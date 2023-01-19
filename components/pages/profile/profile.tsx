@@ -29,15 +29,7 @@ function Profile() {
     BranduBaseResponse<communityProfile>
   >(["postProfile", id], getProfile);
 
-  const getFollow = () => {
-    return client.get("accounts/follows").then((res) => res.data);
-  };
-  const { data, isLoading } = useQuery<BranduBaseResponse<FollowList>>(
-    ["follow"],
-    getFollow
-  );
-
-  if (isLoading) {
+  if (profileLoading) {
     return <div></div>;
   }
 
@@ -59,7 +51,7 @@ function Profile() {
             className="flex flex-row"
             onClick={() => {
               router.push({
-                pathname: "/profile/follow",
+                pathname: `/profile/${profileData?.results.id}/follow`,
                 query: {
                   tab: 0,
                 },
@@ -74,7 +66,7 @@ function Profile() {
             className="flex flex-row"
             onClick={() => {
               router.push({
-                pathname: "/profile/follow",
+                pathname: `/profile/${profileData?.results.id}/follow`,
                 query: {
                   tab: 1,
                 },
