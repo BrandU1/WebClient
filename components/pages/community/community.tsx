@@ -1,18 +1,28 @@
-import TopCommunity from "@components/pages/community/topcommunity";
 import ScrapButton from "@common/scrapbutton";
-import BrandUser from "@components/pages/community/branduser";
-import CategoryPost from "@components/pages/community/categorypost";
-import { BestPost } from "../../../types/privacy";
+import { BestPost, scrapList } from "../../../types/privacy";
 import ImgAtom from "@atoms/imgatom";
-import Link from "next/link";
 import InfiniteScroll from "@components/pages/community/infinityscroll";
-import Image from "next/image";
+import client from "@lib/api";
+import UseBranduQuery from "@hooks/useBranduQuery";
+import { useRouter } from "next/router";
 
 interface bestCommunityProps {
   bestCommunity: BestPost[];
 }
 
 function Community({ bestCommunity }: bestCommunityProps) {
+  const router = useRouter();
+  const getScrapped = () => {
+    return client.get("accounts/scraps").then((res) => res.data);
+  };
+  const { data: scrappedList, isLoading: scrapLoading } = UseBranduQuery<
+    scrapList[]
+  >({
+    queryKey: ["scrap"],
+    queryFn: getScrapped,
+  });
+  console.log(scrappedList?.results);
+
   return (
     <>
       <div className="flex flex-col mt-10">
@@ -24,8 +34,18 @@ function Community({ bestCommunity }: bestCommunityProps) {
           <div className="grid grid-cols-5 gap-y-5 gap-x-2 mt-5">
             {bestCommunity?.map((post, index) => {
               return (
-                <Link key={index} href={`/community/${post.id}`}>
-                  <div className="relative">
+                <div className="relative">
+                  <div
+                    onClick={() => {
+                      router.push({
+                        pathname: `/community/${post.id}`,
+                        query: {
+                          is_scrapped: post.is_scrap ?? false,
+                          is_liked: post.is_like ?? false,
+                        },
+                      });
+                    }}
+                  >
                     <div className=" w-[156px] h-[200px]">
                       <ImgAtom
                         exist={post.backdrop_image}
@@ -41,7 +61,15 @@ function Community({ bestCommunity }: bestCommunityProps) {
                     </div>
                     <p className="text-sm mt-2 text-subContent">{post.title}</p>
                   </div>
-                </Link>
+                  <div className="absolute top-40 left-[116px]">
+                    <ScrapButton
+                      id={post.id}
+                      scrap={post.is_scrap ?? false}
+                      li_width={28}
+                      li_height={30}
+                    />
+                  </div>
+                </div>
               );
             })}
           </div>

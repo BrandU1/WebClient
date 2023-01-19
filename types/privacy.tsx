@@ -196,6 +196,8 @@ export interface BestPost {
   id: number;
   likes_count: number;
   title: string;
+  is_scrap?: boolean;
+  is_like?: boolean;
 }
 
 export interface RecommendComment {
@@ -237,4 +239,12 @@ export interface communityProfile {
   followers: number;
   followings: number;
   platforms: Platform[];
+}
+
+export interface scrapList {
+  backdrop_image: string;
+  created: string;
+  id: number;
+  profile: number;
+  title: string;
 }
