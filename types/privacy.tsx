@@ -105,12 +105,14 @@ export interface SearchBase {
   posts: searchPost;
   products: searchProduct;
 }
+
 export interface searchPost {
   count: number;
   next: number;
   previous: number;
   results: searchPost[];
 }
+
 export interface searchPost {
   id: number;
   title: string;
@@ -118,6 +120,7 @@ export interface searchPost {
   profile: number;
   created: string;
 }
+
 export interface searchProduct {
   count: number;
   next: number;
@@ -143,6 +146,7 @@ export interface Point {
   point: number;
   point_history: PointHistory[];
 }
+
 export interface PointHistory {
   id: number;
   memo: string;
@@ -150,11 +154,13 @@ export interface PointHistory {
   is_use: boolean;
   created: string;
 }
+
 export interface Categories {
   id: number;
   name: string;
   sub_categories: SubCategories[];
 }
+
 export interface SubCategories {
   id: number;
   name: string;
@@ -162,14 +168,16 @@ export interface SubCategories {
 }
 
 export interface FollowList {
-  follower: FollowingProfile[];
-  following: FollowingProfile[];
+  follower: number;
+  followers: FollowingProfile[];
+  following: number;
+  followings: FollowingProfile[];
 }
 
 export interface FollowingProfile {
   id: number;
-  nickname: string;
-  social_link: string;
+  nickname?: string;
+  social_link?: string;
 }
 
 export interface Community {
@@ -179,33 +187,42 @@ export interface Community {
   created: string;
   hits: number;
   id: number;
+  is_like: boolean;
   likes: number;
   profile: number;
+  is_scrap: boolean;
   scraps: number;
   title: string;
 }
+
 export interface BestPost {
   backdrop_image: string;
+  created: string;
   id: number;
-  likes_count: number;
+  profile: number;
   title: string;
+  is_scrap: boolean;
 }
+
 export interface RecommendComment {
   id: number;
   profile: RecommendProfile;
   comment: string;
   created: string;
 }
+
 export interface RecommendProfile {
   id: number;
   name: string;
   nickname: string;
   profile_image: string;
 }
+
 export interface infiniteScroll {
   pageParams: [];
   pages: infinitePost[];
 }
+
 export interface infinitePost {
   count: number;
   next: string;
@@ -226,4 +243,12 @@ export interface communityProfile {
   followers: number;
   followings: number;
   platforms: Platform[];
+}
+
+export interface scrapList {
+  backdrop_image: string;
+  created: string;
+  id: number;
+  profile: number;
+  title: string;
 }

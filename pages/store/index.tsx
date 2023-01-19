@@ -9,7 +9,7 @@ function Index() {
     return client.get("products/contents/hot-deal").then((res) => res.data);
   };
   const { data, isLoading } = useQuery<BranduBaseResponse<HotDeal[]>>(
-    ["store"],
+    ["hotDeal"],
     getStore
   );
 

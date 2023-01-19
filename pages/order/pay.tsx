@@ -12,12 +12,14 @@ import MobilePay from "@icons/mobile-pay";
 import TransferPay from "@icons/transfer-pay";
 import Pricebar from "@components/pages/order/pricebar";
 import { PriceBarPrint } from "./index";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import client from "@lib/api";
 import { newOrder } from "../../recoil/order";
 import CheckBox from "@icons/checkBox";
 import { userData } from "../../recoil/user";
 import Head from "next/head";
+import UseBranduQuery from "@hooks/useBranduQuery";
+import { Point } from "../../types/privacy";
 
 interface PaymentForm {
   point: number;
@@ -68,7 +70,7 @@ export interface OrderCreate {
 
 function PayPage() {
   const orderData = useRecoilValue(newOrder);
-  const userPoint = useRecoilValue(userData);
+  const userInfo = useRecoilValue(userData);
 
   const [priceBarPrint, setPriceBarPrint] = useState<PriceBarPrint[]>([]);
   const { register, handleSubmit, setValue, watch, reset } =
@@ -91,9 +93,17 @@ function PayPage() {
     },
   });
 
+  const getPoint = () => {
+    return client.get("accounts/point").then((res) => res.data);
+  };
+  const { data: userPoint, isLoading } = useQuery<Point>({
+    queryKey: ["point"],
+    queryFn: getPoint,
+  });
+
   /* 포인트 전액 사용 */
   const useAllPoint = () => {
-    setValue("point", userPoint.point.point);
+    setValue("point", userPoint?.point!);
     alert(watch("point") + " Point");
   };
 
@@ -148,7 +158,7 @@ function PayPage() {
   };
 
   async function getTossPayments() {
-    return await loadTossPayments(process.env.NEXT_PUBLIC_TOSS_KEY || "");
+    return await loadTossPayments(process.env.NEXT_PUBLIC_TOSS_KEY!);
   }
 
   const requestTossPayment = async (orderNumber: string) => {
@@ -157,10 +167,10 @@ function PayPage() {
       amount: (orderData?.orderPrice || 0) + 3000 - watch("point"),
       orderId: orderNumber,
       orderName: orderData?.name || "",
-      customerName: "박재현",
+      customerName: userInfo.user.name,
       useCardPoint: true,
-      successUrl: `${process.env.NEXT_PUBLIC_CLIENT_URL}/order/waiting`,
-      failUrl: `${process.env.NEXT_PUBLIC_CLIENT_URL}/order/waiting`,
+      successUrl: `${document.location.origin}/order/waiting`,
+      failUrl: `${document.location.origin}/order/waiting`,
     });
   };
 
@@ -210,7 +220,7 @@ function PayPage() {
                     autoComplete="off"
                     {...register("point", {
                       required: true,
-                      validate: (value) => value <= userPoint.point.point,
+                      validate: (value) => value <= userPoint?.point!,
                     })}
                   />
                   <button
@@ -225,7 +235,7 @@ function PayPage() {
                     사용가능한 포인트
                   </span>
                   <span className="text-main font-bold flex items-center">
-                    {userPoint.point.point.toLocaleString() || "0"} BP
+                    {userPoint?.point.toLocaleString() || "0"} BP
                   </span>
                 </div>
               </div>
@@ -282,7 +292,7 @@ function PayPage() {
 
               <p className="text-xs text-subContent flex flex-col space-y-5 mx-5 mt-2">
                 개인정보 수집 이용 및 제 3자 제공 동의 <br />
-                <br /> 본인은 만 14세 이상이며, 주문 내용을 확인하였습니다.{" "}
+                <br /> 본인은 만 14세 이상이며, 주문 내용을 확인하였습니다.
                 <br />
                 <br />
                 (주)더미는 통신판매중개자로 거래 당사자가 아니므로, 판매자가

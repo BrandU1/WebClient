@@ -30,7 +30,6 @@ export default function App({ Component, pageProps }: AppProps) {
             <div id="main-view" className="max-w-4xl m-auto">
               <Component {...pageProps} />
             </div>
-
             <Footer />
           </Hydrate>
         </QueryClientProvider>

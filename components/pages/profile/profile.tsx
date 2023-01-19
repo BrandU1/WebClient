@@ -29,15 +29,7 @@ function Profile() {
     BranduBaseResponse<communityProfile>
   >(["postProfile", id], getProfile);
 
-  const getFollow = () => {
-    return client.get("accounts/follows").then((res) => res.data);
-  };
-  const { data, isLoading } = useQuery<BranduBaseResponse<FollowList>>(
-    ["follow"],
-    getFollow
-  );
-
-  if (isLoading) {
+  if (profileLoading) {
     return <div></div>;
   }
 
@@ -59,7 +51,7 @@ function Profile() {
             className="flex flex-row"
             onClick={() => {
               router.push({
-                pathname: "/profile/follow",
+                pathname: `/profile/${profileData?.results.id}/follow`,
                 query: {
                   tab: 0,
                 },
@@ -74,7 +66,7 @@ function Profile() {
             className="flex flex-row"
             onClick={() => {
               router.push({
-                pathname: "/profile/follow",
+                pathname: `/profile/${profileData?.results.id}/follow`,
                 query: {
                   tab: 1,
                 },
@@ -108,7 +100,7 @@ function Profile() {
               <div className="relative">
                 <div className="w-48 h-48 bg-[#F5F5F5] rounded-xl" />
                 <div className="absolute top-36 left-36">
-                  <ScrapButton width={14} height={18} />
+                  {/*<ScrapButton width={14} height={18} />*/}
                 </div>
                 <h2 className="text-subContent text-sm mt-2">
                   브랜뉴로 만들어가는 우리집 리뉴얼

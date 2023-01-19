@@ -1,6 +1,5 @@
 import Post from "@components/pages/community/post";
 import SidePost from "@components/pages/community/sidepost";
-import Recommend from "@components/pages/community/recommend";
 import client from "@lib/api";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -34,8 +33,6 @@ function PostPage() {
     ["edit", id],
     getEdit
   );
-
-  console.log(data);
 
   const { data: recommend, isLoading: recommendLoading } = useQuery<
     BranduBaseResponse<RecommendComment[]>
