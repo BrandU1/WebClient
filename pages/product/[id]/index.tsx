@@ -16,6 +16,7 @@ import { isLoginModalOpen } from "../../../recoil/base";
 import PickButton from "@components/pick/pickbutton";
 import Share from "@atoms/share";
 import { HotDeal } from "../../../types/privacy";
+import Viewer from "@components/product/three";
 
 export const getProduct = async (id: number) => {
   const response = await client.get(`products/${id}`);
@@ -62,6 +63,7 @@ export interface Product {
     logo: string;
   };
   default_svg: string;
+  rendering: string;
 }
 
 export interface Review {
@@ -219,19 +221,21 @@ function ProductDetail({ id, wish }: ProductDetailProps) {
                 showThree ? "block" : "hidden"
               }`}
             >
-              <iframe
-                title="BrandU Eco Back"
-                frameBorder="0"
-                allowFullScreen
-                allow="autoplay; fullscreen; xr-spatial-tracking"
-                xr-spatial-tracking
-                execution-while-out-of-viewport
-                execution-while-not-rendered
-                web-share
-                width="380"
-                height="400"
-                src="https://sketchfab.com/models/a0e466df5b7243b1819961651063c79d/embed"
-              ></iframe>
+              {/*<iframe*/}
+              {/*  title="BrandU Eco Back"*/}
+              {/*  frameBorder="0"*/}
+              {/*  allowFullScreen*/}
+              {/*  allow="autoplay; fullscreen; xr-spatial-tracking"*/}
+              {/*  xr-spatial-tracking*/}
+              {/*  execution-while-out-of-viewport*/}
+              {/*  execution-while-not-rendered*/}
+              {/*  web-share*/}
+              {/*  width="380"*/}
+              {/*  height="400"*/}
+              {/*  src="https://sketchfab.com/models/a0e466df5b7243b1819961651063c79d/embed"*/}
+              {/*></iframe>*/}
+
+              <Viewer object={productResponse?.results.rendering!} />
             </div>
           </div>
         </div>
