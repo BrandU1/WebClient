@@ -252,3 +252,62 @@ export interface scrapList {
   profile: number;
   title: string;
 }
+
+export interface OrderResponse {
+  address: {
+    address: string;
+    detail_address: string;
+    id: number;
+    is_main: boolean;
+    memo?: string;
+    name: string;
+    phone_number: string;
+    recipient: string;
+    road_name_address: string;
+    zip_code: string;
+  };
+  coupon?: string;
+  created: string;
+  id: number;
+  is_confirm: boolean;
+  is_payment_confirm: boolean;
+  method: string;
+  name: string;
+  order_number: string;
+  order_status: string;
+  payment: {
+    created: string;
+    id: number;
+    is_deleted: boolean;
+    method: string;
+    name: string;
+    order: number;
+    payment_key: string;
+    platform: string;
+    price: number;
+    recipient_url: string;
+    updated: string;
+  };
+  price: number;
+  products: {
+    count: number;
+    discount?: number;
+    id: number;
+    is_review_written: boolean;
+    option?: string;
+    order: number;
+    product: {
+      id: number;
+      image: string;
+      product: {
+        backdrop_image: string;
+        id: number;
+        is_wish: boolean;
+        name: string;
+        price: number;
+      };
+    };
+    profile: number;
+  }[];
+  used_point: number;
+}

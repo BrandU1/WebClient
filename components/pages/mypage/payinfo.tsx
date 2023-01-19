@@ -7,10 +7,22 @@ import OrderCancel from "@components/modal/ordercancel";
 import Refund from "@components/modal/refund";
 import client from "@lib/api";
 import UseBranduQuery from "@hooks/useBranduQuery";
+import useBranduQuery from "@hooks/useBranduQuery";
+import { OrderResponse } from "../../../types/privacy";
 
-function PayInfo() {
+const getOrder = async () => {
+  const response = await client.get(`/orders/order`);
+  return response.data;
+};
+
+interface payProps {
+  order: number;
+}
+
+function PayInfo({ order }: payProps) {
   const [focused, setFocused] = useState<boolean>(false);
-  const [period, setPeriod] = useState<number>(0);
+
+  console.log(order);
 
   const [search, setSearch] = useState<string>("");
   //주문취소 모달
@@ -24,13 +36,12 @@ function PayInfo() {
     setRefundModal(false);
   };
 
-  const getPurchase = () => {
-    return client.get("/accounts/baskets/purchase").then((res) => res.data);
-  };
-  const { data, isLoading } = UseBranduQuery({
-    queryKey: ["purchase"],
-    queryFn: getPurchase,
+  const { data, isLoading, isError } = useBranduQuery<OrderResponse[]>({
+    queryKey: ["order"],
+    queryFn: () => getOrder(),
   });
+
+  console.log(data?.results);
 
   return (
     <div className="pl-5 flex flex-col flex-1">
@@ -87,43 +98,59 @@ function PayInfo() {
           <SearchIcon />
         </div>
       </div>
-      <div className="product flex flex-col mt-5 ml-[10px]">
-        {[1, 2, 3].map((list, idx) => {
+      <div
+        className={`product flex flex-col mt-5 ml-[10px] ${
+          order === 0 || order === 1 ? "block" : "hidden"
+        } `}
+      >
+        {data?.results.map((list, idx) => {
           return (
             <div className="flex flex-row justify-between border-b border-gray pb-4 mt-5">
               <div className="flex flex-row">
                 <div className="flex items-center flex-col">
-                  <span>2022.07.22 주문</span>
+                  <span>{list.created.slice(0, 10)} 주문</span>
                   <div className="w-24 h-24 bg-gray rounded-xl" />
                 </div>
                 <div className="flex flex-col ml-7">
-                  <span className="text-sm font-bold mb-3">결제완료</span>
-                  <span className="text-sm mb-1">칫솔</span>
-                  <span className="font-bold text-sm mb-5">7,000원</span>
-                  <span className="text-subContent text-sm">Mint/ M/ 1개</span>
+                  <span className="text-sm font-bold mb-3">
+                    {list.order_status}
+                  </span>
+                  <span className="text-sm mb-1">
+                    {list.products[0].product.product.name}
+                  </span>
+                  <span className="font-bold text-sm mb-5">
+                    {list.products[0].product.product.price.toLocaleString()}원
+                  </span>
                 </div>
               </div>
               <div className="flex flex-col space-y-2 mr-3">
-                <Link href={"/mypage/paydetail"}>
-                  <button className="w-24 h-9 bg-main text-white text-sm rounded-xl flex justify-center items-center">
-                    상세조회
+                {/*<Link href={"/mypage/paydetail"}>*/}
+                {/*  <button className="w-24 h-9 bg-main text-white text-sm rounded-xl flex justify-center items-center">*/}
+                {/*    상세조회*/}
+                {/*  </button>*/}
+                {/*</Link>*/}
+                <div
+                  className={`${
+                    list.order_status == "결제 완료" ? "hidden" : "block"
+                  }`}
+                >
+                  <button className="w-24 h-9 bg-white text-main text-sm border border-main rounded-xl flex justify-center items-center">
+                    배송조회
                   </button>
-                </Link>
-                <button className="w-24 h-9 bg-white text-main text-sm border border-main rounded-xl flex justify-center items-center">
-                  배송조회
-                </button>
-                <button
-                  className="w-24 h-9 bg-white text-main text-sm border border-main rounded-xl flex justify-center items-center"
-                  onClick={() => setCancelModal(true)}
-                >
-                  주문취소
-                </button>
-                <button
-                  className="w-24 h-9 bg-white text-main text-sm border border-main rounded-xl flex justify-center items-center"
-                  onClick={() => setRefundModal(true)}
-                >
-                  교환/환불
-                </button>
+
+                  <button
+                    className="w-24 h-9 bg-white text-main text-sm border border-main rounded-xl flex justify-center items-center"
+                    onClick={() => setCancelModal(true)}
+                  >
+                    주문취소
+                  </button>
+                  <button
+                    className="w-24 h-9 bg-white text-main text-sm border border-main rounded-xl flex justify-center items-center"
+                    onClick={() => setRefundModal(true)}
+                  >
+                    교환/환불
+                  </button>
+                </div>
               </div>
               {cancelModal && <OrderCancel onClose={cancelClose} />}
               {refundModal && <Refund onClose={refundClose} />}

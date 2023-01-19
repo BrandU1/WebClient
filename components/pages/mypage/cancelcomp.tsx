@@ -64,36 +64,36 @@ function CancelComp() {
           <SearchIcon />
         </div>
       </div>
-      <div className="product flex flex-col mt-5 ml-[10px]">
-        {[1, 2, 3].map((list, idx) => {
-          return (
-            <div className="flex flex-row justify-between border-b border-gray pb-4 mt-5">
-              <div className="flex flex-row">
-                <div className="flex items-center flex-col">
-                  <span>2022.07.22 주문</span>
-                  <div className="w-24 h-24 bg-gray rounded-xl" />
-                </div>
-                <div className="flex flex-col ml-7">
-                  <span className="text-sm font-bold mb-3">
-                    취소 2022.11.30
-                  </span>
-                  <span className="text-sm mb-1">칫솔</span>
-                  <span className="font-bold text-sm mb-5">7,000원</span>
-                  <span className="text-subContent text-sm">Mint/ M/ 1개</span>
-                </div>
-              </div>
-              <div className="flex flex-col space-y-2 mr-3">
-                <button className="w-24 h-9 bg-main text-white text-sm rounded-xl flex justify-center items-center">
-                  상세조회
-                </button>
-                <button className="w-24 h-9 bg-white text-main text-sm border border-main rounded-xl flex justify-center items-center">
-                  배송조회
-                </button>
-              </div>
-            </div>
-          );
-        })}
-      </div>
+      {/*<div className="product flex flex-col mt-5 ml-[10px]">*/}
+      {/*  {[1, 2, 3].map((list, idx) => {*/}
+      {/*    return (*/}
+      {/*      <div className="flex flex-row justify-between border-b border-gray pb-4 mt-5">*/}
+      {/*        <div className="flex flex-row">*/}
+      {/*          <div className="flex items-center flex-col">*/}
+      {/*            <span>2022.07.22 주문</span>*/}
+      {/*            <div className="w-24 h-24 bg-gray rounded-xl" />*/}
+      {/*          </div>*/}
+      {/*          <div className="flex flex-col ml-7">*/}
+      {/*            <span className="text-sm font-bold mb-3">*/}
+      {/*              취소 2022.11.30*/}
+      {/*            </span>*/}
+      {/*            <span className="text-sm mb-1">칫솔</span>*/}
+      {/*            <span className="font-bold text-sm mb-5">7,000원</span>*/}
+      {/*            <span className="text-subContent text-sm">Mint/ M/ 1개</span>*/}
+      {/*          </div>*/}
+      {/*        </div>*/}
+      {/*        <div className="flex flex-col space-y-2 mr-3">*/}
+      {/*          <button className="w-24 h-9 bg-main text-white text-sm rounded-xl flex justify-center items-center">*/}
+      {/*            상세조회*/}
+      {/*          </button>*/}
+      {/*          <button className="w-24 h-9 bg-white text-main text-sm border border-main rounded-xl flex justify-center items-center">*/}
+      {/*            배송조회*/}
+      {/*          </button>*/}
+      {/*        </div>*/}
+      {/*      </div>*/}
+      {/*    );*/}
+      {/*  })}*/}
+      {/*</div>*/}
     </div>
   );
 }
