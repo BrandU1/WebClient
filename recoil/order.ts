@@ -46,7 +46,7 @@ export const newOrder = selector<OrderRecoilState>({
       address: address?.id || 0,
       products:
         products.map((product) => ({
-          product: product.custom_product.product.id,
+          product: product.custom_product.id,
           count: product.amount,
         })) || [],
       orderPrice: price || 0,
