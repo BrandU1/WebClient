@@ -3,9 +3,16 @@ import SideTab from "@components/pages/mypage/sidetab";
 import Inquiry from "@components/pages/mypage/inquiry";
 import Head from "next/head";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 
-function PayDetail() {
+function Id() {
   const router = useRouter();
+  useEffect(() => {
+    if (router.isReady) {
+    }
+  }, [router.isReady]);
+  const id = router.query.id ?? "";
+
   return (
     <>
       <Head>
@@ -16,7 +23,7 @@ function PayDetail() {
         <div className="max-w-4xl m-auto">
           <div className="flex flex-row">
             <SideTab num={0} />
-            <Inquiry detail={router.query.id as string} />
+            <Inquiry detail={id as string} />
           </div>
         </div>
       </div>
@@ -24,4 +31,4 @@ function PayDetail() {
   );
 }
 
-export default PayDetail;
+export default Id;

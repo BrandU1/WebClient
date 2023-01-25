@@ -126,9 +126,7 @@ function PayInfo({ order }: payProps) {
                 <div
                   onClick={() => {
                     router.push({
-                      pathname: "/mypage/paydetail",
-                      // @ts-ignore
-                      query: { id: list.id },
+                      pathname: `/mypage/order/${list.id}`,
                     });
                   }}
                 >

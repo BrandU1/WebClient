@@ -138,7 +138,10 @@ function Inquiry({ detail }: inquiryProp) {
           </div>
         </div>
         <div className="mt-[86px]">
-          <Link href={data?.results.payment.recipient_url ?? "/404"}>
+          <Link
+            href={data?.results?.payment?.recipient_url ?? "/404"}
+            target={"_blank"}
+          >
             <button className="border border-main rounded-xl text-main text-sm py-2 px-3 mr-3">
               카드영수증
             </button>
