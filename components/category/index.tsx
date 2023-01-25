@@ -9,9 +9,10 @@ import ImgAtom from "@atoms/imgatom";
 interface CategoryProps {
   // ref: React.ForwardedRef<HTMLDivElement>;
   onClose: () => void;
+  clickSearch: (name: string) => void;
 }
 
-function Category({ onClose }: CategoryProps) {
+function Category({ onClose, clickSearch }: CategoryProps) {
   const [id, setIndex] = useState(0);
 
   const categoryEl = useRef<HTMLDivElement>(null);
@@ -49,7 +50,11 @@ function Category({ onClose }: CategoryProps) {
             >
               {item.sub_categories.map((subItem, index) => {
                 return (
-                  <div key={index} className="text-center pt-4 ">
+                  <div
+                    key={index}
+                    className="text-center pt-4"
+                    onClick={() => clickSearch(subItem.name)}
+                  >
                     <div className="h-[100px] w-[100px] bg-white flex justify-center items-center rounded-lg">
                       <ImgAtom
                         exist={"/dummy/bag.png"}

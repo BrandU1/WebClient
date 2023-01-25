@@ -18,8 +18,6 @@ function FollowBtn({ following, height, weight }: FollowProps) {
   const [follows, getFollows] =
     useRecoilState<myFollowingList>(FollowingListAtom);
 
-  console.log(follows);
-
   const handleFollowing = useMutation(
     (id: number) => {
       //팔로우 취소

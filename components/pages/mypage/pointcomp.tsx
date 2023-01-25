@@ -34,7 +34,7 @@ function PointComp() {
         return (
           <div className="flex justify-between flex-row mx-2 mb-3" key={index}>
             <div className="flex flex-row text-xs text-subContent space-x-3">
-              <span>2022/12/05</span>
+              <span>{list.created.slice(0, 10)}</span>
               <span>{list.memo}</span>
             </div>
             <span className="font-bold text-xs ">

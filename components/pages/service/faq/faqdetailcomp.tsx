@@ -6,13 +6,15 @@ function FaqDetailComp({ data }: any) {
         <div className="border-b-[1px] border-black" />
       </div>
       <div className="flex flex-col">
-        <div className="border-b border-gray mt-5 pb-5 flex justify-between px-5">
+        <div className="mt-5 pb-5 flex justify-between px-2">
           <p>{data.title}</p>
           <p className="text-sm text-subContent">
             {String(data.created)?.substring(0, 10)}
           </p>
-          <p className="mt-5 text-sm">{data.description}</p>
         </div>
+        <p className="border-b border-gray mt-5 text-sm px-5 pb-5">
+          {data.description}
+        </p>
       </div>
     </div>
   );

@@ -128,7 +128,7 @@ function Post({ data, recommend }: Post) {
         />
         <div className="mt-2 flex justify-between px-2">
           <p className="font-bold text-lg">{data?.title}</p>
-          <Share image={"/dummy/cat.png"} name={data?.title} />
+          <Share image={data?.backdrop_image} name={data?.title} />
         </div>
         <div className="flex flex-row items-center mt-5 px-2">
           <div className="w-9 h-9 bg-gray rounded-xl" />
@@ -152,7 +152,6 @@ function Post({ data, recommend }: Post) {
           <p className="ml-2">조회</p>
           <p className="font-bold">{data?.hits}</p>
         </div>
-        {/*{console.log(recommend)}*/}
         <div className="mt-3">
           {recommend?.map((recommend, index) => {
             return (

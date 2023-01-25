@@ -12,13 +12,15 @@ function MainInfoDetail({ detail }: any) {
         <div className="border-b-[1px] border-black" />
       </div>
       <div className="flex flex-col">
-        <div className="border-b border-gray mt-5 pb-5 flex justify-between px-5">
-          <p>{detail.title}</p>
+        <div className="mt-5 pb-5 flex justify-between w-full px-2">
+          <h2>{detail.title}</h2>
           <p className="text-sm text-subContent">
             {String(detail.created)?.substring(0, 10)}
           </p>
-          <p className="mt-5 text-sm">{detail.description}</p>
         </div>
+        <p className="border-b border-gray px-5 mt-5 text-sm pb-5">
+          {detail.description}
+        </p>
       </div>
     </div>
   );

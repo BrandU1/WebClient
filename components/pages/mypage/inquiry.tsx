@@ -1,21 +1,47 @@
-function Inquiry() {
+import useBranduQuery from "@hooks/useBranduQuery";
+import { OrderResponse } from "../../../types/privacy";
+import client from "@lib/api";
+import { useRecoilValue } from "recoil";
+import { userData } from "../../../recoil/user";
+
+interface inquiryProp {
+  detail: any;
+}
+
+const getOrder = async (id: string) => {
+  const response = await client.get(`/orders/order/${id}`);
+  return response.data;
+};
+
+function Inquiry({ detail }: inquiryProp) {
+  const userInfo = useRecoilValue(userData);
+
+  const { data, isLoading, isError } = useBranduQuery<OrderResponse>({
+    queryKey: ["order", detail.id],
+    queryFn: () => getOrder(detail.id as string),
+  });
   return (
     <div className="pl-5 flex flex-col flex-1 mt-10">
       <div className="title flex flex-row items-center border-b pb-5">
         <span className="font-bold text-lg">상세조회</span>
-        <span className="text-lg ml-3">[주문번호 : 131312330204]</span>
+        <span className="text-lg ml-3">
+          [주문번호 : {data?.results.order_number}]
+        </span>
       </div>
       <div className="flex flex-row justify-between border-b border-gray pb-4 mt-5">
         <div className="flex flex-row">
           <div className="flex items-center flex-col">
-            <span>2022.07.22 주문</span>
+            <span>{data?.results.created.slice(0, 10)} 주문</span>
             <div className="w-24 h-24 bg-gray rounded-xl" />
           </div>
           <div className="flex flex-col ml-7">
-            <span className="text-sm font-bold mb-3">결제완료</span>
-            <span className="text-sm mb-1">칫솔</span>
-            <span className="font-bold text-sm mb-5">7,000원</span>
-            <span className="text-subContent text-sm">Mint/ M/ 1개</span>
+            <span className="text-sm font-bold mb-3">
+              {data?.results.order_status}
+            </span>
+            <span className="text-sm mb-1">{data?.results.name}</span>
+            <span className="font-bold text-sm mb-5">
+              {Number(data?.results.price).toLocaleString()}원
+            </span>
           </div>
         </div>
         <div className="flex flex-col space-y-2 mr-3">
@@ -36,9 +62,9 @@ function Inquiry() {
             <p>이메일</p>
           </div>
           <div className="flex flex-col space-y-[10px] text-sm justify-start px-5 mt-[10px]">
-            <p>민수</p>
-            <p>010-2222-2222</p>
-            <p>as@asdf.cosdm</p>
+            <p>{userInfo.user.name}</p>
+            <p>{userInfo.user.phone_number}</p>
+            <p>{userInfo.user.email}</p>
           </div>
         </div>
       </div>
@@ -51,9 +77,9 @@ function Inquiry() {
             <p>주소</p>
           </div>
           <div className="flex flex-col space-y-[10px] text-sm justify-start px-5 mt-[10px]">
-            <p>민수</p>
-            <p>010-2222-2222</p>
-            <p>경기도 안산시 상록구 사동</p>
+            <p>{data?.results.address.recipient}</p>
+            <p>{data?.results.address.phone_number}</p>
+            <p>{data?.results.address.address}</p>
           </div>
         </div>
       </div>
@@ -62,13 +88,13 @@ function Inquiry() {
         <div className="text-sm flex justify-between ">
           <div>
             <span className="text-subContent mr-[18px]">결제수단</span>
-            {/*<span>{data?.method}</span>*/}
+            <span>{data?.results.method}</span>
           </div>
           <div className="w-[250px]">
             <div className="flex justify-between">
               <p className="text-subContent text-sm ">총 주문금액</p>
               <p className=" text-sm ">
-                {/*{(data?.price - 3000 + data?.used_point).toLocaleString()} 원*/}
+                {Number(data?.results.price).toLocaleString()}원
               </p>
             </div>
             <div className="mt-3 flex justify-between">
@@ -82,13 +108,13 @@ function Inquiry() {
             <div className="mt-3 flex justify-between">
               <p className="text-subContent text-[14px] ">포인트 사용</p>
               <p className="space-x-2 text-sm">
-                {/*{data?.used_point.toLocaleString()} 원*/}
+                {data?.results.used_point.toLocaleString()} 원
               </p>
             </div>
             <div className="mt-3 flex justify-between">
               <p className="text-subContent text-[14px]">최종 결제 금액</p>
               <p className="space-x-2 text-sm font-bold ">
-                {/*{data.price.toLocaleString()} 원*/}
+                {Number(data?.results.price).toLocaleString()}원
               </p>
             </div>
           </div>

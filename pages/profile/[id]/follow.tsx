@@ -22,8 +22,6 @@ function FollowPage() {
     getFollow
   );
 
-  console.log(data);
-
   return (
     <>
       <Head>

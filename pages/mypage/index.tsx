@@ -2,13 +2,10 @@ import TopInfo from "@components/pages/mypage/topinfo";
 import SideTab from "../../components/pages/mypage/sidetab";
 import PayInfo from "@components/pages/mypage/payinfo";
 import Head from "next/head";
-import useBranduQuery from "@hooks/useBranduQuery";
-import { OrderResponse } from "../../types/privacy";
-import client from "@lib/api";
 import { useState } from "react";
 
 function MyOrder() {
-  const [orderState, setOrderState] = useState<number>(0);
+  const [orderState, setOrderState] = useState<string>("전체");
   return (
     <>
       <Head>
