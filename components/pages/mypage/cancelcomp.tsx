@@ -5,7 +5,6 @@ import SearchIcon from "@icons/search";
 
 function CancelComp() {
   const [focused, setFocused] = useState<boolean>(false);
-  const [period, setPeriod] = useState<number>(0);
 
   const [search, setSearch] = useState<string>("");
 

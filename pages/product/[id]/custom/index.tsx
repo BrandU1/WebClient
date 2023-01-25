@@ -75,8 +75,6 @@ function ProductCustom({ id }: ProductCustomProps): ReactElement {
     }
   };
 
-  console.log(productResponse, "test");
-
   const [customImage, _] = useRecoilState(canvasImage);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);

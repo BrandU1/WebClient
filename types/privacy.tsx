@@ -72,6 +72,11 @@ export interface SummaryProfile {
   coupon_count: number;
 }
 
+export interface SummaryOrder {
+  count: number;
+  order_status: string;
+}
+
 export interface Product {
   id: number;
   tags: Tags[];

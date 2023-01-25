@@ -16,8 +16,6 @@ function Profile() {
     getProfile
   );
 
-  console.log(data);
-
   return (
     <>
       <Head>

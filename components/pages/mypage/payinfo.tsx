@@ -9,6 +9,7 @@ import client from "@lib/api";
 import UseBranduQuery from "@hooks/useBranduQuery";
 import useBranduQuery from "@hooks/useBranduQuery";
 import { OrderResponse } from "../../../types/privacy";
+import { useRouter } from "next/router";
 
 const getOrder = async () => {
   const response = await client.get(`/orders/order`);
@@ -16,13 +17,12 @@ const getOrder = async () => {
 };
 
 interface payProps {
-  order: number;
+  order: string;
 }
 
 function PayInfo({ order }: payProps) {
+  const router = useRouter();
   const [focused, setFocused] = useState<boolean>(false);
-
-  console.log(order);
 
   const [search, setSearch] = useState<string>("");
   //주문취소 모달
@@ -40,8 +40,6 @@ function PayInfo({ order }: payProps) {
     queryKey: ["order"],
     queryFn: () => getOrder(),
   });
-
-  console.log(data?.results);
 
   return (
     <div className="pl-5 flex flex-col flex-1">
@@ -98,16 +96,14 @@ function PayInfo({ order }: payProps) {
           <SearchIcon />
         </div>
       </div>
-      <div
-        className={`product flex flex-col mt-5 ml-[10px] ${
-          order === 0 || order === 1 ? "block" : "hidden"
-        } `}
-      >
+      <div className={`product flex flex-col mt-5 ml-[10px]`}>
         {data?.results.map((list, idx) => {
           return (
             <div
               className={`flex flex-row justify-between border-b border-gray pb-4 mt-5 ${
-                list.order_status === "결제 완료" ? "block" : "hidden"
+                list.order_status === order || order === "전체"
+                  ? "block"
+                  : "hidden"
               }`}
             >
               <div className="flex flex-row">
@@ -128,20 +124,27 @@ function PayInfo({ order }: payProps) {
                 </div>
               </div>
               <div className="flex flex-col space-y-2 mr-3">
-                {/*<Link href={"/mypage/paydetail"}>*/}
-                {/*  <button className="w-24 h-9 bg-main text-white text-sm rounded-xl flex justify-center items-center">*/}
-                {/*    상세조회*/}
-                {/*  </button>*/}
-                {/*</Link>*/}
+                <div
+                  onClick={() => {
+                    router.push({
+                      pathname: "/mypage/paydetail",
+                      // @ts-ignore
+                      query: list,
+                    });
+                  }}
+                >
+                  <button className="w-24 h-9 bg-main text-white text-sm rounded-xl flex justify-center items-center">
+                    상세조회
+                  </button>
+                </div>
                 <div
                   className={`${
                     list.order_status == "결제 완료" ? "hidden" : "block"
                   }`}
                 >
-                  <button className="w-24 h-9 bg-white text-main text-sm border border-main rounded-xl flex justify-center items-center">
-                    배송조회
-                  </button>
-
+                  {/*<button className="w-24 h-9 bg-white text-main text-sm border border-main rounded-xl flex justify-center items-center">*/}
+                  {/*  배송조회*/}
+                  {/*</button>*/}
                   <button
                     className="w-24 h-9 bg-white text-main text-sm border border-main rounded-xl flex justify-center items-center"
                     onClick={() => setCancelModal(true)}

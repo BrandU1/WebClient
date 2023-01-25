@@ -17,6 +17,7 @@ function SideTab({ num, setStateNums }: tabProps) {
           className={`text-sm my-2 ${tabNum == 0 && "text-main font-bold"}`}
           onClick={() => {
             setTabNum(0);
+            setStateNum(0);
           }}
         >
           주문/배송조회
@@ -28,7 +29,7 @@ function SideTab({ num, setStateNums }: tabProps) {
             className={`${stateNum == 0 && "text-main font-bold"}`}
             onClick={() => {
               setStateNum(0);
-              setStateNums(0);
+              setStateNums("전체");
             }}
           >
             전체
@@ -37,37 +38,37 @@ function SideTab({ num, setStateNums }: tabProps) {
             className={`${stateNum == 1 && "text-main font-bold"}`}
             onClick={() => {
               setStateNum(1);
-              setStateNums(1);
+              setStateNums("결제 대기");
             }}
           >
-            결제완료
+            결제대기
           </span>
           <span
             className={`${stateNum == 2 && "text-main font-bold"}`}
             onClick={() => {
               setStateNum(2);
-              setStateNums(2);
+              setStateNums("결제 완료");
             }}
           >
-            배송 중
+            결제완료
           </span>
           <span
             className={`${stateNum == 3 && "text-main font-bold"}`}
             onClick={() => {
               setStateNum(3);
-              setStateNums(3);
+              setStateNums("배송 중");
             }}
           >
-            배송완료
+            배송 중
           </span>
           <span
             className={`${stateNum == 4 && "text-main font-bold"}`}
             onClick={() => {
               setStateNum(4);
-              setStateNums(4);
+              setStateNums("배송 완료");
             }}
           >
-            구매확정
+            배송완료
           </span>
         </div>
       )}

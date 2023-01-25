@@ -26,13 +26,15 @@ function Notice() {
       <div className="contents">
         {data?.results?.map((notice, index) => {
           return (
-            <div
-              key={index}
-              className="flex items-center justify-between px-2 py-4"
-            >
-              <h2 className="text-base">{notice.title}</h2>
-              <p className="text-xs">{notice.created}</p>
-              <div className="border-[1px] border-[#EDEDED]" />
+            <div key={index} className="flex flex-col px-2 py-4">
+              <div className="flex justify-between w-full">
+                <h2 className="text-base">{notice.title}</h2>
+                <p className="text-xs">{notice.created.slice(0, 10)}</p>
+              </div>
+              <div className="mt-5 px-5 pb-5">
+                <p>{notice.description}</p>
+              </div>
+              <div className="border-b-[1px] border-[#EDEDED]" />
             </div>
           );
         })}

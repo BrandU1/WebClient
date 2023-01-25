@@ -40,8 +40,6 @@ function Success() {
     queryFn: () => getOrder(id as string),
   });
 
-  // console.log(data?.results);
-
   const finalPrice = data?.results.price! - data?.results.used_point!;
 
   if (isLoading) {

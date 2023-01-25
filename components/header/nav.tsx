@@ -180,6 +180,7 @@ function Nav() {
     setInput(clickInput);
     router.push(`/search?query=${clickInput}`);
     setFocused(false);
+    setCategory(false);
   };
   useEffect(() => {
     if (clickInput !== "") {
@@ -475,7 +476,7 @@ function Nav() {
             category ? "block " : "hidden"
           }`}
         >
-          <Category onClose={normalClose} />
+          <Category onClose={normalClose} clickSearch={setClickInput} />
         </div>
       </div>
       <div>
