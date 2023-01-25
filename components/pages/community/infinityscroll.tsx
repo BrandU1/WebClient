@@ -65,30 +65,26 @@ const InfiniteScroll = () => {
                     }}
                     className=" w-[156px] h-[200px]"
                   >
-                    <ImgAtom
-                      exist={item.backdrop_image}
-                      src={item.backdrop_image}
-                      width={156}
-                      height={200}
-                      alt={"searchResult"}
-                    />
+                    <div className="h-48">
+                      <div className="flex ">
+                        <ImgAtom
+                          exist={item.backdrop_image}
+                          src={item.backdrop_image}
+                          width={156}
+                          height={200}
+                          alt={"searchResult"}
+                        />
+                      </div>
+                    </div>
                   </div>
 
                   <div
                     onClick={() => {
                       router.push(`/community/${item.id}`);
                     }}
-                    className="text-subContent text-sm h-10"
+                    className="text-subContent text-sm h-10 mb-10"
                   >
                     <p>{item.title}</p>
-                  </div>
-                  <div className="relative bottom-20 left-14  rounded-xl">
-                    <ScrapButton
-                      id={item.id}
-                      scrap={item.is_scrap}
-                      li_width={28}
-                      li_height={30}
-                    />
                   </div>
                 </div>
               </>

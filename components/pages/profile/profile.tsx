@@ -107,7 +107,7 @@ function Profile() {
           {postData?.results.map((post, index) => {
             return (
               <div key={index} className="relative">
-                <div className="w-48 h-48 bg-[#fff] rounded-xl">
+                <div className="w-48 h-48 bg-[#F5F5F5] rounded-xl">
                   <Image
                     src={post.backdrop_image || ""}
                     alt="backgroundImage"
