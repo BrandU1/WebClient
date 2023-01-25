@@ -12,6 +12,7 @@ import { useRecoilState } from "recoil";
 import { myPostLikeList, PostLikedListAtom } from "../../../recoil/postlike";
 import ScrapButton from "@common/scrapbutton";
 import ScrapIcon from "@icons/scrap";
+import ImgAtom from "@atoms/imgatom";
 
 interface Side {
   data: Community;
@@ -86,7 +87,13 @@ function SidePost({ data }: Side) {
         <Link key={data?.id} href={`/profile/${data?.profile}`}>
           <div className="flex flex-row items-center justify-between">
             <div className="flex flex-row">
-              <div className="w-9 h-9 bg-gray rounded-xl" />
+              <ImgAtom
+                exist={profileData?.results?.profile_image || ""}
+                src={profileData?.results?.profile_image || ""}
+                alt="profile"
+                width={36}
+                height={36}
+              />
               <div className="flex flex-col ml-2 text-[12px]">
                 <p>{profileData?.results.nickname}</p>
                 <div className="flex flex-row">

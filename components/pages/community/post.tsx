@@ -12,6 +12,7 @@ import {
 import { useRecoilValue } from "recoil";
 import { Link } from "react-scroll";
 import useUserInfo from "@hooks/defaultValue";
+import ImgAtom from "@atoms/imgatom";
 
 interface Post {
   data: Community;
@@ -131,14 +132,13 @@ function Post({ data, recommend }: Post) {
           <Share image={data?.backdrop_image} name={data?.title} />
         </div>
         <div className="flex flex-row items-center mt-5 px-2">
-          <div className="w-9 h-9 bg-gray rounded-xl">
-            <Image
-              src={profileData?.results.profile_image || ""}
-              width={40}
-              height={40}
-              alt="profile"
-            />
-          </div>
+          <ImgAtom
+            exist={profileData?.results.profile_image || ""}
+            src={profileData?.results.profile_image || ""}
+            width={42}
+            height={42}
+            alt="profile"
+          />
 
           <div className="flex flex-col ml-2 text-xs">
             <p>{profileData?.results.nickname}</p>
@@ -166,7 +166,16 @@ function Post({ data, recommend }: Post) {
               <>
                 <div key={index} className="flex justify-between mx-2">
                   <div className="flex">
-                    <div className="w-9 h-9 bg-gray rounded-xl mr-2" />
+                    <div className="mr-2">
+                      <ImgAtom
+                        exist={recommend.profile.profile_image || ""}
+                        src={recommend.profile.profile_image || ""}
+                        width={46}
+                        height={100}
+                        alt={"profile"}
+                      />
+                    </div>
+
                     <div className="flex flex-col">
                       <h2 className="text-[12px]">
                         {recommend.profile.nickname}

@@ -107,7 +107,7 @@ function Profile() {
           {postData?.results.map((post, index) => {
             return (
               <div key={index} className="relative">
-                <div className="w-48 h-48 bg-[#F5F5F5] rounded-xl">
+                <div className="w-48 h-48 bg-[#fff] rounded-xl flex justify-center">
                   <Image
                     src={post.backdrop_image || ""}
                     alt="backgroundImage"
@@ -119,7 +119,9 @@ function Profile() {
                 <div className="absolute top-36 left-36">
                   {/*<ScrapButton width={14} height={18} />*/}
                 </div>
-                <h2 className="text-subContent text-sm mt-2">{post.title}</h2>
+                <div className="flex justify-center">
+                  <h2 className="text-subContent text-sm mt-2">{post.title}</h2>
+                </div>
               </div>
             );
           })}
