@@ -6,6 +6,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import client from "@lib/api";
 import PickButton from "@components/pick/pickbutton";
 import ImgAtom from "@atoms/imgatom";
+import ScrapButton from "@common/scrapbutton";
 
 interface SearchProps {
   searchResult: SearchBase;
@@ -121,12 +122,23 @@ function Search({ searchResult }: SearchProps) {
                       as={`/community/${item.id}`}
                     >
                       <div className="h-60 relative">
-                        <Image
-                          src={item.backdrop_image || ""}
-                          width={156}
-                          height={200}
-                          alt={"searchResult"}
-                        />
+                        <div className="h-40">
+                          <Image
+                            src={item.backdrop_image || ""}
+                            width={156}
+                            height={200}
+                            alt={"searchResult"}
+                          />
+                        </div>
+                        <div className="relative bottom-3 left-16  rounded-xl">
+                          <ScrapButton
+                            id={item.id}
+                            scrap={item.is_scrap}
+                            li_width={28}
+                            li_height={30}
+                          />
+                        </div>
+
                         <div className="flex justify-center mt-2">
                           <p className="text-sm">{item.title}</p>
                         </div>

@@ -115,6 +115,7 @@ export interface searchPost {
   count: number;
   next: number;
   previous: number;
+  is_scrap: boolean;
   results: searchPost[];
 }
 

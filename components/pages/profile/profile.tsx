@@ -3,6 +3,7 @@ import ScrapButton from "@common/scrapbutton";
 import client from "@lib/api";
 import { useQuery } from "@tanstack/react-query";
 import {
+  BestPost,
   BranduBaseResponse,
   communityProfile,
   FollowList,
@@ -28,6 +29,14 @@ function Profile() {
   const { data: profileData, isLoading: profileLoading } = useQuery<
     BranduBaseResponse<communityProfile>
   >(["postProfile", id], getProfile);
+
+  const getPostData = () => {
+    return client.get(`accounts/${id}/posts`).then((res) => res.data);
+  };
+
+  const { data: postData, isLoading: postLoading } = useQuery<
+    BranduBaseResponse<BestPost[]>
+  >(["myPost", id], getPostData);
 
   if (profileLoading) {
     return <div></div>;
@@ -93,18 +102,24 @@ function Profile() {
       </div>
       <div className="border-b border-gray w-full my-5" />
       <div className="postedList px-6">
-        <h2>게시물 4개</h2>
+        <h2>게시물 {postData?.results.length} 개 </h2>
         <div className="grid grid-cols-4 gap-5 mt-5">
-          {[1, 2, 3, 4].map((post, index) => {
+          {postData?.results.map((post, index) => {
             return (
-              <div className="relative">
-                <div className="w-48 h-48 bg-[#F5F5F5] rounded-xl" />
+              <div key={index} className="relative">
+                <div className="w-48 h-48 bg-[#F5F5F5] rounded-xl">
+                  <Image
+                    src={post.backdrop_image || ""}
+                    alt="backgroundImage"
+                    width={160}
+                    height={160}
+                  />
+                </div>
+
                 <div className="absolute top-36 left-36">
                   {/*<ScrapButton width={14} height={18} />*/}
                 </div>
-                <h2 className="text-subContent text-sm mt-2">
-                  브랜뉴로 만들어가는 우리집 리뉴얼
-                </h2>
+                <h2 className="text-subContent text-sm mt-2">{post.title}</h2>
               </div>
             );
           })}

@@ -27,29 +27,22 @@ function Community({ bestCommunity }: bestCommunityProps) {
               return (
                 <div className="relative">
                   <Link key={post.id} href={`/community/${post.id}`}>
-                    <div className=" w-[156px] h-[200px]">
-                      <ImgAtom
-                        exist={post.backdrop_image}
-                        src={post.backdrop_image}
-                        width={156}
-                        height={200}
-                        alt={"searchResult"}
-                      />
+                    <div className="h-48">
+                      <div className="">
+                        <ImgAtom
+                          exist={post.backdrop_image}
+                          src={post.backdrop_image}
+                          width={156}
+                          height={200}
+                          alt={"searchResult"}
+                        />
+                      </div>
                     </div>
                   </Link>
                   <div className="absolute rounded-xl bg-main text-white font-bold w-7 h-7 top-2 left-2 flex justify-center items-center">
                     {index + 1}
                   </div>
                   <p className="text-sm mt-2 text-subContent">{post.title}</p>
-
-                  <div className="absolute top-40 left-[116px] rounded-xl">
-                    <ScrapButton
-                      id={post.id}
-                      scrap={post?.is_scrap}
-                      li_width={28}
-                      li_height={30}
-                    />
-                  </div>
                 </div>
               );
             })}

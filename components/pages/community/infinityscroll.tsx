@@ -1,5 +1,4 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
-import axios from "axios";
 import { useRef } from "react";
 import { useObserver } from "@components/pages/community/useobserve";
 import ImgAtom from "@atoms/imgatom";
@@ -11,6 +10,7 @@ import {
 } from "../../../types/privacy";
 import router from "next/router";
 import Image from "next/image";
+import ScrapButton from "@common/scrapbutton";
 
 const InfiniteScroll = () => {
   const OFFSET = 5;
@@ -57,26 +57,37 @@ const InfiniteScroll = () => {
         {data?.pages.map((group, index) => (
           <div className="grid grid-cols-5 gap-x-2 " key={index}>
             {group.results.results?.map((item: any, index: number) => (
-              <div
-                onClick={() => {
-                  router.push(`/community/${item.id}`);
-                }}
-                key={index}
-                className="mb-4"
-              >
-                <div className=" w-[156px] h-[200px]">
-                  <ImgAtom
-                    exist={item.backdrop_image}
-                    src={item.backdrop_image}
-                    width={156}
-                    height={200}
-                    alt={"searchResult"}
-                  />
+              <>
+                <div key={index}>
+                  <div
+                    onClick={() => {
+                      router.push(`/community/${item.id}`);
+                    }}
+                    className=" w-[156px] h-[200px]"
+                  >
+                    <div className="h-48">
+                      <div className="flex ">
+                        <ImgAtom
+                          exist={item.backdrop_image}
+                          src={item.backdrop_image}
+                          width={156}
+                          height={200}
+                          alt={"searchResult"}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div
+                    onClick={() => {
+                      router.push(`/community/${item.id}`);
+                    }}
+                    className="text-subContent text-sm h-10 mb-10"
+                  >
+                    <p>{item.title}</p>
+                  </div>
                 </div>
-                <div className="text-subContent text-sm">
-                  <p>{item.title}</p>
-                </div>
-              </div>
+              </>
             ))}
           </div>
         ))}
