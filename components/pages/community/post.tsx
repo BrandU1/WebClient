@@ -131,10 +131,18 @@ function Post({ data, recommend }: Post) {
           <Share image={"/dummy/cat.png"} name={data?.title} />
         </div>
         <div className="flex flex-row items-center mt-5 px-2">
-          <div className="w-9 h-9 bg-gray rounded-xl" />
+          <div className="w-9 h-9 bg-gray rounded-xl">
+            <Image
+              src={profileData?.results.profile_image || ""}
+              width={40}
+              height={40}
+              alt="profile"
+            />
+          </div>
+
           <div className="flex flex-col ml-2 text-xs">
             <p>{profileData?.results.nickname}</p>
-            <p className="text-subContent">2022.12.21(수)</p>
+            <p className="text-subContent">{data?.created.slice(0, 10)}</p>
           </div>
         </div>
       </div>

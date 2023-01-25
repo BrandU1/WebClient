@@ -209,16 +209,16 @@ function Edit() {
           // @ts-ignore
           forwardedRef={quillRef}
           placeholder="내용을 입력해주세요"
-          className="h-full"
+          className="h-96"
           theme="snow"
           formats={formats}
           modules={modules}
           value={text}
           onChange={handleText}
         />
-        <div onClick={submit} className="flex justify-center py-5">
-          <button className="p-3 border-main border-[2px] rounded-2xl">
-            글 등록하기
+        <div onClick={submit} className="flex justify-center py-5 mt-16">
+          <button className="w-[318px] h-[45px]  border-[#0CABA8] border-[2px] rounded-2xl">
+            저장하기
           </button>
         </div>
       </div>
