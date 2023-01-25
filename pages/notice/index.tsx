@@ -1,4 +1,4 @@
-import Notice from "@components/pages/service/noticecomp";
+import Notice from "@components/pages/notice/noticecomp";
 import Head from "next/head";
 
 function NoticePage() {

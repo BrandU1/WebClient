@@ -16,7 +16,7 @@ function PayDetail() {
         <div className="max-w-4xl m-auto">
           <div className="flex flex-row">
             <SideTab num={0} />
-            <Inquiry detail={router.query} />
+            <Inquiry detail={router.query.id as string} />
           </div>
         </div>
       </div>

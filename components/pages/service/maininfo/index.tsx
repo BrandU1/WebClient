@@ -1,15 +1,19 @@
-import { useRouter } from "next/router";
 import { MainInfoInterface } from "../../../../types/service";
 import client from "@lib/api";
 import { useQuery } from "@tanstack/react-query";
 import { BranduBaseResponse } from "../../../../types/privacy";
+import Link from "next/link";
 
-interface MainInfoProp {
-  info: MainInfoInterface[];
-}
+function MainInfoComp() {
+  const getMainInfo = () => {
+    return client.get("services/main_infos").then((res) => res.data);
+  };
+  const { data, isLoading } = useQuery<BranduBaseResponse<MainInfoInterface[]>>(
+    ["mainInfo"],
+    getMainInfo
+  );
 
-function MainInfoComp({ info }: MainInfoProp) {
-  const router = useRouter();
+  console.log(data);
   return (
     <>
       <div>
@@ -17,31 +21,16 @@ function MainInfoComp({ info }: MainInfoProp) {
         <div className="border-b-[1px] border-black" />
       </div>
       <div className="flex flex-col">
-        {info?.map((info, index) => {
+        {data?.results.map((info, index) => {
           return (
-            <div
-              key={index}
-              className="border-b border-gray mt-5 pb-5 flex justify-between px-5"
-              onClick={() => {
-                router.push(
-                  {
-                    pathname: "/service/maininfo/infodetail",
-                    query: {
-                      id: info.id,
-                      title: info.title,
-                      description: info.description,
-                      created: info.created,
-                    },
-                  }
-                  // `/service/maininfo/${info.id}`
-                );
-              }}
-            >
-              <p>{info.title}</p>
-              <p className="text-sm text-subContent">
-                {info.created.substring(0, 10)}
-              </p>
-            </div>
+            <Link key={index} href={`/service/maininfo/${info.id}`}>
+              <div className="border-b border-gray mt-5 pb-5 flex justify-between px-5">
+                <p>{info.title}</p>
+                <p className="text-sm text-subContent">
+                  {info.created.substring(0, 10)}
+                </p>
+              </div>
+            </Link>
           );
         })}
       </div>
