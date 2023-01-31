@@ -3,13 +3,21 @@ import { useQuery } from "@tanstack/react-query";
 import { BranduBaseResponse } from "../../../../types/privacy";
 import { FaqInterface } from "../../../../types/service";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
-interface FaqProp {
-  data: FaqInterface[];
-}
+function FaqComp() {
+  const getFaq = () => {
+    return client.get("services/faqs").then((res) => res.data);
+  };
+  const { data, isLoading } = useQuery<BranduBaseResponse<FaqInterface[]>>(
+    ["faq"],
+    getFaq
+  );
 
-function FaqComp({ data }: FaqProp) {
-  const router = useRouter();
+  if (isLoading) {
+    return <div>로딩 중입니다.</div>;
+  }
+
   return (
     <>
       <div>
@@ -17,28 +25,16 @@ function FaqComp({ data }: FaqProp) {
         <div className="border-b-[1px] border-black" />
       </div>
       <div className="flex flex-col">
-        {data?.map((faq, index) => {
+        {data?.results.map((faq, index) => {
           return (
-            <div
-              key={index}
-              className="border-b border-gray mt-5 pb-5 flex justify-between px-5"
-              onClick={() => {
-                router.push({
-                  pathname: "/service/faq/faqdetail",
-                  query: {
-                    id: faq.id,
-                    title: faq.title,
-                    description: faq.description,
-                    created: faq.created,
-                  },
-                });
-              }}
-            >
-              <p>{faq.title}</p>
-              <p className="text-sm text-subContent">
-                {faq.created.substring(0, 10)}
-              </p>
-            </div>
+            <Link key={index} href={`/service/faq/${faq.id}`}>
+              <div className="border-b border-gray mt-5 pb-5 flex justify-between px-5">
+                <p>{faq.title}</p>
+                <p className="text-sm text-subContent">
+                  {faq.created.substring(0, 10)}
+                </p>
+              </div>
+            </Link>
           );
         })}
       </div>

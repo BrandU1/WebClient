@@ -281,7 +281,7 @@ export interface OrderResponse {
   name: string;
   order_number: string;
   order_status: string;
-  payment: {
+  payment?: {
     created: string;
     id: number;
     is_deleted: boolean;

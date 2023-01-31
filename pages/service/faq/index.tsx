@@ -9,24 +9,13 @@ import Head from "next/head";
 import Service from "@components/pages/service";
 
 function FaqPage() {
-  const getFaq = () => {
-    return client.get("services/faqs").then((res) => res.data);
-  };
-  const { data: faqData, isLoading: faqIsLoading } = useQuery<
-    BranduBaseResponse<FaqInterface[]>
-  >(["faq"], getFaq);
-
-  if (faqIsLoading) {
-    return <div>로딩 중입니다.</div>;
-  }
-
   return (
     <>
       <Head>
         <title>자주 묻는 질문</title>
       </Head>
       <div>
-        <FaqComp data={faqData?.results!} />
+        <FaqComp />
       </div>
     </>
   );

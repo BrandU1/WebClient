@@ -3,9 +3,10 @@ import { OrderResponse } from "../../../types/privacy";
 import client from "@lib/api";
 import { useRecoilValue } from "recoil";
 import { userData } from "../../../recoil/user";
+import Link from "next/link";
 
 interface inquiryProp {
-  detail: any;
+  detail: string;
 }
 
 const getOrder = async (id: string) => {
@@ -15,15 +16,22 @@ const getOrder = async (id: string) => {
 
 function Inquiry({ detail }: inquiryProp) {
   const userInfo = useRecoilValue(userData);
-
   const { data, isLoading, isError } = useBranduQuery<OrderResponse>({
-    queryKey: ["order", detail.id],
-    queryFn: () => getOrder(detail.id as string),
+    queryKey: ["order", detail],
+    queryFn: () => getOrder(detail),
   });
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center">
+        잠시만 기다려주세요
+      </div>
+    );
+  }
   return (
     <div className="pl-5 flex flex-col flex-1 mt-10">
       <div className="title flex flex-row items-center border-b pb-5">
-        <span className="font-bold text-lg">상세조회</span>
+        <span className="font-bold text-lg">상세조회</span>=
         <span className="text-lg ml-3">
           [주문번호 : {data?.results.order_number}]
         </span>
@@ -32,7 +40,17 @@ function Inquiry({ detail }: inquiryProp) {
         <div className="flex flex-row">
           <div className="flex items-center flex-col">
             <span>{data?.results.created.slice(0, 10)} 주문</span>
-            <div className="w-24 h-24 bg-gray rounded-xl" />
+
+            <div className="w-24 h-24 relative  ">
+              <div
+                className="rounded-lg w-[96px] h-[96px]"
+                dangerouslySetInnerHTML={{
+                  __html: `<svg style="width: 96px; height: 96px;" ${
+                    data?.results.products[0].product.image.split("<svg")[1]
+                  }`,
+                }}
+              ></div>
+            </div>
           </div>
           <div className="flex flex-col ml-7">
             <span className="text-sm font-bold mb-3">
@@ -120,9 +138,14 @@ function Inquiry({ detail }: inquiryProp) {
           </div>
         </div>
         <div className="mt-[86px]">
-          <button className="border border-main rounded-xl text-main text-sm py-2 px-3 mr-3">
-            카드영수증
-          </button>
+          <Link
+            href={data?.results?.payment?.recipient_url ?? "/404"}
+            target={"_blank"}
+          >
+            <button className="border border-main rounded-xl text-main text-sm py-2 px-3 mr-3">
+              카드영수증
+            </button>
+          </Link>
           <button className="border border-main rounded-xl text-main text-sm py-2 px-3">
             거래명세서
           </button>

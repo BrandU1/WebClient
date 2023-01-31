@@ -40,7 +40,6 @@ function PayInfo({ order }: payProps) {
     queryKey: ["order"],
     queryFn: () => getOrder(),
   });
-
   return (
     <div className="pl-5 flex flex-col flex-1">
       <div className="title flex flex-row justify-between items-center border-b pb-5">
@@ -127,9 +126,7 @@ function PayInfo({ order }: payProps) {
                 <div
                   onClick={() => {
                     router.push({
-                      pathname: "/mypage/paydetail",
-                      // @ts-ignore
-                      query: list,
+                      pathname: `/mypage/order/${list.id}`,
                     });
                   }}
                 >

@@ -2,12 +2,14 @@ import ModalFrame from "@common/modalframe";
 import { useRef, useState } from "react";
 import Image from "next/image";
 import client from "@lib/api";
+import CircularProgress from "@mui/material/CircularProgress";
 
 interface newModalProps {
   handleClose: () => void;
 }
 
 function NewImgModal({ handleClose }: newModalProps) {
+  const [isLoadings, setIsLoadings] = useState<boolean>(false);
   const [imgBase64, setImgBase64] = useState("");
   const [imgFile, setImgFile] = useState<any>(null);
 
@@ -38,6 +40,7 @@ function NewImgModal({ handleClose }: newModalProps) {
   const saveImgWithRemove = async () => {
     const formData = new FormData();
     if (imgFile) {
+      setIsLoadings(true);
       formData.append("image", imgFile);
     }
     const response = await client.post("accounts/customs/remove", formData, {
@@ -48,6 +51,8 @@ function NewImgModal({ handleClose }: newModalProps) {
 
     if (response.data.success) {
       handleClose();
+      setIsLoadings(false);
+    } else {
     }
   };
 
@@ -78,7 +83,12 @@ function NewImgModal({ handleClose }: newModalProps) {
       bgColor={"none"}
       components={
         <div className="mt-10">
-          {!imgBase64 ? (
+          {isLoadings ? (
+            <div className="flex flex-col justify-center items-center h-[258px] w-[338px]">
+              <CircularProgress size={50} sx={{ color: "#0CABA8" }} />
+              <p className="mt-3 text-main">잠시만 기다려주세요</p>
+            </div>
+          ) : !imgBase64 ? (
             <label className="text-sm text-subContent flex flex-col m-auto h-[258px] w-[338px] rounded-xl border-2 border-gray justify-center items-center">
               <span>+</span>
               <span>신규 이미지 업로드</span>
