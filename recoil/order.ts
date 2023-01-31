@@ -40,7 +40,7 @@ export const newOrder = selector<OrderRecoilState>({
     const address = get(orderAddress);
     const products = get(purchaseProducts);
     const price = products.reduce(
-      (acc, cur) => acc + cur.custom_product.product.price,
+      (acc, cur) => acc + cur.custom_product.product.price * cur.amount,
       0
     );
 
